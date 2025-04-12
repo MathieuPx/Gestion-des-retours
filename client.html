@@ -6,9 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
   <style>
+    :root {
+      --bleu-fonce: #0b1e49;
+      --bleu-clair: #113267;
+      --jaune-aai: #ffe04c;
+      --gris-fond: #f8f9fc;
+      --gris-texte: #64748b;
+      --bordure: #e2e8f0;
+      --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.05);
+      --blanc: #ffffff;
+    }
     .dashboard {
       display: flex;
       min-height: 100vh;
+      background-color: var(--gris-fond);
     }
     .sidebar {
       width: 240px;
@@ -17,10 +28,7 @@
       display: flex;
       flex-direction: column;
       padding: 2rem 1rem;
-    }
-    .sidebar img {
-      max-width: 150px;
-      margin: 0 auto 2rem;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     }
     .sidebar button {
       background: none;
@@ -28,44 +36,39 @@
       color: white;
       font-size: 1rem;
       text-align: left;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      margin-bottom: 0.7rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.3s;
     }
     .sidebar button:hover {
       background-color: var(--bleu-clair);
     }
     .main-content {
       flex: 1;
-      padding: 2rem;
-      background-color: var(--gris-fond);
+      padding: 2.5rem 3rem;
     }
     .main-content h1 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: var(--bleu-fonce);
+      margin-bottom: 0.5rem;
+    }
+    .main-content .subtitle {
+      color: var(--gris-texte);
+      margin-bottom: 2rem;
     }
     .info-bar {
       margin: 1rem 0 2rem;
       font-weight: bold;
       color: var(--gris-texte);
-    }
-    .actions {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .actions button {
-      padding: 0.7rem 1.2rem;
-      background-color: var(--bleu-clair);
-      color: white;
-      border: none;
+      background: white;
+      padding: 1rem;
       border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .actions button:hover {
-      background-color: var(--bleu-fonce);
+      box-shadow: var(--shadow-light);
     }
     .table-container {
       overflow-x: auto;
@@ -77,10 +80,10 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
     th, td {
-      padding: 0.75rem;
+      padding: 0.8rem;
       border-bottom: 1px solid var(--bordure);
     }
     th {
@@ -91,33 +94,143 @@
     .footer {
       margin-top: 2rem;
       color: var(--gris-texte);
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="dashboard">
     <aside class="sidebar">
-      <img src="https://tse3.mm.bing.net/th?id=OIP.-JZJlknZTwSH_jOwoWcW_gHaBZ&pid=Api&P=0&h=180" alt="Logo AAI">
-      <button>🏠 Accueil</button>
-      <button>🙍‍♂️ Mon compte</button>
-      <button onclick="window.location.href='retour.html'">➕ Ajouter un retour</button>
+      <div style="text-align: center; font-weight: bold; font-size: 1.2rem; margin-bottom: 2rem;">👤 <span id="nom"></span></div>
+      <button onclick="afficherSection('retours')">🏠 Accueil</button>
+      <button onclick="afficherSection('mon-compte')">🙍‍♂️ Mon compte</button>
+      <button onclick="afficherSection('ajout-retour')">➕ Ajouter un retour</button>
       <button onclick="logout()">🔓 Déconnexion</button>
     </aside>
-
     <main class="main-content">
-      <h1>Bienvenue dans votre espace client</h1>
-      <div class="info-bar">
-        <span id="nom"></span> — <span id="email"></span> — N° <span id="numClient"></span>
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <img src="https://tse3.mm.bing.net/th?id=OIP.-JZJlknZTwSH_jOwoWcW_gHaBZ&pid=Api&P=0&h=180" alt="Logo AAI" style="max-width: 180px;">
       </div>
+      <h1>Bienvenue dans votre espace gestion des retours client</h1>
+      <p class="subtitle">Visualisez et gérez vos retours simplement</p>
+      
 
-      <div class="actions">
-        <button onclick="window.location.href='retour.html'">+ Nouveau retour</button>
-        <button onclick="window.location.reload()">🔄 Rafraîchir</button>
-      </div>
-
-      <div class="table-container" id="retours">
+      <div class="table-container" id="retours" style="display: block;">
         <p class="loading">Chargement des retours...</p>
+      </div>
+
+      <div class="table-container" id="mon-compte" style="margin-top: 3rem; display: none;">
+  <h2 style="color: var(--bleu-clair); margin-bottom: 1rem;">🙍‍♂️ Mes informations</h2>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;">
+    <div><strong>Nom</strong><br><div id="info-nom" class="info-box">Chargement...</div></div>
+    <div><strong>Email</strong><br><div id="info-email" class="info-box">Chargement...</div></div>
+    <div><strong>N° Client</strong><br><div id="info-num" class="info-box">Chargement...</div></div>
+    <div><strong>Adresse</strong><br><div id="info-adresse" class="info-box">Chargement...</div></div>
+    <div><strong>Code Postal</strong><br><div id="info-cp" class="info-box">Chargement...</div></div>
+    <div><strong>Ville</strong><br><div id="info-ville" class="info-box">Chargement...</div></div>
+    <div><strong>Téléphone</strong><br><div id="info-tel" class="info-box">Chargement...</div></div>
+  </div>
+  <h3 style="margin-top: 2rem; color: var(--bleu-clair);">🔑 Modifier mon mot de passe</h3>
+  <input type="password" id="new-password" placeholder="Nouveau mot de passe" style="margin: 1rem 0; padding: 0.6rem; width: 100%; border-radius: 6px; border: 1px solid var(--bordure);">
+  <button onclick="changerMotDePasse()">💾 Enregistrer</button>
+  <p id="pass-msg" style="color: var(--bleu-clair); margin-top: 0.5rem;"></p>
+</div>
+<style>
+  .info-box {
+    padding: 0.6rem;
+    background: var(--gris-fond);
+    border: 1px solid var(--bordure);
+    border-radius: 6px;
+    margin-top: 0.2rem;
+    font-weight: 500;
+    color: var(--bleu-fonce);
+  }
+</style>
+
+      <div class="table-container" id="ajout-retour" style="margin-top: 3rem; display: none;">
+  <h2 style="color: var(--bleu-clair); margin-bottom: 1rem;">➕ Ajouter un retour</h2>
+  <form id="form-retour">
+    <div id="ligne-retour-container">
+      <div class="ligne-retour" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; background: var(--gris-fond); padding: 1rem; border-radius: 10px; border: 1px solid var(--bordure); box-shadow: var(--shadow-light); margin-bottom: 1rem;">
+  <div>
+    <label style="font-weight: 600; color: var(--bleu-clair);">Référence</label>
+    <input type="text" name="reference[]" required style="text-transform: uppercase; width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--bordure);">
+  </div>
+  <div>
+    <label style="font-weight: 600; color: var(--bleu-clair);">Quantité</label>
+    <input type="number" name="quantite[]" required min="1" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--bordure);">
+  </div>
+  <div>
+    <label style="font-weight: 600; color: var(--bleu-clair);">Précision (facultatif)</label>
+    <input type="text" name="precision[]" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--bordure);">
+  </div>
+  <div>
+    <label style="font-weight: 600; color: var(--bleu-clair);">Type</label>
+    <select name="type[]" onchange="afficherNotice(this)" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--bordure);">
+      <option value="PIÈCE">PIÈCE</option>
+      <option value="CONSIGNE">CONSIGNE</option>
+      <option value="GARANTIE">GARANTIE</option>
+    </select>
+  </div>
+</div>
+    </div>
+    <div style="margin-bottom: 1rem;">
+      <button type="button" onclick="ajouterLigneRetour()" style="background: #f0f0f0; color: #113267; padding: 0.5rem 1rem; border: 1px dashed #113267; border-radius: 6px; cursor: pointer;">➕ Ajouter une autre ligne</button>
+    </div>
+    <div id="notice-garantie" style="margin-top: 1rem; background: #fffbe6; padding: 1rem; border-left: 4px solid #ffe04c; display: none;">
+      <strong>📦 Pour un retour en garantie :</strong><br>
+      Merci de fournir avec la pièce : le bon de livraison, la facture client, la facture de garantie et une photocopie de la carte grise.
+    </div>
+    <button type="submit" style="margin-top: 1rem; background: var(--bleu-clair); color: white; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; font-weight: bold;">📤 Envoyer</button>
+  </form>
+</div>
+
+<script>
+function afficherNotice(select) {
+  const block = document.getElementById("notice-garantie");
+  block.style.display = select.value === "GARANTIE" ? "block" : "none";
+}
+
+function ajouterLigneRetour() {
+  const ligne = document.querySelector(".ligne-retour");
+  const clone = ligne.cloneNode(true);
+  clone.querySelectorAll("input").forEach(input => input.value = "");
+  clone.querySelector("select").selectedIndex = 0;
+  document.getElementById("ligne-retour-container").appendChild(clone);
+}
+function afficherNotice(select) {
+  const block = document.getElementById("notice-garantie");
+  block.style.display = select.value === "GARANTIE" ? "block" : "none";
+}
+
+
+// ✅ Rediriger vers l'accueil après soumission du formulaire retour
+  document.getElementById("form-retour").addEventListener("submit", function(e) {
+    e.preventDefault();
+    // ➕ Tu pourras ajouter ici un appel à App Script pour enregistrer les données
+
+    afficherSection("retours"); // revient sur Accueil
+    chargerRetours(); // recharge les données visibles
+  });
+
+</script>
+<div class="table-container" id="contact" style="margin-top: 3rem; display: none;">
+        <h2 style="color: var(--bleu-clair); margin-bottom: 1rem;">📞 Contact</h2>
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 250px;">
+            <h3 style="margin-bottom: 0.5rem; color: var(--bleu-fonce);">Informations Magasin</h3>
+            <p><strong>Nom :</strong> <span id="magasin"></span></p>
+            <p><strong>Email :</strong> <span id="emailMagasin"></span></p>
+            <p><strong>Téléphone :</strong> <span id="telMagasin"></span></p>
+          </div>
+          <div style="flex: 1; min-width: 250px;">
+            <h3 style="margin-bottom: 0.5rem; color: var(--bleu-fonce);">Commercial dédié</h3>
+            <p><strong>Nom :</strong> <span id="nomCom"></span></p>
+            <p><strong>Email :</strong> <span id="mailCom"></span></p>
+            <p><strong>Code :</strong> <span id="codeCom"></span></p>
+          </div>
+        </div>
       </div>
 
       <div class="footer">
@@ -127,6 +240,79 @@
     </main>
   </div>
 
+  <script>
+    function chargerRetours() {
+      const container = document.getElementById("retours");
+      container.innerHTML = '<p class="loading">Chargement des retours...</p>';
+      setTimeout(() => {
+        container.innerHTML = `
+          <input type="text" placeholder="🔍 Filtrer..." onkeyup="filtrerTable(this.value)" style="margin-bottom: 1rem; padding: 0.5rem; width: 100%; border-radius: 6px; border: 1px solid var(--bordure);">
+          <table>
+            <thead>
+              <tr><th>Date</th><th>Référence</th><th>Type</th><th>Quantité</th><th>Statut</th></tr>
+            </thead>
+            <tbody id="table-body">
+              <tr><td>29/03/2025</td><td>L1044</td><td>PIÈCE</td><td>1</td><td>EN ATTENTE</td></tr>
+              <tr><td>30/03/2025</td><td>AH245-2</td><td>PIÈCE</td><td>1</td><td title="PAS OUVERT PROPREMENT">REFUSÉ</td></tr>
+              <tr><td>03/04/2025</td><td>A1445</td><td>PIÈCE</td><td>1</td><td>VALIDÉ</td></tr>
+            </tbody>
+          </table>
+        `;
+      }, 1000);
+    }
+
+    function filtrerTable(recherche) {
+      const lignes = document.querySelectorAll("#table-body tr");
+      lignes.forEach(tr => {
+        const texte = tr.textContent.toLowerCase();
+        tr.style.display = texte.includes(recherche.toLowerCase()) ? "" : "none";
+      });
+    }
+
+    function changerMotDePasse() {
+      const newPass = document.getElementById("new-password").value.trim();
+      if (!newPass) {
+        document.getElementById("pass-msg").textContent = "❗ Veuillez entrer un mot de passe.";
+        return;
+      }
+      document.getElementById("pass-msg").textContent = "⏳ Mise à jour...";
+      setTimeout(() => {
+        document.getElementById("pass-msg").textContent = "✅ Mot de passe mis à jour.";
+      }, 1500);
+    }
+
+    function chargerInfosContactSheets(email) {
+      google.script.run.withSuccessHandler(function(data) {
+        if (!data) return;
+        document.getElementById("magasin").textContent = data.nomMagasin || "";
+        document.getElementById("emailMagasin").textContent = data.emailMagasin || "";
+        document.getElementById("telMagasin").textContent = data.telMagasin || "";
+
+        document.getElementById("nomCom").textContent = data.nomCom || "";
+        document.getElementById("mailCom").textContent = data.mailCom || "";
+        document.getElementById("codeCom").textContent = data.codeCom || "";
+      }).getInfosContactParEmail(email);
+    }
+
+    function afficherSection(id) {
+      const sections = ["retours", "mon-compte", "ajout-retour", "contact"];
+      sections.forEach(sec => {
+        const el = document.getElementById(sec);
+        if (el) el.style.display = sec === id ? "block" : "none";
+      });
+      if (id === "retours") chargerRetours();
+      if (id === "mon-compte") {
+        const el = document.getElementById(id);
+        if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
+      }
+    }
+
+    window.onload = function() {
+      chargerRetours();
+      const email = localStorage.getItem("email");
+      if (email) chargerInfosContactSheets(email);
+    };
+  </script>
   <script src="js/client.js"></script>
 </body>
 </html>
