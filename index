@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AAI — Gestion des Retours</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header>
+    <img src="https://tse3.mm.bing.net/th?id=OIP.-JZJlknZTwSH_jOwoWcW_gHaBZ&pid=Api&P=0&h=180" alt="Logo AAI" class="logo" />
+    <h1>Plateforme de Gestion des Retours</h1>
+    <p class="subtitle">Pour clients, commerciaux, CDV, responsables & magasins</p>
+  </header>
+
+  <main>
+    <a class="button" href="https://script.google.com/macros/s/AKfycbzKeKu3DQ1VqJkoOsRp3b798wi-gg0cXN39ku3yNHZWdPKfx1FQGDq99GmyLIQzYBag/exec">
+      ➡️ Se connecter à mon espace
+    </a>
+  </main>
+
+  <footer>
+    <p>© AAI 2025 — Retour Pièces & Logistique</p>
+  </footer>
+</body>
+</html>
