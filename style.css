@@ -7,21 +7,15 @@ body {
   padding: 2rem;
 }
 
-.logo {
-  max-width: 200px;
-  margin-bottom: 1rem;
+h1, h2 {
+  color: #0b1e49;
 }
 
 header {
   margin-bottom: 2rem;
 }
 
-.subtitle {
-  color: #64748b;
-  font-weight: 500;
-}
-
-.button {
+.button, button {
   display: inline-block;
   padding: 1rem 2rem;
   background-color: #113267;
@@ -29,15 +23,21 @@ header {
   border-radius: 8px;
   text-decoration: none;
   font-weight: bold;
+  border: none;
+  cursor: pointer;
   transition: background 0.2s ease-in-out;
 }
 
-.button:hover {
+.button:hover, button:hover {
   background-color: #0b1e49;
 }
 
-footer {
-  margin-top: 4rem;
-  color: #64748b;
-  font-size: 0.9rem;
+.container {
+  background: white;
+  max-width: 400px;
+  margin: auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
+
