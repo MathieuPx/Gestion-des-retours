@@ -2,26 +2,53 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Espace Client</title>
+  <title>Espace Client AAI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="header">
-    <div>
-      👤 <strong><span id="nom"></span></strong> — Client
-    </div>
-    <button onclick="logout()">Se déconnecter</button>
-  </div>
+  <aside class="sidebar">
+    <img src="https://tse3.mm.bing.net/th?id=OIP.-JZJlknZTwSH_jOwoWcW_gHaBZ&pid=Api&P=0&h=180" alt="Logo AAI" class="logo">
+    <nav>
+      <button class="nav-btn active">🏠 Accueil</button>
+      <button class="nav-btn">🙍‍♂️ Mon compte</button>
+      <button class="nav-btn" onclick="window.location.href='retour.html'">➕ Ajouter un retour</button>
+      <button class="nav-btn">📞 Contact</button>
+      <button class="nav-btn logout" onclick="logout()">🔓 Déconnexion</button>
+    </nav>
+  </aside>
 
-  <div class="content">
-    <h1>Bienvenue dans l'espace client 🧾</h1>
-    <p>Email : <strong><span id="email"></span></strong></p>
-    <p>Numéro client : <strong><span id="numClient"></span></strong></p>
+  <main class="main-content">
+    <header class="top-header">
+      <h1>Bienvenue sur votre espace client</h1>
+      <p><strong id="nom"></strong> — <span id="email"></span> — N° <span id="numClient"></span></p>
+    </header>
 
-    <h2>Mes retours</h2>
-    <div id="retours"></div>
-  </div>
+    <section class="retour-actions">
+      <button class="primary-btn" onclick="window.location.href='retour.html'">+ Nouveau bon de retour</button>
+      <button class="primary-btn" onclick="window.location.reload()">🔄 Rafraîchir</button>
+    </section>
+
+    <section class="filtre-status">
+      <button class="filter-btn active" data-filter="all">📁 Tous</button>
+      <button class="filter-btn" data-filter="EN ATTENTE">⏳ En attente</button>
+      <button class="filter-btn" data-filter="PRIS EN CHARGE">📦 Pris en charge</button>
+      <button class="filter-btn" data-filter="REFUSÉ">❌ Refusé</button>
+    </section>
+
+    <section id="retours" class="table-container">
+      <p class="loading">Chargement des retours...</p>
+    </section>
+
+    <footer class="client-footer">
+      <p><strong>Magasin rattaché :</strong> <span id="magasin"></span></p>
+      <p><strong>Commercial :</strong> <span id="codeCom"></span> (<span id="nomCom"></span>)</p>
+      <p><strong>Téléphone commercial :</strong> <span id="mailCom"></span></p>
+    </footer>
+  </main>
 
   <script src="js/client.js"></script>
 </body>
