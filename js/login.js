@@ -20,14 +20,14 @@ document.getElementById("login-form").addEventListener("submit", function(e) {
         return;
       }
 
-      // ✅ Stocker les infos en local
+      // ✅ Stockage
       localStorage.setItem("email", data.email);
       localStorage.setItem("role", data.role);
       localStorage.setItem("nom", data.nom);
       localStorage.setItem("numClient", data.numero);
 
-      // 🔁 Rediriger selon le rôle
-      window.location.href = `${baseURL}?role=${encodeURIComponent(data.role)}`;
+      // ✅ Redirection vers le bon HTML (client.html, cdv.html, etc.)
+      window.location.href = `${data.role}.html`;
     })
     .catch(() => {
       errorMsg.textContent = "❌ Erreur de communication avec le serveur.";
