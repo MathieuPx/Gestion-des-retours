@@ -1,4 +1,4 @@
-const baseURL = "https://script.google.com/macros/s/AKfycbzvWr51ExoXVerjVsGV5zbfy3_pXiVHIDGBKc0EjBdcsPodP6Y4NiQc_PYuXMydiIZZ/exec";
+const baseURL = "https://script.google.com/macros/s/AKfycbzE1WSO1Bb5_zMnWfjBQWIE9okRMx6jJQmAH53yv9ob_U93Bf97eb02H7wKhfatkAxY/exec";
 
 document.getElementById("login-form").addEventListener("submit", function(e) {
   e.preventDefault();
