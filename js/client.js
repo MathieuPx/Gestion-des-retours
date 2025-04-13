@@ -1,4 +1,4 @@
-const baseURL = "https://script.google.com/macros/s/AKfycbzKeKu3DQ1VqJkoOsRp3b798wi-gg0cXN39ku3yNHZWdPKfx1FQGDq99GmyLIQzYBag/exec";
+const baseURL = "https://script.google.com/macros/s/AKfycbwqUzkJDWCSFXOFaukYBvxL69uTsvRJm3GFMcVufKVPYdNX2q0qbxe7mJebEEQ6HA5p/exec";
 const email = localStorage.getItem("email");
 const nom = localStorage.getItem("nom");
 const role = localStorage.getItem("role");
@@ -71,3 +71,42 @@ fetch(`${baseURL}?action=getRetoursClient&email=${encodeURIComponent(email)}`)
   .catch(() => {
     document.getElementById("retours").innerText = "Erreur de connexion au serveur.";
   });
+document.getElementById("form-retour").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const email = localStorage.getItem("email");
+  const nom = localStorage.getItem("nom");
+  const numClient = localStorage.getItem("numClient");
+
+  const lignes = [...document.querySelectorAll(".ligne-retour")].map(ligne => {
+    return {
+      reference: ligne.querySelector("input[name='reference[]']").value,
+      quantite: ligne.querySelector("input[name='quantite[]']").value,
+      precision: ligne.querySelector("input[name='precision[]']").value,
+      type: ligne.querySelector("select[name='type[]']").value,
+    };
+  });
+
+  const body = JSON.stringify({ email, nom, numClient, lignes });
+
+  try {
+    const response = await fetch("TON_URL_APPS_SCRIPT", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      afficherSection("retours");
+      chargerRetours();
+    } else {
+      alert("❌ Une erreur est survenue lors de l'envoi.");
+      console.error(result.error);
+    }
+
+  } catch (err) {
+    console.error("Erreur fetch :", err);
+    alert("❌ Connexion échouée.");
+  }
+});
