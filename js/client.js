@@ -1,112 +1,149 @@
-const baseURL = "https://script.google.com/macros/s/AKfycbwaaUrWfvfGoqkGsnAMbs-XL9l3psSXjDOQBrUnBetqvTzKOMmwd4MeDsZ8PWPwtNrR/exec";
-const email = localStorage.getItem("email");
-const nom = localStorage.getItem("nom");
-const role = localStorage.getItem("role");
-const numero = localStorage.getItem("numClient");
+window.addEventListener("DOMContentLoaded", () => {
+  const baseURL = "https://script.google.com/macros/s/AKfycbwaaUrWfvfGoqkGsnAMbs-XL9l3psSXjDOQBrUnBetqvTzKOMmwd4MeDsZ8PWPwtNrR/exec";
+  const email = localStorage.getItem("email");
+  const nom = localStorage.getItem("nom");
+  const role = localStorage.getItem("role");
+  const numero = localStorage.getItem("numClient");
 
-if (!email || role !== "client") {
-  window.location.href = "login.html";
-}
-
-document.getElementById("email").innerText = email;
-document.getElementById("nom").innerText = nom;
-document.getElementById("numClient").innerText = numero;
-
-function logout() {
-  localStorage.clear();
-  window.location.href = "login.html";
-}
-
-function afficherRetours(retours) {
-  if (!retours.length) {
-    document.getElementById("retours").innerText = "Aucun retour enregistré.";
+  // Sécurité : redirection si mauvais rôle
+  if (!email || role !== "client") {
+    window.location.href = "login.html";
     return;
   }
 
-  const table = document.createElement("table");
-  table.style.width = "100%";
-  table.style.borderCollapse = "collapse";
+  // Injecter les infos dans le DOM si dispo
+  const emailEl = document.getElementById("email");
+  const nomEl = document.getElementById("nom");
+  const numEl = document.getElementById("numClient");
+  if (emailEl) emailEl.innerText = email;
+  if (nomEl) nomEl.innerText = nom;
+  if (numEl) numEl.innerText = numero;
 
-  const headers = Object.keys(retours[0]);
-  const thead = document.createElement("thead");
-  const trHead = document.createElement("tr");
-  headers.forEach(h => {
-    const th = document.createElement("th");
-    th.textContent = h;
-    th.style.borderBottom = "1px solid #e2e8f0";
-    th.style.padding = "8px";
-    th.style.background = "#113267";
-    th.style.color = "white";
-    trHead.appendChild(th);
+  // 🔒 Déconnexion
+  document.getElementById("logout")?.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "login.html";
   });
-  thead.appendChild(trHead);
-  table.appendChild(thead);
 
-  const tbody = document.createElement("tbody");
-  retours.forEach(row => {
-    const tr = document.createElement("tr");
+  // 🧾 Affichage tableau des retours
+  function afficherRetours(retours) {
+    const conteneur = document.getElementById("retours");
+    if (!conteneur) return;
+
+    conteneur.innerHTML = "";
+    if (!retours.length) {
+      conteneur.textContent = "Aucun retour enregistré.";
+      return;
+    }
+
+    const table = document.createElement("table");
+    table.className = "retours-table";
+
+    const headers = ["Date", "Référence", "Type", "Quantité", "Statut"];
+    const thead = document.createElement("thead");
+    const trHead = document.createElement("tr");
     headers.forEach(h => {
-      const td = document.createElement("td");
-      td.textContent = row[h] || "";
-      td.style.padding = "8px";
-      td.style.borderBottom = "1px solid #e2e8f0";
-      tr.appendChild(td);
+      const th = document.createElement("th");
+      th.textContent = h;
+      trHead.appendChild(th);
     });
-    tbody.appendChild(tr);
-  });
-  table.appendChild(tbody);
+    thead.appendChild(trHead);
+    table.appendChild(thead);
 
-  document.getElementById("retours").appendChild(table);
-}
+    const tbody = document.createElement("tbody");
+    retours.forEach(row => {
+      const tr = document.createElement("tr");
 
-fetch(`${baseURL}?action=getRetoursClient&email=${encodeURIComponent(email)}`)
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      afficherRetours(data.retours);
-    } else {
-      document.getElementById("retours").innerText = "Erreur lors de la récupération des retours.";
-    }
-  })
-  .catch(() => {
-    document.getElementById("retours").innerText = "Erreur de connexion au serveur.";
-  });
-document.getElementById("form-retour").addEventListener("submit", async function (e) {
-  e.preventDefault();
+      const tdDate = document.createElement("td");
+      tdDate.textContent = new Date(row["DATE"]).toLocaleDateString("fr-FR");
+      tr.appendChild(tdDate);
 
-  const email = localStorage.getItem("email");
-  const nom = localStorage.getItem("nom");
-  const numClient = localStorage.getItem("numClient");
+      const tdRef = document.createElement("td");
+      tdRef.textContent = row["REFERENCE"];
+      tr.appendChild(tdRef);
 
-  const lignes = [...document.querySelectorAll(".ligne-retour")].map(ligne => {
-    return {
-      reference: ligne.querySelector("input[name='reference[]']").value,
-      quantite: ligne.querySelector("input[name='quantite[]']").value,
-      precision: ligne.querySelector("input[name='precision[]']").value,
-      type: ligne.querySelector("select[name='type[]']").value,
-    };
-  });
+      const tdType = document.createElement("td");
+      tdType.textContent = row["TYPE DE RETOUR"];
+      tr.appendChild(tdType);
 
-  const body = JSON.stringify({ email, nom, numClient, lignes });
+      const tdQte = document.createElement("td");
+      tdQte.textContent = row["QUANTITE"];
+      tr.appendChild(tdQte);
 
-  try {
-    const response = await fetch("TON_URL_APPS_SCRIPT", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body,
+      const tdStatut = document.createElement("td");
+      tdStatut.textContent = row["STATUT DE RETOUR"];
+      if (tdStatut.textContent === "REFUSÉ" && row["MOTIFS REFUS MAGASIN"]) {
+        tdStatut.title = row["MOTIFS REFUS MAGASIN"];
+      }
+      tr.appendChild(tdStatut);
+
+      tbody.appendChild(tr);
     });
 
-    const result = await response.json();
-    if (result.success) {
-      afficherSection("retours");
-      chargerRetours();
-    } else {
-      alert("❌ Une erreur est survenue lors de l'envoi.");
-      console.error(result.error);
-    }
+    table.appendChild(tbody);
+    conteneur.appendChild(table);
+  }
 
-  } catch (err) {
-    console.error("Erreur fetch :", err);
-    alert("❌ Connexion échouée.");
+  // 📥 Charger les retours du client
+  async function chargerRetours() {
+    const conteneur = document.getElementById("retours");
+    if (!conteneur) return;
+    conteneur.innerHTML = "Chargement...";
+
+    try {
+      const res = await fetch(`${baseURL}?action=getRetoursClient&email=${encodeURIComponent(email)}`);
+      const data = await res.json();
+      if (data.success) {
+        afficherRetours(data.retours);
+      } else {
+        conteneur.textContent = "Erreur lors du chargement des retours.";
+      }
+    } catch (e) {
+      conteneur.textContent = "Erreur de communication avec le serveur.";
+    }
+  }
+
+  // 🔄 Charger retours au démarrage
+  chargerRetours();
+
+  // 📨 Formulaire d'ajout de retour
+  const form = document.getElementById("form-retour");
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const lignes = [...document.querySelectorAll(".ligne-retour")].map(ligne => ({
+        reference: ligne.querySelector("input[name='reference[]']").value,
+        quantite: ligne.querySelector("input[name='quantite[]']").value,
+        precision: ligne.querySelector("input[name='precision[]']").value,
+        type: ligne.querySelector("select[name='type[]']").value
+      }));
+
+      const body = JSON.stringify({
+        email,
+        nom,
+        numClient: numero,
+        lignes
+      });
+
+      try {
+        const response = await fetch(baseURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body,
+        });
+        const result = await response.json();
+        if (result.success) {
+          chargerRetours();
+          afficherSection("retours");
+        } else {
+          alert("❌ Une erreur est survenue.");
+          console.error(result.error);
+        }
+      } catch (err) {
+        alert("❌ Connexion au serveur impossible.");
+        console.error(err);
+      }
+    });
   }
 });
