@@ -25,6 +25,11 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
+  function voirPdf(numeroRetour) {
+  const url = `https://script.google.com/macros/s/TON_DEPLOYMENT_ID/exec?numero=${numeroRetour}`;
+  window.open(url, '_blank');
+}
+
   // 🧾 Affichage tableau des retours
   function afficherRetours(retours) {
     const conteneur = document.getElementById("retours");
@@ -35,6 +40,10 @@ window.addEventListener("DOMContentLoaded", () => {
       conteneur.textContent = "Aucun retour enregistré.";
       return;
     }
+    const btn = document.createElement("button");
+btn.textContent = "📄 Voir PDF";
+btn.onclick = () => voirPdf(row["NUMÉRO DE RETOUR"]);
+td.appendChild(btn);
 
     const table = document.createElement("table");
     table.className = "retours-table";
