@@ -165,5 +165,3 @@ window.addEventListener("DOMContentLoaded", () => {
     console.error("Erreur chargement infos client", e);
   }
 }
-
-
