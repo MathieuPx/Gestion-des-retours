@@ -136,6 +136,15 @@
   <button onclick="changerMotDePasse()">💾 Enregistrer</button>
   <p id="pass-msg" style="color: var(--bleu-clair); margin-top: 0.5rem;"></p>
 </div>
+    <div class="contact-infos" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+      <h2 style="margin-bottom: 1rem; color: #113267;">Contact</h2>
+      <p><strong>📍 Magasin :</strong> <span id="nomMagasin"></span></p>
+      <p><strong>✉️ Email Magasin :</strong> <span id="emailMagasin"></span></p>
+      <p><strong>📞 Téléphone Magasin :</strong> <span id="telMagasin"></span></p>
+       <hr style="margin: 1.5rem 0;">
+       <p><strong>👔 Commercial :</strong> <span id="nomCom"></span> <span id="codeCom"></span></p>
+       <p><strong>📧 Email Commercial :</strong> <span id="mailCom"></span></p>
+      </div>
 <style>
   .info-box {
     padding: 0.6rem;
@@ -241,24 +250,61 @@ function afficherNotice(select) {
   </div>
 
   <script>
+    
+    function chargerInfosClient() {
+  const email = localStorage.getItem("email");
+  fetch(`https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=getInfosClient&email=${encodeURIComponent(email)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById("info-nom").innerText = data.nom || "";
+        document.getElementById("info-email").innerText = data.email || "";
+        document.getElementById("info-num").innerText = data.numero || "";
+        document.getElementById("info-adresse").innerText = data.adresse || "";
+        document.getElementById("info-cp").innerText = data.cp || "";
+        document.getElementById("info-ville").innerText = data.ville || "";
+        document.getElementById("info-tel").innerText = data.telephone || "";
+      }
+    })
+    .catch(() => {
+      document.getElementById("info-nom").innerText = "Erreur";
+    });
+}
+    
     function chargerRetours() {
       const container = document.getElementById("retours");
       container.innerHTML = '<p class="loading">Chargement des retours...</p>';
-      setTimeout(() => {
-        container.innerHTML = `
-          <input type="text" placeholder="🔍 Filtrer..." onkeyup="filtrerTable(this.value)" style="margin-bottom: 1rem; padding: 0.5rem; width: 100%; border-radius: 6px; border: 1px solid var(--bordure);">
-          <table>
-            <thead>
-              <tr><th>Date</th><th>Référence</th><th>Type</th><th>Quantité</th><th>Statut</th></tr>
-            </thead>
-            <tbody id="table-body">
-              <tr><td>29/03/2025</td><td>L1044</td><td>PIÈCE</td><td>1</td><td>EN ATTENTE</td></tr>
-              <tr><td>30/03/2025</td><td>AH245-2</td><td>PIÈCE</td><td>1</td><td title="PAS OUVERT PROPREMENT">REFUSÉ</td></tr>
-              <tr><td>03/04/2025</td><td>A1445</td><td>PIÈCE</td><td>1</td><td>VALIDÉ</td></tr>
-            </tbody>
-          </table>
-        `;
-      }, 1000);
+      fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=getRetoursClient&email=" + encodeURIComponent(localStorage.getItem("email")))
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success || !Array.isArray(data.retours)) {
+            container.innerHTML = '<p>Erreur lors du chargement des retours.</p>';
+            return;
+          }
+          const rows = data.retours.map(retour => `
+            <tr>
+              <td>${new Date(retour["DATE"]).toLocaleDateString("fr-FR")}</td>
+              <td>${retour["REFERENCE"]}</td>
+              <td>${retour["TYPE DE RETOUR"]}</td>
+              <td>${retour["QUANTITE"]}</td>
+              <td${retour["STATUT DE RETOUR"] === "REFUSÉ" ? ` title="${retour["MOTIFS REFUS MAGASIN"] || ''}"` : ''}>${retour["STATUT DE RETOUR"]}</td>
+            </tr>
+          `).join("");
+          container.innerHTML = `
+            <input type="text" placeholder="🔍 Filtrer..." onkeyup="filtrerTable(this.value)" style="margin-bottom: 1rem; padding: 0.5rem; width: 100%; border-radius: 6px; border: 1px solid var(--bordure);">
+            <table>
+              <thead>
+                <tr><th>Date</th><th>Référence</th><th>Type</th><th>Quantité</th><th>Statut</th></tr>
+              </thead>
+              <tbody id="table-body">
+                ${rows}
+              </tbody>
+            </table>
+          `;
+        })
+        .catch(() => {
+          container.innerHTML = '<p>Erreur de connexion au serveur.</p>';
+        });
     }
 
     function filtrerTable(recherche) {
@@ -268,7 +314,7 @@ function afficherNotice(select) {
         tr.style.display = texte.includes(recherche.toLowerCase()) ? "" : "none";
       });
     }
-
+    
     function changerMotDePasse() {
       const newPass = document.getElementById("new-password").value.trim();
       if (!newPass) {
@@ -308,11 +354,19 @@ function afficherNotice(select) {
     }
 
     window.onload = function() {
-      chargerRetours();
-      const email = localStorage.getItem("email");
-      if (email) chargerInfosContactSheets(email);
-    };
+  chargerRetours();
+  chargerInfosClient(); // <-- AJOUT ICI
+  const email = localStorage.getItem("email");
+  if (email) chargerInfosContactSheets(email);
+};
+
+ <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
   </script>
   <script src="js/client.js"></script>
 </body>
 </html>
+
