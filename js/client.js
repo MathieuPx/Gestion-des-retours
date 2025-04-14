@@ -147,3 +147,22 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+  async function chargerInfosClient() {
+  try {
+    const res = await fetch(`${baseURL}?action=getInfosClient&email=${encodeURIComponent(email)}`);
+    const data = await res.json();
+
+    if (data.success) {
+      document.getElementById("info-nom").innerText = data.nom || "";
+      document.getElementById("info-email").innerText = data.email || "";
+      document.getElementById("info-num").innerText = data.numero || "";
+      document.getElementById("info-adresse").innerText = data.adresse || "";
+      document.getElementById("info-cp").innerText = data.cp || "";
+      document.getElementById("info-ville").innerText = data.ville || "";
+      document.getElementById("info-tel").innerText = data.telephone || "";
+    }
+  } catch (e) {
+    console.error("Erreur chargement infos client", e);
+  }
+}
+
