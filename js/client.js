@@ -5,53 +5,42 @@ window.addEventListener("DOMContentLoaded", () => {
   const role = localStorage.getItem("role");
   const numero = localStorage.getItem("numClient");
 
-  // Sécurité : redirection si mauvais rôle
   if (!email || role !== "client") {
     window.location.href = "login.html";
     return;
   }
 
-  // Injecter les infos dans le DOM si dispo
-  const emailEl = document.getElementById("email");
-  const nomEl = document.getElementById("nom");
-  const numEl = document.getElementById("numClient");
-  if (emailEl) emailEl.innerText = email;
-  if (nomEl) nomEl.innerText = nom;
-  if (numEl) numEl.innerText = numero;
+  // Injection DOM
+  document.getElementById("email")?.innerText = email;
+  document.getElementById("nom")?.innerText = nom;
+  document.getElementById("numClient")?.innerText = numero;
 
-  // 🔒 Déconnexion
   document.getElementById("logout")?.addEventListener("click", () => {
     localStorage.clear();
     window.location.href = "login.html";
   });
 
+  // Génère un bouton PDF par ligne
   function voirPdf(numeroRetour) {
-  const url = `https://script.google.com/macros/s/TON_DEPLOYMENT_ID/exec?numero=${numeroRetour}`;
-  window.open(url, '_blank');
-}
+    const url = `${baseURL}?action=genererPdfDepuisRetour&numero=${numeroRetour}`;
+    window.open(url, "_blank");
+  }
 
-  // 🧾 Affichage tableau des retours
   function afficherRetours(retours) {
     const conteneur = document.getElementById("retours");
-    if (!conteneur) return;
-
     conteneur.innerHTML = "";
+
     if (!retours.length) {
       conteneur.textContent = "Aucun retour enregistré.";
       return;
     }
-    const btn = document.createElement("button");
-btn.textContent = "📄 Voir PDF";
-btn.onclick = () => voirPdf(row["NUMÉRO DE RETOUR"]);
-td.appendChild(btn);
 
     const table = document.createElement("table");
     table.className = "retours-table";
 
-    const headers = ["Date", "Référence", "Type", "Quantité", "Statut"];
     const thead = document.createElement("thead");
     const trHead = document.createElement("tr");
-    headers.forEach(h => {
+    ["Date", "Référence", "Désignation", "Type", "Quantité", "Statut", "📄"].forEach(h => {
       const th = document.createElement("th");
       th.textContent = h;
       trHead.appendChild(th);
@@ -71,6 +60,10 @@ td.appendChild(btn);
       tdRef.textContent = row["REFERENCE"];
       tr.appendChild(tdRef);
 
+      const tdDes = document.createElement("td");
+      tdDes.textContent = row["DESIGNATION"] || "–";
+      tr.appendChild(tdDes);
+
       const tdType = document.createElement("td");
       tdType.textContent = row["TYPE DE RETOUR"];
       tr.appendChild(tdType);
@@ -86,6 +79,13 @@ td.appendChild(btn);
       }
       tr.appendChild(tdStatut);
 
+      const tdBtn = document.createElement("td");
+      const btn = document.createElement("button");
+      btn.textContent = "Voir PDF";
+      btn.onclick = () => voirPdf(row["NUMÉRO DE RETOUR"]);
+      tdBtn.appendChild(btn);
+      tr.appendChild(tdBtn);
+
       tbody.appendChild(tr);
     });
 
@@ -93,10 +93,8 @@ td.appendChild(btn);
     conteneur.appendChild(table);
   }
 
-  // 📥 Charger les retours du client
   async function chargerRetours() {
     const conteneur = document.getElementById("retours");
-    if (!conteneur) return;
     conteneur.innerHTML = "Chargement...";
 
     try {
@@ -105,17 +103,15 @@ td.appendChild(btn);
       if (data.success) {
         afficherRetours(data.retours);
       } else {
-        conteneur.textContent = "Erreur lors du chargement des retours.";
+        conteneur.textContent = "Erreur lors du chargement.";
       }
     } catch (e) {
-      conteneur.textContent = "Erreur de communication avec le serveur.";
+      conteneur.textContent = "Erreur de connexion au serveur.";
     }
   }
 
-  // 🔄 Charger retours au démarrage
-  chargerRetours();
+  chargerRetours(); // Lancement auto
 
-  // 📨 Formulaire d'ajout de retour
   const form = document.getElementById("form-retour");
   if (form) {
     form.addEventListener("submit", async (e) => {
@@ -128,12 +124,7 @@ td.appendChild(btn);
         type: ligne.querySelector("select[name='type[]']").value
       }));
 
-      const body = JSON.stringify({
-        email,
-        nom,
-        numClient: numero,
-        lignes
-      });
+      const body = JSON.stringify({ email, nom, numClient: numero, lignes });
 
       try {
         const response = await fetch(baseURL, {
@@ -146,61 +137,64 @@ td.appendChild(btn);
           chargerRetours();
           afficherSection("retours");
         } else {
-          alert("❌ Une erreur est survenue.");
-          console.error(result.error);
+          alert("❌ Erreur retour.");
         }
       } catch (err) {
-        alert("❌ Connexion au serveur impossible.");
+        alert("❌ Connexion serveur.");
         console.error(err);
       }
     });
   }
-});
+
+  // Charger les infos client (Mon compte)
+  chargerInfosClient();
+
   async function chargerInfosClient() {
-  try {
-    const res = await fetch(`${baseURL}?action=getInfosClient&email=${encodeURIComponent(email)}`);
-    const data = await res.json();
-
-    if (data.success) {
-      document.getElementById("info-nom").innerText = data.nom || "";
-      document.getElementById("info-email").innerText = data.email || "";
-      document.getElementById("info-num").innerText = data.numero || "";
-      document.getElementById("info-adresse").innerText = data.adresse || "";
-      document.getElementById("info-cp").innerText = data.cp || "";
-      document.getElementById("info-ville").innerText = data.ville || "";
-      document.getElementById("info-tel").innerText = data.telephone || "";
+    try {
+      const res = await fetch(`${baseURL}?action=getInfosClient&email=${encodeURIComponent(email)}`);
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById("info-nom").innerText = data.nom || "";
+        document.getElementById("info-email").innerText = data.email || "";
+        document.getElementById("info-num").innerText = data.numero || "";
+        document.getElementById("info-adresse").innerText = data.adresse || "";
+        document.getElementById("info-cp").innerText = data.cp || "";
+        document.getElementById("info-ville").innerText = data.ville || "";
+        document.getElementById("info-tel").innerText = data.telephone || "";
+      }
+    } catch (e) {
+      console.error("❌ Infos client non chargées", e);
     }
-  } catch (e) {
-    console.error("Erreur chargement infos client", e);
   }
-}
-  
-document.getElementById("exportCSV")?.addEventListener("click", () => {
-  const filtreStatut = document.getElementById("filtre-statut")?.value || "";
-  const lignes = [...document.querySelectorAll("#retours table tbody tr")];
 
-  const enTete = ["Date", "Référence", "Désignation", "Type", "Quantité", "Statut"];
-  const csv = [enTete.join(",")];
+  // 📤 Export CSV
+  document.getElementById("exportCSV")?.addEventListener("click", () => {
+    const filtreStatut = document.getElementById("filtre-statut")?.value || "";
+    const lignes = [...document.querySelectorAll("#retours table tbody tr")];
 
-  lignes.forEach(row => {
-    const cells = row.querySelectorAll("td");
-    if (!cells.length) return;
+    const enTete = ["Date", "Référence", "Désignation", "Type", "Quantité", "Statut"];
+    const csv = [enTete.join(",")];
 
-    const statut = cells[5]?.innerText;
-    if (filtreStatut && statut !== filtreStatut) return;
+    lignes.forEach(row => {
+      const cells = row.querySelectorAll("td");
+      if (!cells.length) return;
 
-    const ligneCsv = Array.from(cells).slice(0, 6).map(cell =>
-      `"${cell.innerText.replace(/"/g, '""')}"`
-    ).join(",");
-    csv.push(ligneCsv);
+      const statut = cells[5]?.innerText;
+      if (filtreStatut && statut !== filtreStatut) return;
+
+      const ligneCsv = Array.from(cells).slice(0, 6).map(cell =>
+        `"${cell.innerText.replace(/"/g, '""')}"`
+      ).join(",");
+      csv.push(ligneCsv);
+    });
+
+    const blob = new Blob([csv.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `retours-client-${new Date().toISOString().split("T")[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   });
-
-  const blob = new Blob([csv.join("\n")], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `retours-client-${new Date().toISOString().split("T")[0]}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
 });
