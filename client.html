@@ -119,6 +119,24 @@
       <div class="table-container" id="retours" style="display: block;">
         <p class="loading">Chargement des retours...</p>
       </div>
+    <section id="retours">
+  <h2>Mes retours</h2>
+
+  <div class="actions" style="margin-bottom: 1rem;">
+    <label for="filtre-statut">Filtrer par statut :</label>
+    <select id="filtre-statut">
+      <option value="">Tous</option>
+      <option value="EN ATTENTE">EN ATTENTE</option>
+      <option value="VALIDÉ">VALIDÉ</option>
+      <option value="REFUSÉ">REFUSÉ</option>
+    </select>
+
+    <button id="exportCSV">📁 Exporter en CSV</button>
+  </div>
+
+  <div id="retours"></div>
+</section>
+
 
       <div class="table-container" id="mon-compte" style="margin-top: 3rem; display: none;">
   <h2 style="color: var(--bleu-clair); margin-bottom: 1rem;">🙍‍♂️ Mes informations</h2>
@@ -369,4 +387,6 @@ function afficherNotice(select) {
   <script src="js/client.js"></script>
 </body>
 </html>
+
+  
 
