@@ -174,3 +174,33 @@ td.appendChild(btn);
     console.error("Erreur chargement infos client", e);
   }
 }
+  
+document.getElementById("exportCSV")?.addEventListener("click", () => {
+  const filtreStatut = document.getElementById("filtre-statut")?.value || "";
+  const lignes = [...document.querySelectorAll("#retours table tbody tr")];
+
+  const enTete = ["Date", "Référence", "Désignation", "Type", "Quantité", "Statut"];
+  const csv = [enTete.join(",")];
+
+  lignes.forEach(row => {
+    const cells = row.querySelectorAll("td");
+    if (!cells.length) return;
+
+    const statut = cells[5]?.innerText;
+    if (filtreStatut && statut !== filtreStatut) return;
+
+    const ligneCsv = Array.from(cells).slice(0, 6).map(cell =>
+      `"${cell.innerText.replace(/"/g, '""')}"`
+    ).join(",");
+    csv.push(ligneCsv);
+  });
+
+  const blob = new Blob([csv.join("\n")], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `retours-client-${new Date().toISOString().split("T")[0]}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+});
