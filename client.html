@@ -5,169 +5,174 @@
   <title>Espace Client AAI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
-  <style>
-    :root {
-      --bleu-fonce: #0b1e49;
-      --bleu-clair: #113267;
-      --jaune-aai: #ffe04c;
-      --gris-fond: #f8f9fc;
-      --gris-texte: #64748b;
-      --bordure: #e2e8f0;
-      --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.05);
-      --blanc: #ffffff;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: var(--gris-fond);
-    }
-
-    .dashboard {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      width: 240px;
-      background-color: var(--bleu-fonce);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      padding: 2rem 1rem;
-    }
-
-    .sidebar button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1rem;
-      padding: 0.8rem 1rem;
-      border-radius: 10px;
-      margin-bottom: 0.7rem;
-      cursor: pointer;
-      transition: background 0.3s;
-      text-align: left;
-    }
-
-    .sidebar button:hover {
-      background-color: var(--bleu-clair);
-    }
-
-    .main-content {
-      flex: 1;
-      padding: 2rem;
-    }
-
-    h1 {
-      color: var(--bleu-fonce);
-    }
-
-    h2 {
-      color: var(--bleu-clair);
-    }
-
-    .info-box {
-      padding: 0.6rem;
-      background: var(--gris-fond);
-      border: 1px solid var(--bordure);
-      border-radius: 6px;
-      margin-top: 0.2rem;
-      font-weight: 500;
-      color: var(--bleu-fonce);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-
-    th, td {
-      padding: 0.8rem;
-      border-bottom: 1px solid var(--bordure);
-    }
-
-    th {
-      background-color: var(--bleu-clair);
-      color: white;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="dashboard">
-    <aside class="sidebar">
-      <div style="font-weight: bold; margin-bottom: 2rem; text-align: center;">
-        👤 <span id="nom"></span>
-      </div>
-      <button onclick="afficherSection('retours')">🏠 Accueil</button>
-      <button onclick="afficherSection('mon-compte')">🙍‍♂️ Mon compte</button>
-      <button onclick="afficherSection('ajout-retour')">➕ Ajouter un retour</button>
-      <button onclick="logout()">🔓 Déconnexion</button>
-    </aside>
+  <header class="topbar">
+    <h1>AAI</h1>
+    <nav>
+      <a href="#">Accueil</a>
+      <a href="#">Tableau de bord</a>
+      <a href="#">Créer un retour</a>
+      <a href="#">Historique</a>
+      <a href="#">Statistiques</a>
+      <a href="#">Support</a>
+    </nav>
+    <div class="profile-icon" title="Mon profil"><i class="fas fa-user-circle"></i></div>
+  </header>
 
-    <main class="main-content">
-      <div style="text-align:center; margin-bottom: 2rem;">
-        <img src="https://tse3.mm.bing.net/th?id=OIP.-JZJlknZTwSH_jOwoWcW_gHaBZ&pid=Api&P=0&h=180" style="max-width: 280px;">
+  <main>
+    <section class="dashboard-cards">
+      <div class="card">
+        <h3>Retours en attente</h3>
+        <p><strong id="stat-attente">0</strong></p>
       </div>
+      <div class="card">
+        <h3>Retours en cours</h3>
+        <p><strong id="stat-encours">0</strong></p>
+      </div>
+      <div class="card">
+        <h3>Retours terminés</h3>
+        <p><strong id="stat-termes">0</strong></p>
+      </div>
+      <div class="card">
+        <button class="button-jaune" onclick="location.href='formulaireRetour.html'" aria-label="Créer un retour"><i class="fas fa-plus"></i> Créer un retour</button>
+      </div>
+    </section>
 
-      <section id="retours">
-        <h1>Mes retours</h1>
-        <div style="margin-bottom: 1rem;">
-          <label for="filtre-statut">Filtrer par statut :</label>
+    <section class="chart-container">
+      <div class="chart-box">
+        <h3>Évolution mensuelle</h3>
+        <canvas id="chart1"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Répartition par motif</h3>
+        <canvas id="chart2"></canvas>
+      </div>
+    </section>
+
+    <section>
+      <div class="table-actions">
+        <h3>Historique des retours</h3>
+        <div>
           <select id="filtre-statut">
-            <option value="">Tous</option>
-            <option value="EN ATTENTE">EN ATTENTE</option>
-            <option value="VALIDÉ">VALIDÉ</option>
-            <option value="REFUSÉ">REFUSÉ</option>
+            <option value="">Tous les statuts</option>
+            <option value="En attente">En attente</option>
+            <option value="En cours">En cours</option>
+            <option value="Terminé">Terminé</option>
           </select>
-          <button id="exportCSV">📁 Export CSV</button>
+          <input type="text" id="search-bar" placeholder="Rechercher..." aria-label="Recherche">
+          <button onclick="exportCSV()" aria-label="Exporter les données">Exporter</button>
         </div>
-        <div id="retours-table">Chargement...</div>
-      </section>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Référence</th>
+            <th>Désignation</th>
+            <th>Pré-accord</th>
+            <th>Statut</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr><td colspan="6">Chargement...</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
 
-      <section id="mon-compte" class="hidden">
-        <h2>🙍‍♂️ Mes informations</h2>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-          <div><strong>Nom :</strong><div class="info-box" id="info-nom">–</div></div>
-          <div><strong>Email :</strong><div class="info-box" id="info-email">–</div></div>
-          <div><strong>N° Client :</strong><div class="info-box" id="info-num">–</div></div>
-          <div><strong>Adresse :</strong><div class="info-box" id="info-adresse">–</div></div>
-          <div><strong>Code Postal :</strong><div class="info-box" id="info-cp">–</div></div>
-          <div><strong>Ville :</strong><div class="info-box" id="info-ville">–</div></div>
-          <div><strong>Téléphone :</strong><div class="info-box" id="info-tel">–</div></div>
-        </div>
+  <footer>
+    &copy; 2025 <strong>AAI</strong>. Tous droits réservés.
+  </footer>
 
-        <h3 style="margin-top: 2rem;">🔑 Modifier le mot de passe</h3>
-        <input type="password" id="new-password" placeholder="Nouveau mot de passe" style="width:100%;padding:0.5rem;margin:1rem 0;">
-        <button onclick="changerMotDePasse()">💾 Enregistrer</button>
-        <p id="pass-msg"></p>
-      </section>
+  <script>
+    function applyFilters() {
+      const statut = document.getElementById("filtre-statut").value.toLowerCase();
+      const search = document.getElementById("search-bar").value.toLowerCase();
+      const rows = document.querySelectorAll("#table-body tr");
 
-      <section id="ajout-retour" class="hidden">
-        <h2>➕ Ajouter un retour</h2>
-        <form id="form-retour">
-          <div id="ligne-retour-container">
-            <!-- Généré dynamiquement par JS -->
-          </div>
-          <button type="button" onclick="ajouterLigneRetour()">➕ Ajouter une autre ligne</button>
-          <div id="notice-garantie" class="hidden" style="background: #fffbe6; padding: 1rem; border-left: 4px solid #ffe04c; margin-top: 1rem;">
-            <strong>📦 Pour un retour en garantie :</strong><br>
-            Merci de fournir : bon de livraison, facture client, garantie, carte grise.
-          </div>
-          <button type="submit" style="margin-top:1rem;background:#113267;color:white;padding:0.5rem 1rem;border:none;border-radius:5px;">📤 Envoyer</button>
-        </form>
-      </section>
-    </main>
-  </div>
+      rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        const cellText = Array.from(cells).map(c => c.textContent.toLowerCase()).join(" ");
+        const show = (!statut || cellText.includes(statut)) && (!search || cellText.includes(search));
+        row.style.display = show ? "" : "none";
+      });
+    }
 
-  <script src="js/client.js"></script>
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      window.addEventListener("DOMContentLoaded", () => {
+        google.script.run.withSuccessHandler(function(html) {
+          document.getElementById("table-body").innerHTML = html;
+          Array.from(document.querySelectorAll('.btn-pdf')).forEach(btn => {
+            btn.addEventListener('click', function () {
+              const ref = this.getAttribute('data-ref');
+              google.script.run.exportPDF(ref);
+            });
+          });
+        }).getHistoriqueRetours();
+
+        google.script.run.withSuccessHandler(function(stats) {
+          document.getElementById("stat-attente").textContent = stats.attente;
+          document.getElementById("stat-encours").textContent = stats.encours;
+          document.getElementById("stat-termes").textContent = stats.termines;
+        }).getStatsRetours();
+
+        google.script.run.withSuccessHandler(function(data) {
+          new Chart(document.getElementById('chart1'), {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'Retours',
+                data: data.values,
+                borderColor: '#0b1e49',
+                backgroundColor: 'rgba(11,30,73,0.1)'
+              }]
+            }
+          });
+        }).getGraphData();
+
+        google.script.run.withSuccessHandler(function(donnees) {
+          new Chart(document.getElementById('chart2'), {
+            type: 'doughnut',
+            data: {
+              labels: donnees.labels,
+              datasets: [{
+                data: donnees.valeurs,
+                backgroundColor: donnees.couleurs
+              }]
+            },
+            options: {
+              plugins: {
+                legend: {
+                  position: 'right'
+                }
+              }
+            }
+          });
+        }).getMotifsDonut();
+
+        document.getElementById("filtre-statut").addEventListener("change", applyFilters);
+        document.getElementById("search-bar").addEventListener("input", applyFilters);
+      });
+    } else {
+      console.error("Ce script doit être exécuté dans un environnement Google Apps Script (HtmlService).");
+    }
+
+    function exportCSV() {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(function(url) {
+          window.open(url, '_blank');
+        }).exportCSV();
+      } else {
+        alert("Export CSV non disponible.");
+      }
+    }
+  </script>
 </body>
 </html>
 
-  
 
