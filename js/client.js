@@ -1,3 +1,4 @@
+// ========== CLIENT.JS (COMPLETEMENT REPRIS) ==========
 window.addEventListener("DOMContentLoaded", () => {
   const baseURL = "https://script.google.com/macros/s/AKfycbwaaUrWfvfGoqkGsnAMbs-XL9l3psSXjDOQBrUnBetqvTzKOMmwd4MeDsZ8PWPwtNrR/exec";
   const email = localStorage.getItem("email");
@@ -10,7 +11,8 @@ window.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Injection DOM
+  // === DOM Injection ===
+  document.getElementById("client-id")?.setAttribute("value", numero);
   document.getElementById("email")?.innerText = email;
   document.getElementById("nom")?.innerText = nom;
   document.getElementById("numClient")?.innerText = numero;
@@ -20,14 +22,37 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
   });
 
-  // Génère un bouton PDF par ligne
+  // === Chargement des infos client ===
+  async function chargerInfosClient() {
+    try {
+      const res = await fetch(`${baseURL}?action=getInfosClient&email=${encodeURIComponent(email)}`);
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById("info-nom").innerText = data.nom || "";
+        document.getElementById("info-email").innerText = data.email || "";
+        document.getElementById("info-num").innerText = data.numero || "";
+        document.getElementById("info-adresse").innerText = data.adresse || "";
+        document.getElementById("info-cp").innerText = data.cp || "";
+        document.getElementById("info-ville").innerText = data.ville || "";
+        document.getElementById("info-tel").innerText = data.telephone || "";
+      }
+    } catch (e) {
+      console.error("❌ Infos client non chargées", e);
+    }
+  }
+
+  // === Génération PDF ===
   function voirPdf(numeroRetour) {
     const url = `${baseURL}?action=genererPdfDepuisRetour&numero=${numeroRetour}`;
     window.open(url, "_blank");
   }
 
+  // === Affichage des retours ===
   function afficherRetours(retours) {
-    const conteneur = document.getElementById("retours");
+    const statutFiltre = document.getElementById("filtre-statut")?.value || "";
+    const referenceFiltre = document.getElementById("filtre-reference")?.value?.toLowerCase() || "";
+    const typeFiltre = document.getElementById("filtre-type")?.value || "";
+    const conteneur = document.getElementById("retours-table");
     conteneur.innerHTML = "";
 
     if (!retours.length) {
@@ -49,56 +74,65 @@ window.addEventListener("DOMContentLoaded", () => {
     table.appendChild(thead);
 
     const tbody = document.createElement("tbody");
-    retours.forEach(row => {
-      const tr = document.createElement("tr");
+    retours
+      .filter(row => {
+        const statutOK = !statutFiltre || row["STATUT DE RETOUR"] === statutFiltre;
+        const referenceOK = !referenceFiltre || (row["REFERENCE"] || "").toLowerCase().includes(referenceFiltre);
+        const typeOK = !typeFiltre || row["TYPE DE RETOUR"] === typeFiltre;
+        return statutOK && referenceOK && typeOK;
+      })
+      .forEach(row => {
+        const tr = document.createElement("tr");
 
-      const tdDate = document.createElement("td");
-      tdDate.textContent = new Date(row["DATE"]).toLocaleDateString("fr-FR");
-      tr.appendChild(tdDate);
+        const tdDate = document.createElement("td");
+        tdDate.textContent = new Date(row["DATE"]).toLocaleDateString("fr-FR");
+        tr.appendChild(tdDate);
 
-      const tdRef = document.createElement("td");
-      tdRef.textContent = row["REFERENCE"];
-      tr.appendChild(tdRef);
+        const tdRef = document.createElement("td");
+        tdRef.textContent = row["REFERENCE"];
+        tr.appendChild(tdRef);
 
-      const tdDes = document.createElement("td");
-      tdDes.textContent = row["DESIGNATION"] || "–";
-      tr.appendChild(tdDes);
+        const tdDes = document.createElement("td");
+        tdDes.textContent = row["DESIGNATION"] || "–";
+        tr.appendChild(tdDes);
 
-      const tdType = document.createElement("td");
-      tdType.textContent = row["TYPE DE RETOUR"];
-      tr.appendChild(tdType);
+        const tdType = document.createElement("td");
+        tdType.textContent = row["TYPE DE RETOUR"];
+        tr.appendChild(tdType);
 
-      const tdQte = document.createElement("td");
-      tdQte.textContent = row["QUANTITE"];
-      tr.appendChild(tdQte);
+        const tdQte = document.createElement("td");
+        tdQte.textContent = row["QUANTITE"];
+        tr.appendChild(tdQte);
 
-      const tdStatut = document.createElement("td");
-      tdStatut.textContent = row["STATUT DE RETOUR"];
-      if (tdStatut.textContent === "REFUSÉ" && row["MOTIFS REFUS MAGASIN"]) {
-        tdStatut.title = row["MOTIFS REFUS MAGASIN"];
-      }
-      tr.appendChild(tdStatut);
+        const tdStatut = document.createElement("td");
+        tdStatut.textContent = row["STATUT DE RETOUR"];
+        tdStatut.classList.add(`statut-${tdStatut.textContent.toLowerCase().replace(" ", "_")}`);
+        if (tdStatut.textContent === "REFUSÉ" && row["MOTIFS REFUS MAGASIN"]) {
+          tdStatut.title = row["MOTIFS REFUS MAGASIN"];
+        }
+        tr.appendChild(tdStatut);
 
-      const tdBtn = document.createElement("td");
-      const btn = document.createElement("button");
-      btn.textContent = "Voir PDF";
-      btn.onclick = () => voirPdf(row["NUMÉRO DE RETOUR"]);
-      tdBtn.appendChild(btn);
-      tr.appendChild(tdBtn);
+        const tdBtn = document.createElement("td");
+        const btn = document.createElement("button");
+        btn.textContent = "Voir PDF";
+        btn.onclick = () => voirPdf(row["NUMÉRO DE RETOUR"]);
+        tdBtn.appendChild(btn);
+        tr.appendChild(tdBtn);
 
-      tbody.appendChild(tr);
-    });
+        tbody.appendChild(tr);
+      });
 
     table.appendChild(tbody);
     conteneur.appendChild(table);
   }
 
+  // === Chargement initial des retours ===
   async function chargerRetours() {
     const conteneur = document.getElementById("retours");
     conteneur.innerHTML = "Chargement...";
 
     try {
-      const res = await fetch(`${baseURL}?action=getRetoursClient&email=${encodeURIComponent(email)}`);
+      const res = await fetch(`${baseURL}?action=getRetoursParNumeroClient&numero=${encodeURIComponent(numero)}`);
       const data = await res.json();
       if (data.success) {
         afficherRetours(data.retours);
@@ -110,8 +144,12 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  chargerRetours(); // Lancement auto
+  // === Événements des filtres ===
+  document.getElementById("filtre-statut")?.addEventListener("change", chargerRetours);
+  document.getElementById("filtre-reference")?.addEventListener("input", chargerRetours);
+  document.getElementById("filtre-type")?.addEventListener("change", chargerRetours);
 
+  // === Soumission du formulaire de retour ===
   const form = document.getElementById("form-retour");
   if (form) {
     form.addEventListener("submit", async (e) => {
@@ -146,28 +184,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Charger les infos client (Mon compte)
-  chargerInfosClient();
-
-  async function chargerInfosClient() {
-    try {
-      const res = await fetch(`${baseURL}?action=getInfosClient&email=${encodeURIComponent(email)}`);
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById("info-nom").innerText = data.nom || "";
-        document.getElementById("info-email").innerText = data.email || "";
-        document.getElementById("info-num").innerText = data.numero || "";
-        document.getElementById("info-adresse").innerText = data.adresse || "";
-        document.getElementById("info-cp").innerText = data.cp || "";
-        document.getElementById("info-ville").innerText = data.ville || "";
-        document.getElementById("info-tel").innerText = data.telephone || "";
-      }
-    } catch (e) {
-      console.error("❌ Infos client non chargées", e);
-    }
-  }
-
-  // 📤 Export CSV
+  // === Export CSV ===
   document.getElementById("exportCSV")?.addEventListener("click", () => {
     const filtreStatut = document.getElementById("filtre-statut")?.value || "";
     const lignes = [...document.querySelectorAll("#retours table tbody tr")];
@@ -197,4 +214,9 @@ window.addEventListener("DOMContentLoaded", () => {
     a.click();
     document.body.removeChild(a);
   });
+
+  // Init
+  chargerInfosClient();
+  chargerRetours();
 });
+
