@@ -4,174 +4,233 @@
   <meta charset="UTF-8">
   <title>Espace Client AAI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bleu-fonce: #0b1e49;
+      --bleu-clair: #4e73df;
+      --jaune-aai: #ffe04c;
+      --blanc: #ffffff;
+      --gris-clair: #f4f4f4;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--gris-clair);
+    }
+
+    header.topbar {
+  background: var(--bleu-fonce);
+  color: var(--blanc);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+    header.topbar h1 {
+      font-size: 1.8rem;
+    }
+
+    nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+nav a {
+  color: var(--bleu-fonce);
+  background-color: var(--jaune-aai);
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  flex: 1;
+  max-width: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+nav a.active {
+  background-color: var(--bleu-clair);
+  color: white;
+}
+
+nav a:hover {
+  background-color: #ffd633;
+}
+
+    .profile-icon {
+      font-size: 1.8rem;
+      color: var(--jaune-aai);
+    }
+
+    main {
+      padding: 2rem;
+    }
+
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--blanc);
+      border-left: 6px solid var(--jaune-aai);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    }
+
+    .button-jaune {
+      background: var(--jaune-aai);
+      color: var(--bleu-fonce);
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .chart-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-box {
+      background: var(--blanc);
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    }
+
+    .table-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .table-actions h3 {
+      margin: 0;
+    }
+
+    .table-actions select,
+    .table-actions input[type="text"],
+    .table-actions button {
+      margin-left: 1rem;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--blanc);
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    table th, table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    table thead {
+      background: var(--jaune-aai);
+      color: var(--bleu-fonce);
+    }
+
+    footer {
+      background: var(--jaune-aai);
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--bleu-fonce);
+      padding: 1rem;
+    }
+  </style>
 </head>
-<body>
-  <header class="topbar">
-    <h1>AAI</h1>
-    <nav>
-      <a href="#">Accueil</a>
-      <a href="#">Tableau de bord</a>
-      <a href="#">Créer un retour</a>
-      <a href="#">Historique</a>
-      <a href="#">Statistiques</a>
-      <a href="#">Support</a>
-    </nav>
-    <div class="profile-icon" title="Mon profil"><i class="fas fa-user-circle"></i></div>
+<body onload="window.location.hash = '#accueil'">
+  <header class="topbar" style="position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+    <h1 style="margin: 0 1rem;">Espace Client</h1>
+    <nav style="display: flex; justify-content: center; align-items: center; width: 100%; gap: 0.5rem; flex-wrap: wrap;">
+  <a href="#accueil">Accueil</a>
+  <a href="#stats">Tableau de bord</a>
+  <a href="formulaireRetour.html">Créer un retour</a>
+  <a href="#retours">Historique</a>
+  <a href="#graphiques">Statistiques</a>
+  <a href="#mon-compte">Mon compte</a>
+</nav>
+<div style="position: absolute; top: 1rem; right: 1rem;">
+  <a href="#" onclick="logout()" style="background-color: #e63946; color: white; padding: 0.4rem 1rem; border-radius: 6px; font-weight: bold; text-decoration: none;">Déconnexion</a>
+</div>
   </header>
 
-  <main>
-    <section class="dashboard-cards">
-      <div class="card">
-        <h3>Retours en attente</h3>
-        <p><strong id="stat-attente">0</strong></p>
-      </div>
-      <div class="card">
-        <h3>Retours en cours</h3>
-        <p><strong id="stat-encours">0</strong></p>
-      </div>
-      <div class="card">
-        <h3>Retours terminés</h3>
-        <p><strong id="stat-termes">0</strong></p>
-      </div>
-      <div class="card">
-        <button class="button-jaune" onclick="location.href='formulaireRetour.html'" aria-label="Créer un retour"><i class="fas fa-plus"></i> Créer un retour</button>
-      </div>
-    </section>
+  <main id="accueil">
+  <section class="dashboard-cards">
+    <div class="card">
+      <h2>🕓 En attente</h2>
+      <p><strong id="stat-en-attente">0</strong> retour(s)</p>
+    </div>
+    <div class="card">
+      <h2>⚙️ Pris en charge</h2>
+      <p><strong id="stat-en-cours">0</strong> retour(s)</p>
+    </div>
+    <div class="card">
+      <h2>✅ Validé</h2>
+      <p><strong id="stat-termines">0</strong> retour(s)</p>
+    </div>
+    <div class="card">
+      <h2>❌ Refusé</h2>
+      <p><strong id="stat-refuses">0</strong> retour(s)</p>
+    </div>
+  </section>
+</main>
 
-    <section class="chart-container">
-      <div class="chart-box">
-        <h3>Évolution mensuelle</h3>
-        <canvas id="chart1"></canvas>
-      </div>
-      <div class="chart-box">
-        <h3>Répartition par motif</h3>
-        <canvas id="chart2"></canvas>
-      </div>
-    </section>
+  <main id="stats">
+  <section class="chart-container">
+    <div class="chart-box">
+      <h3>Répartition des statuts</h3>
+      <canvas id="chart-statut"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Répartition par type de retour</h3>
+      <canvas id="chart-type"></canvas>
+    </div>
+  </section>
+</main>
 
-    <section>
-      <div class="table-actions">
-        <h3>Historique des retours</h3>
-        <div>
-          <select id="filtre-statut">
-            <option value="">Tous les statuts</option>
-            <option value="En attente">En attente</option>
-            <option value="En cours">En cours</option>
-            <option value="Terminé">Terminé</option>
-          </select>
-          <input type="text" id="search-bar" placeholder="Rechercher..." aria-label="Recherche">
-          <button onclick="exportCSV()" aria-label="Exporter les données">Exporter</button>
-        </div>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Référence</th>
-            <th>Désignation</th>
-            <th>Pré-accord</th>
-            <th>Statut</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="table-body">
-          <tr><td colspan="6">Chargement...</td></tr>
-        </tbody>
-      </table>
-    </section>
-  </main>
-
+  
   <footer>
-    &copy; 2025 <strong>AAI</strong>. Tous droits réservés.
+    © 2025 AAI - Espace client sécurisé
   </footer>
-
-  <script>
-    function applyFilters() {
-      const statut = document.getElementById("filtre-statut").value.toLowerCase();
-      const search = document.getElementById("search-bar").value.toLowerCase();
-      const rows = document.querySelectorAll("#table-body tr");
-
-      rows.forEach(row => {
-        const cells = row.querySelectorAll("td");
-        const cellText = Array.from(cells).map(c => c.textContent.toLowerCase()).join(" ");
-        const show = (!statut || cellText.includes(statut)) && (!search || cellText.includes(search));
-        row.style.display = show ? "" : "none";
-      });
-    }
-
-    if (typeof google !== 'undefined' && google.script && google.script.run) {
-      window.addEventListener("DOMContentLoaded", () => {
-        google.script.run.withSuccessHandler(function(html) {
-          document.getElementById("table-body").innerHTML = html;
-          Array.from(document.querySelectorAll('.btn-pdf')).forEach(btn => {
-            btn.addEventListener('click', function () {
-              const ref = this.getAttribute('data-ref');
-              google.script.run.exportPDF(ref);
-            });
-          });
-        }).getHistoriqueRetours();
-
-        google.script.run.withSuccessHandler(function(stats) {
-          document.getElementById("stat-attente").textContent = stats.attente;
-          document.getElementById("stat-encours").textContent = stats.encours;
-          document.getElementById("stat-termes").textContent = stats.termines;
-        }).getStatsRetours();
-
-        google.script.run.withSuccessHandler(function(data) {
-          new Chart(document.getElementById('chart1'), {
-            type: 'line',
-            data: {
-              labels: data.labels,
-              datasets: [{
-                label: 'Retours',
-                data: data.values,
-                borderColor: '#0b1e49',
-                backgroundColor: 'rgba(11,30,73,0.1)'
-              }]
-            }
-          });
-        }).getGraphData();
-
-        google.script.run.withSuccessHandler(function(donnees) {
-          new Chart(document.getElementById('chart2'), {
-            type: 'doughnut',
-            data: {
-              labels: donnees.labels,
-              datasets: [{
-                data: donnees.valeurs,
-                backgroundColor: donnees.couleurs
-              }]
-            },
-            options: {
-              plugins: {
-                legend: {
-                  position: 'right'
-                }
-              }
-            }
-          });
-        }).getMotifsDonut();
-
-        document.getElementById("filtre-statut").addEventListener("change", applyFilters);
-        document.getElementById("search-bar").addEventListener("input", applyFilters);
-      });
-    } else {
-      console.error("Ce script doit être exécuté dans un environnement Google Apps Script (HtmlService).");
-    }
-
-    function exportCSV() {
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run.withSuccessHandler(function(url) {
-          window.open(url, '_blank');
-        }).exportCSV();
-      } else {
-        alert("Export CSV non disponible.");
-      }
-    }
-  </script>
+<script>
+  // Active link on scroll or click
+  const links = document.querySelectorAll('nav a');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      links.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+</script>
 </body>
 </html>
 
