@@ -5,148 +5,7 @@
   <title>Espace Client AAI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js">
-  // Données fictives pour les graphiques camembert
-  document.addEventListener("DOMContentLoaded", function () {
-    const chartStatut = document.getElementById('chart-statut');
-    if (chartStatut) {
-      new Chart(chartStatut, {
-        type: 'pie',
-        data: {
-          labels: ['En attente', 'Pris en charge', 'Validé', 'Refusé'],
-          datasets: [{
-            data: [5, 3, 8, 2],
-            backgroundColor: ['#f4c542', '#4e73df', '#1cc88a', '#e74a3b']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
-      });
-    }
-
-    const chartType = document.getElementById('chart-type');
-    if (chartType) {
-      new Chart(chartType, {
-        type: 'pie',
-        data: {
-          labels: ['Retour', 'Consigne', 'Garantie', 'Autre'],
-          datasets: [{
-            data: [6, 4, 2, 1],
-            backgroundColor: ['#36b9cc', '#f6c23e', '#858796', '#20c997']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
-      });
-    }
-  });
-function filterTable(colIndex) {
-  const inputBoxes = document.querySelectorAll('thead input');
-  const table = document.querySelector('#table-retours');
-  const filter = inputBoxes[colIndex].value.toUpperCase();
-  const rows = table.getElementsByTagName('tr');
-
-  for (let i = 0; i < rows.length; i++) {
-    const cell = rows[i].getElementsByTagName('td')[colIndex];
-    if (cell) {
-      const textValue = cell.textContent || cell.innerText;
-      rows[i].style.display = textValue.toUpperCase().indexOf(filter) > -1 ? '' : 'none';
-    }
-  }
-}
-function toggleFilter(col) {
-  const inputs = document.querySelectorAll('thead input');
-  const target = inputs[col];
-  if (target) {
-    const visible = target.style.display === 'inline-block';
-    inputs.forEach(input => input.style.display = 'none');
-    target.style.display = visible ? 'none' : 'inline-block';
-    if (!visible) target.focus();
-  }
-}
-function exportSelectedRowsToCSV() {
-  const rows = document.querySelectorAll('#table-retours tr');
-  let csvContent = '';
-  rows.forEach(row => {
-    const checkbox = row.querySelector('input[type="checkbox"]');
-    if (checkbox && checkbox.checked) {
-      const cols = row.querySelectorAll('td');
-      const rowData = [];
-      for (let i = 1; i < cols.length - 1; i++) {
-        rowData.push('"' + cols[i].innerText.trim().replace(/
-/g, ' ') + '"');
-      }
-      csvContent += rowData.join(',') + '
-';
-    }
-  });
-  if (!csvContent) return alert('Veuillez sélectionner au moins une ligne.');
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  link.setAttribute('href', URL.createObjectURL(blob));
-  link.setAttribute('download', 'retours_selection.csv');
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-document.getElementById('select-all')?.addEventListener('change', function () {
-  document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = this.checked);
-});
-function handleRetourSubmit(event) {
-  event.preventDefault();
-  const tableBody = document.querySelector('#table-retours tbody');
-  const now = new Date().toLocaleString('fr-FR');
-  const form = document.querySelector('#form-retour');
-  const lignes = form.querySelectorAll('tbody tr');
-
-  lignes.forEach((row, i) => {
-    const ref = row.querySelector('[name="ref[]"]').value || '-';
-    const des = row.querySelector('[name="des[]"]').value || '-';
-    const qte = row.querySelector('[name="qte[]"]').value || '1';
-    const type = row.querySelector('[name="type[]"]').value || '-';
-    const precision = row.querySelector('[name="precision[]"]').value || '-';
-    const numero = 'CLIENT-' + Date.now().toString().slice(-6) + '-' + i;
-
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `
-      <td><input type="checkbox" class="row-checkbox"></td>
-      <td>${now}</td>
-      <td>${ref}</td>
-      <td>${des}</td>
-      <td>${type.toUpperCase()}</td>
-      <td>${qte}</td>
-      <td>${precision}</td>
-      <td>${numero}</td>
-      <td>EN ATTENTE</td>
-      <td><button class="button-bleu" onclick="window.print()">📄 PDF</button></td>
-    `;
-    tableBody.prepend(newRow);
-  });
-
-  form.reset();
-  alert('Retour envoyé avec succès !');
-  showSection('#accueil');
-  // TODO : ajouter ici le code pour insérer la ligne dans la table HTML côté historique si besoin
-}
-
-function ouvrirPDF(btn) {
-  const row = btn.closest('tr');
-  const numero = row.children[7]?.innerText?.trim(); // Colonne n° de retour
-  if (!numero) return alert("Numéro de retour introuvable !");
-  const url = `/pdf/${numero}.pdf`; // 💡 À adapter selon ton dossier
-  window.open(url, '_blank');
-}
- 
-</script>
+  
   <style>
     :root {
       --bleu-fonce: #0b1e49;
@@ -326,7 +185,8 @@ function ouvrirPDF(btn) {
       color: var(--bleu-fonce);
       padding: 1rem;
     }
-  </style>
+  
+ </style>
 </head>
 <body>
   <header class="topbar" style="position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
@@ -370,30 +230,29 @@ function ouvrirPDF(btn) {
     <table id="form-lignes-retour">
       <thead>
         <tr>
-          <th>Référence</th>
-          <th>Désignation</th>
-          <th>Quantité</th>
-          <th>Type de retour</th>
-          <th>Précision</th>
+          <th style="width: 15%;">Référence</th>
+          <th style="width: 35%;">Désignation</th>
+          <th style="width: 10%;">Quantité</th>
+          <th style="width: 20%;">Type de retour</th>
+          <th style="width: 15%;">Précision</th>
+          <th style="width: 5%;"></th>
         </tr>
-      </thead>
       <tbody>
-        <tr>
-          <td><input type="text" name="ref[]" style="width: 80px;" required></td>
-          <td><input type="text" name="des[]" style="width: 140px;"></td>
-          <td><input type="number" name="qte[]" min="1" style="width: 60px;" required></td>
-          <td>
-            <select name="type[]" onchange="toggleNoticeGarantie(this)" style="width: 100px;">
-              <option value="Pièce">Pièce</option>
-              <option value="Consigne">Consigne</option>
-              <option value="Garantie">Garantie</option>
-              <option value="Autre">Autre</option>
-            </select>
-          </td>
-          <td><input type="text" name="precision[]" style="width: 140px;"></td>
-        </tr>
+<tr>
+          <td style="width: 120px;"><input type="text" name="ref[]" required style="width: 100%; box-sizing: border-box;"></td>
+<td style="width: 180px;"><input type="text" name="des[]" style="width: 100%; box-sizing: border-box;"></td>
+<td style="width: 80px;"><input type="number" name="qte[]" min="1" required style="width: 100%; box-sizing: border-box;"></td>
+<td style="width: 120px;">
+  <select name="type[]" onchange="toggleNoticeGarantie(this)" style="width: 100%;">
+    <option value="Pièce">Pièce</option>
+    <option value="Consigne">Consigne</option>
+    <option value="Garantie">Garantie</option>
+    <option value="Autre">Autre</option>
+  </select>
+</td>
+<td style="width: 5%; text-align: center;"><button type="button" onclick="this.closest\('tr'\).remove\(\)" style="background:none;border:none;color:red;font-size:0.9rem;cursor:pointer;">❌</button></td></tr>
       </tbody>
-    </table>
+</table>
     <button type="button" class="button-jaune" onclick="ajouterLigneRetour()">➕ Ajouter une autre ligne</button>
     <div id="notice-garantie" class="hidden" style="background: #fffbe6; padding: 1rem; border-left: 4px solid #ffe04c; margin-top: 1rem; display: none;">
       <strong>📦 Pour un retour en garantie :</strong><br>
@@ -404,24 +263,24 @@ function ouvrirPDF(btn) {
     </div>
   </form>
 </main>
-
 <script>
 function ajouterLigneRetour() {
   const tbody = document.querySelector('#form-lignes-retour tbody');
   const row = document.createElement('tr');
   row.innerHTML = `
-    <td><input type="text" name="ref[]" required></td>
-    <td><input type="text" name="des[]"></td>
-    <td><input type="number" name="qte[]" min="1" required></td>
-    <td>
-      <select name="type[]" onchange="toggleNoticeGarantie(this)">
+    <td style="width: 120px;"><input type="text" name="ref[]" required style="width: 100%; box-sizing: border-box;"></td>
+    <td style="width: 180px;"><input type="text" name="des[]" style="width: 100%; box-sizing: border-box;"></td>
+    <td style="width: 80px;"><input type="number" name="qte[]" min="1" required style="width: 100%; box-sizing: border-box;"></td>
+    <td style="width: 120px;">
+      <select name="type[]" onchange="toggleNoticeGarantie(this)" style="width: 100%; box-sizing: border-box;">
         <option value="Pièce">Pièce</option>
         <option value="Consigne">Consigne</option>
         <option value="Garantie">Garantie</option>
         <option value="Autre">Autre</option>
       </select>
     </td>
-    <td><input type="text" name="precision[]"></td>`;
+    <td style="width: 180px;"><input type="text" name="precision[]" style="width: 100%; box-sizing: border-box;"></td>
+    <td style="width: 5%; text-align: center;"><button type="button" onclick="this.closest('tr').remove()" style="background:none;border:none;color:red;font-size:0.9rem;cursor:pointer;">❌</button></td>`;
   tbody.appendChild(row);
 }
 
@@ -434,19 +293,161 @@ function toggleNoticeGarantie(select) {
 </script>
 
   <main id="stats" style="display: none;">
-    <section class="chart-container">
-      <div class="chart-box">
-        <h3>Répartition des statuts</h3>
-        <canvas id="chart-statut"></canvas>
-      </div>
-      <div class="chart-box">
-        <h3>Répartition par type de retour</h3>
-        <canvas id="chart-type"></canvas>
-      </div>
-    </section>
-  </main>
+  <section class="chart-container">
+    <div class="chart-box">
+      <h3>Répartition des statuts</h3>
+      <div id="camembert-statut" style="width: 200px; height: 200px; border-radius: 50%; margin: auto; position: relative; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2), inset 0 10px 20px rgba(255,255,255,0.3); transition: transform 0.6s ease; cursor: pointer; transform-style: preserve-3d; perspective: 600px;"></div>
+      <ul id="legende-statut" style="list-style: none; padding: 1rem 0 0;"></ul>
+    </div>
+    <div class="chart-box">
+      <h3>Répartition par type de retour</h3>
+      <div id="camembert-type" style="width: 200px; height: 200px; border-radius: 50%; margin: auto; position: relative; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2), inset 0 10px 20px rgba(255,255,255,0.3); transition: transform 0.6s ease; cursor: pointer; transform-style: preserve-3d; perspective: 600px;"></div>
+      <ul id="legende-type" style="list-style: none; padding: 1rem 0 0;"></ul>
+    </div>
+  </section>
+</main>
+  <script>
+  const links = document.querySelectorAll('nav a');
+const sections = document.querySelectorAll('main');
 
-  <main id="retours" style="display: none;">
+function logout() {
+  window.location.href = 'login.html';
+}
+
+function showSection(id) {
+  console.log('Tentative d\'affichage de la section :', id);
+  sections.forEach(section => {
+    console.log('Masquage de la section :', section.id);
+    section.style.display = 'none';
+  });
+  const target = document.querySelector(id);
+  if (target) {
+    target.style.display = 'block';
+    console.log('Section affichée :', id);
+  } else {
+    console.warn('Section introuvable :', id);
+  }
+}
+
+links.forEach(link => {
+  link.addEventListener('click', e => {
+    const target = link.getAttribute('href');
+    console.log('Lien cliqué :', target);
+    if (target.startsWith('#')) {
+      e.preventDefault();
+      showSection(target);
+      links.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    }
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  const charts = document.querySelectorAll('#camembert-statut, #camembert-type');
+  charts.forEach(chart => {
+    const container = chart.closest('.chart-box');
+    container.style.perspective = '800px';
+    chart.style.transformStyle = 'preserve-3d';
+    chart.addEventListener('mousemove', (e) => {
+      const rect = chart.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      const rotateX = -(y / rect.height) * 20;
+      const rotateY = (x / rect.width) * 20;
+      chart.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    chart.addEventListener('mouseleave', () => {
+      chart.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  });
+  genererCamembertsDepuisTableau();
+});
+
+function genererCamembertsDepuisTableau() {
+  let total = 0;
+  const rows = document.querySelectorAll('#retours table tr');
+  const statuts = {};
+  const types = {};
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length > 8) {
+      const statut = cells[8].innerText.trim();
+      const type = cells[4].innerText.trim();
+      statuts[statut] = (statuts[statut] || 0) + 1;
+      total++;
+      types[type] = (types[type] || 0) + 1;
+    }
+  });
+
+  function renderCamembert(containerId, data, colors) {
+    const totalData = Object.values(data).reduce((a, b) => a + b, 0);
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    container.style.background = 'conic-gradient(' + Object.entries(data).map(([_, v], i) => {
+      const start = (Object.values(data).slice(0, i).reduce((a,b)=>a+b,0)/totalData)*100;
+      const end = (Object.values(data).slice(0, i+1).reduce((a,b)=>a+b,0)/totalData)*100;
+      return colors[i % colors.length] + ' ' + start + '%, ' + colors[i % colors.length] + ' ' + end + '%';
+    }).join(', ') + ')';
+  }
+
+  function renderLegend(containerId, data, colors, total) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    let index = 0;
+    for (const [label, value] of Object.entries(data)) {
+      const percent = ((value / total) * 100).toFixed(1);
+      const li = document.createElement('li');
+      li.innerHTML = `<span style="display:inline-block;width:12px;height:12px;background:${colors[index % colors.length]};margin-right:8px;border-radius:2px;"></span> ${label} (${percent}%)`;
+      container.appendChild(li);
+      index++;
+    }
+  }
+
+  const statutColors = ['#4CAF50', '#FFC107', '#2196F3', '#F44336'];
+  const typeColors = ['#ffb347', '#87ceeb', '#c5e384', '#ff6961'];
+  renderCamembert('camembert-statut', statuts, statutColors);
+  renderCamembert('camembert-type', types, typeColors);
+  renderLegend('legende-statut', statuts, statutColors, total);
+  renderLegend('legende-type', types, typeColors, total);
+}
+function togglePasswordVisibility() {
+  const input = document.getElementById('client-password');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function modifierMotDePasse() {
+  const nouveau = prompt('Entrez votre nouveau mot de passe :');
+  if (nouveau) {
+    document.getElementById('client-password').value = nouveau;
+    alert('Mot de passe mis à jour (non enregistré côté serveur dans cette démo).');
+  }
+}
+</script>
+<script>
+// Rotation 3D interactive sur les camemberts
+window.addEventListener('DOMContentLoaded', () => {
+    genererCamembertsDepuisTableau();
+  const charts = document.querySelectorAll('#camembert-statut, #camembert-type');
+  charts.forEach(chart => {
+    const container = chart.closest('.chart-box');
+    container.style.perspective = '800px';
+    chart.style.transformStyle = 'preserve-3d';
+    chart.addEventListener('mousemove', (e) => {
+      const rect = chart.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      const rotateX = -(y / rect.height) * 20;
+      const rotateY = (x / rect.width) * 20;
+      chart.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    chart.addEventListener('mouseleave', () => {
+      chart.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  });
+});
+</script>
+<main id="retours" style="display: none;">
   <h2>Historique de mes retours</h2>
   <div class="table-actions">
     <label for="search-bar">🔍 Rechercher :</label>
@@ -530,48 +531,47 @@ function toggleNoticeGarantie(select) {
       <td>PAS MONTÉ</td>
       <td>24868-2025-03-0024</td>
       <td>EN ATTENTE</td>
-      <td> <button class="button-bleu" onclick="window.print()">📄 PDF</button></td>
+      <td> <button class="button-bleu" onclick="ouvrirPDF(this)">📄 PDF</button>
     </tr>
-    </tbody>
   </table>
 </main>
 
-<script>
-  const links = document.querySelectorAll('nav a');
-  const sections = document.querySelectorAll('main');
+  <main id="mon-compte" style="display: none;">
+  <section class="dashboard-cards">
+    <div class="card" style="grid-column: span 2;">
+      <h2>👤 Informations client</h2>
+      <p><strong>Nom :</strong> <span id="client-nom">Jean Dupont</span></p>
+      <p><strong>Numéro client :</strong> <span id="client-id">C24868</span></p>
+      <p><strong>Adresse :</strong> <span id="client-adresse">123 rue de l'Industrie, 75000 Paris</span></p>
+      <p><strong>Téléphone :</strong> <span id="client-tel">06 12 34 56 78</span></p>
+      <p><strong>Email :</strong> <span id="client-mail">jean.dupont@email.com</span></p>
+    </div>
 
-  function showSection(id) {
-    console.log('Tentative d\'affichage de la section :', id);
-    sections.forEach(section => {
-      console.log('Masquage de la section :', section.id);
-      section.style.display = 'none';
-    });
-    const target = document.querySelector(id);
-    if (target) {
-      target.style.display = 'block';
-      console.log('Section affichée :', id);
-    } else {
-      console.warn('Section introuvable :', id);
-    }
-  }
+    <div class="card">
+      <h2>🔐 Mot de passe</h2>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <input type="password" id="client-password" value="motdepasse123" style="flex:1; padding: 0.5rem;">
+        <button class="button-jaune" onclick="togglePasswordVisibility()">👁️</button>
+      </div>
+      <button class="button-bleu" onclick="modifierMotDePasse()" style="margin-top: 1rem;">Modifier mon mot de passe</button>
+    </div>
 
-  links.forEach(link => {
-    link.addEventListener('click', e => {
-      const target = link.getAttribute('href');
-      console.log('Lien cliqué :', target);
-      if (target.startsWith('#')) {
-        e.preventDefault();
-        showSection(target);
-        links.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-      }
-    });
-  });
+    <div class="card">
+      <h2>🏬 Contact magasin</h2>
+      <p><strong>Magasin :</strong> <span id="magasin-nom">AAI Marseille</span> (N° 0123)</p>
+      <p><strong>Téléphone :</strong> <span id="magasin-tel">04 91 23 45 67</span></p>
+      <p><strong>Email :</strong> <span id="magasin-mail">contact@aai-marseille.com</span></p>
+    </div>
 
-  window.addEventListener('DOMContentLoaded', () => {
-    console.log('Chargement terminé, affichage de #accueil');
-    showSection('#accueil');
-  });
-</script>
+    <div class="card">
+      <h2>📞 Votre commercial</h2>
+      <p><strong>Nom :</strong> <span id="commercial-nom">Sophie Martin</span> (Secteur 05)</p>
+      <p><strong>Téléphone :</strong> <span id="commercial-tel">06 78 90 12 34</span></p>
+      <p><strong>Email :</strong> <span id="commercial-mail">sophie.martin@aai.fr</span></p>
+    </div>
+  </section>
+</main>
 </body>
 </html>
+
+
