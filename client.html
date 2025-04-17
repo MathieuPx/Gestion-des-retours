@@ -137,6 +137,15 @@ function handleRetourSubmit(event) {
   showSection('#accueil');
   // TODO : ajouter ici le code pour insérer la ligne dans la table HTML côté historique si besoin
 }
+
+function ouvrirPDF(btn) {
+  const row = btn.closest('tr');
+  const numero = row.children[7]?.innerText?.trim(); // Colonne n° de retour
+  if (!numero) return alert("Numéro de retour introuvable !");
+  const url = `/pdf/${numero}.pdf`; // 💡 À adapter selon ton dossier
+  window.open(url, '_blank');
+}
+ 
 </script>
   <style>
     :root {
@@ -469,7 +478,7 @@ function toggleNoticeGarantie(select) {
       <td>PAS MONTÉ</td>
       <td>24868-2025-03-0020</td>
       <td>PRIS EN CHARGE</td>
-      <td> <button class="button-bleu" onclick="window.print()">📄 PDF</button></td>
+      <td> <button class="button-bleu" onclick="ouvrirPDF(this)">📄 PDF</button>
     </tr>
 
     <tr>
@@ -482,7 +491,7 @@ function toggleNoticeGarantie(select) {
       <td>PAS EU BESOIN</td>
       <td>24868-2025-03-0021</td>
       <td>VALIDÉ</td>
-      <td> <button class="button-bleu" onclick="window.print()">📄 PDF</button></td>
+      <td> <button class="button-bleu" onclick="ouvrirPDF(this)">📄 PDF</button>
     </tr>
 
     <tr>
@@ -495,7 +504,7 @@ function toggleNoticeGarantie(select) {
       <td>PAS MONTÉ</td>
       <td>24868-2025-03-0022</td>
       <td><span title="PAS OUVERT PROPREMENT">REFUSÉ</span></td>
-      <td><button class="button-bleu" onclick="window.print()">📄 PDF</button></td>
+      <td> <button class="button-bleu" onclick="ouvrirPDF(this)">📄 PDF</button>
     </tr>
 
     <tr>
@@ -508,7 +517,7 @@ function toggleNoticeGarantie(select) {
       <td>PAS MONTÉ</td>
       <td>24868-2025-03-0023</td>
       <td>EN ATTENTE</td>
-      <td> <button class="button-bleu" onclick="window.print()">📄 PDF</button></td>
+      <td> <button class="button-bleu" onclick="ouvrirPDF(this)">📄 PDF</button>
     </tr>
 
     <tr>
