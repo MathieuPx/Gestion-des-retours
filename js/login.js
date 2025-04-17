@@ -1,4 +1,4 @@
-const baseURL = "https://script.google.com/macros/s/AKfycbzE1WSO1Bb5_zMnWfjBQWIE9okRMx6jJQmAH53yv9ob_U93Bf97eb02H7wKhfatkAxY/exec";
+const baseURL = "https://script.google.com/macros/s/AKfycbx65IRqIby9U0zUdOxg9JkmIo-g1FW4DJos3lDHH2rjL9nSGUyXaWFK03fTqfaUMwO6/exec";
 
 document.getElementById("login-form").addEventListener("submit", function(e) {
   e.preventDefault();
@@ -33,3 +33,4 @@ document.getElementById("login-form").addEventListener("submit", function(e) {
       errorMsg.textContent = "❌ Erreur de communication avec le serveur.";
     });
 });
+
