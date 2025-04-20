@@ -2,575 +2,98 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Espace Client AAI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  
-  <style>
-    :root {
-      --bleu-fonce: #0b1e49;
-      --bleu-clair: #4e73df;
-      --jaune-aai: #ffe04c;
-      --blanc: #ffffff;
-      --gris-clair: #f4f4f4;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--gris-clair);
-    }
-
-    header.topbar {
-      background: var(--bleu-fonce);
-      color: var(--blanc);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem;
-    }
-
-    header.topbar h1 {
-      font-size: 1.8rem;
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 1rem;
-      width: 100%;
-    }
-
-    nav a {
-      color: var(--bleu-fonce);
-      background-color: var(--jaune-aai);
-      padding: 0.4rem 1rem;
-      border-radius: 6px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-      text-align: center;
-      flex: 1;
-      max-width: 160px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-    }
-
-    nav a.active {
-      background-color: var(--bleu-clair);
-      color: white;
-    }
-
-    nav a:hover {
-      background-color: #ffd633;
-    }
-
-    .profile-icon {
-      font-size: 1.8rem;
-      color: var(--jaune-aai);
-    }
-
-    main {
-      padding: 2rem;
-    }
-
-    .dashboard-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .card {
-      background: var(--blanc);
-      border-left: 6px solid var(--jaune-aai);
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
-    }
-
-    .button-jaune {
-      background: var(--jaune-aai);
-      color: var(--bleu-fonce);
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    
-    .button-bleu {
-      background: var(--bleu-fonce);
-      color: var(--jaune-aai);
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .chart-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .chart-box {
-      background: var(--blanc);
-      padding: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.05);
-    }
-
-    .table-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-
-    .table-actions h3 {
-      margin: 0;
-    }
-
-    .table-actions select,
-    .table-actions input[type="text"],
-    .table-actions button {
-      margin-left: 1rem;
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--blanc);
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    table th, table td {
-  padding: 0.6rem 0.4rem;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-  white-space: nowrap;
-  max-width: 120px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-}
-
-    table thead {
-  background: var(--jaune-aai);
-  color: var(--bleu-fonce);
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-align: left;
-  border-bottom: 2px solid var(--bleu-fonce);
-  white-space: nowrap;
-}
-
-    footer {
-      background: var(--jaune-aai);
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--bleu-fonce);
-      padding: 1rem;
-    }
-  
- </style>
+  <title>Portail Client AAI</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="client.js" defer></script>
 </head>
 <body>
-  <header class="topbar" style="position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-    <h1 style="margin: 0 1rem;">Espace Client</h1>
-    <nav style="display: flex; justify-content: center; align-items: center; width: 100%; gap: 0.5rem; flex-wrap: wrap;">
-      <a href="#accueil">Accueil</a>
-      <a href="#retours">Historique</a>
-      <a href="#formulaire">Créer un retour</a>
-      <a href="#stats">Tableau de bord</a>
-      <a href="#mon-compte">Mon compte</a>
-    </nav>
-    <div style="position: absolute; top: 1rem; right: 1rem;">
-      <a href="#" onclick="logout()" style="background-color: #e63946; color: white; padding: 0.4rem 1rem; border-radius: 6px; font-weight: bold; text-decoration: none;">Déconnexion</a>
+  <header>
+    <div class="logo">
+      <img src="logo-aai.png" alt="Logo AAI" style="height: 50px;">
     </div>
+    <nav>
+      <a href="#accueil">Accueil</a>
+      <a href="#retours">Mes retours</a>
+      <a href="#formulaire">Ajouter</a>
+      <a href="#compte">Mon compte</a>
+    </nav>
+    <button class="logout-btn" onclick="logout()">Déconnexion</button>
   </header>
 
-  <main id="accueil" style="display: block;">
-    <section class="dashboard-cards">
-      <div class="card">
-        <h2>🕓 En attente</h2>
-        <p><strong id="stat-en-attente">0</strong> retour(s)</p>
-      </div>
-      <div class="card">
-        <h2>⚙️ Pris en charge</h2>
-        <p><strong id="stat-en-cours">0</strong> retour(s)</p>
-      </div>
-      <div class="card">
-        <h2>✅ Validé</h2>
-        <p><strong id="stat-termines">0</strong> retour(s)</p>
-      </div>
-      <div class="card">
-        <h2>❌ Refusé</h2>
-        <p><strong id="stat-refuses">0</strong> retour(s)</p>
+  <main>
+    <section id="accueil" class="tab-content active">
+      <h2>Tableau de bord</h2>
+      <div class="cards">
+        <div class="card"><h3>En attente</h3><p id="stat-en-attente">0</p></div>
+        <div class="card"><h3>En cours</h3><p id="stat-en-cours">0</p></div>
+        <div class="card"><h3>Validé</h3><p id="stat-valides">0</p></div>
+        <div class="card"><h3>Refusé</h3><p id="stat-refuses">0</p></div>
       </div>
     </section>
-    </main>
-  
-<main id="formulaire" style="display: none;">
-  <h2>Créer un retour</h2>
-  <form id="form-retour" onsubmit="handleRetourSubmit(event)">
-    <table id="form-lignes-retour">
-      <thead>
-        <tr>
-          <th style="width: 15%;">Référence</th>
-          <th style="width: 35%;">Désignation</th>
-          <th style="width: 10%;">Quantité</th>
-          <th style="width: 20%;">Type de retour</th>
-          <th style="width: 15%;">Précision</th>
-          <th style="width: 5%;"></th>
-        </tr>
-      <tbody>
-<tr>
-          <td style="width: 120px;"><input type="text" name="ref[]" required style="width: 100%; box-sizing: border-box;"></td>
-<td style="width: 180px;"><input type="text" name="des[]" style="width: 100%; box-sizing: border-box;"></td>
-<td style="width: 80px;"><input type="number" name="qte[]" min="1" required style="width: 100%; box-sizing: border-box;"></td>
-<td style="width: 120px;">
-  <select name="type[]" onchange="toggleNoticeGarantie(this)" style="width: 100%;">
-    <option value="Pièce">Pièce</option>
-    <option value="Consigne">Consigne</option>
-    <option value="Garantie">Garantie</option>
-    <option value="Autre">Autre</option>
-  </select>
-</td>
-<td style="width: 5%; text-align: center;"><button type="button" onclick="this.closest\('tr'\).remove\(\)" style="background:none;border:none;color:red;font-size:0.9rem;cursor:pointer;">❌</button></td></tr>
-      </tbody>
-</table>
-    <button type="button" class="button-jaune" onclick="ajouterLigneRetour()">➕ Ajouter une autre ligne</button>
-    <div id="notice-garantie" class="hidden" style="background: #fffbe6; padding: 1rem; border-left: 4px solid #ffe04c; margin-top: 1rem; display: none;">
-      <strong>📦 Pour un retour en garantie :</strong><br>
-      Merci de fournir : bon de livraison, facture client et de garantie, photocopie de la carte grise et photo du montage si nécessaire.
-    </div>
-    <div style="margin-top: 1rem;">
-      <button type="submit" class="button-bleu">📤 Envoyer le retour</button>
-    </div>
-  </form>
-</main>
-<script>
-function ajouterLigneRetour() {
-  const tbody = document.querySelector('#form-lignes-retour tbody');
-  const row = document.createElement('tr');
-  row.innerHTML = `
-    <td style="width: 120px;"><input type="text" name="ref[]" required style="width: 100%; box-sizing: border-box;"></td>
-    <td style="width: 180px;"><input type="text" name="des[]" style="width: 100%; box-sizing: border-box;"></td>
-    <td style="width: 80px;"><input type="number" name="qte[]" min="1" required style="width: 100%; box-sizing: border-box;"></td>
-    <td style="width: 120px;">
-      <select name="type[]" onchange="toggleNoticeGarantie(this)" style="width: 100%; box-sizing: border-box;">
-        <option value="Pièce">Pièce</option>
-        <option value="Consigne">Consigne</option>
-        <option value="Garantie">Garantie</option>
-        <option value="Autre">Autre</option>
-      </select>
-    </td>
-    <td style="width: 180px;"><input type="text" name="precision[]" style="width: 100%; box-sizing: border-box;"></td>
-    <td style="width: 5%; text-align: center;"><button type="button" onclick="this.closest('tr').remove()" style="background:none;border:none;color:red;font-size:0.9rem;cursor:pointer;">❌</button></td>`;
-  tbody.appendChild(row);
-}
 
-function toggleNoticeGarantie(select) {
-  const notice = document.getElementById('notice-garantie');
-  const lignes = document.querySelectorAll('select[name="type[]"]');
-  const show = Array.from(lignes).some(s => s.value === 'Garantie');
-  notice.style.display = show ? 'block' : 'none';
-}
-</script>
-
-  <main id="stats" style="display: none;">
-  <section class="chart-container">
-    <div class="chart-box">
-      <h3>Répartition des statuts</h3>
-      <div id="camembert-statut" style="width: 200px; height: 200px; border-radius: 50%; margin: auto; position: relative; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2), inset 0 10px 20px rgba(255,255,255,0.3); transition: transform 0.6s ease; cursor: pointer; transform-style: preserve-3d; perspective: 600px;"></div>
-      <ul id="legende-statut" style="list-style: none; padding: 1rem 0 0;"></ul>
-    </div>
-    <div class="chart-box">
-      <h3>Répartition par type de retour</h3>
-      <div id="camembert-type" style="width: 200px; height: 200px; border-radius: 50%; margin: auto; position: relative; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2), inset 0 10px 20px rgba(255,255,255,0.3); transition: transform 0.6s ease; cursor: pointer; transform-style: preserve-3d; perspective: 600px;"></div>
-      <ul id="legende-type" style="list-style: none; padding: 1rem 0 0;"></ul>
-    </div>
-  </section>
-</main>
-  <script>
-  const links = document.querySelectorAll('nav a');
-const sections = document.querySelectorAll('main');
-
-function logout() {
-  window.location.href = 'login.html';
-}
-
-function showSection(id) {
-  console.log('Tentative d\'affichage de la section :', id);
-  sections.forEach(section => {
-    console.log('Masquage de la section :', section.id);
-    section.style.display = 'none';
-  });
-  const target = document.querySelector(id);
-  if (target) {
-    target.style.display = 'block';
-    console.log('Section affichée :', id);
-  } else {
-    console.warn('Section introuvable :', id);
-  }
-}
-
-links.forEach(link => {
-  link.addEventListener('click', e => {
-    const target = link.getAttribute('href');
-    console.log('Lien cliqué :', target);
-    if (target.startsWith('#')) {
-      e.preventDefault();
-      showSection(target);
-      links.forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
-    }
-  });
-});
-
-window.addEventListener('DOMContentLoaded', () => {
-  const charts = document.querySelectorAll('#camembert-statut, #camembert-type');
-  charts.forEach(chart => {
-    const container = chart.closest('.chart-box');
-    container.style.perspective = '800px';
-    chart.style.transformStyle = 'preserve-3d';
-    chart.addEventListener('mousemove', (e) => {
-      const rect = chart.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      const rotateX = -(y / rect.height) * 20;
-      const rotateY = (x / rect.width) * 20;
-      chart.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-    chart.addEventListener('mouseleave', () => {
-      chart.style.transform = 'rotateX(0deg) rotateY(0deg)';
-    });
-  });
-  genererCamembertsDepuisTableau();
-});
-
-function genererCamembertsDepuisTableau() {
-  let total = 0;
-  const rows = document.querySelectorAll('#retours table tr');
-  const statuts = {};
-  const types = {};
-
-  rows.forEach(row => {
-    const cells = row.querySelectorAll('td');
-    if (cells.length > 8) {
-      const statut = cells[8].innerText.trim();
-      const type = cells[4].innerText.trim();
-      statuts[statut] = (statuts[statut] || 0) + 1;
-      total++;
-      types[type] = (types[type] || 0) + 1;
-    }
-  });
-
-  function renderCamembert(containerId, data, colors) {
-    const totalData = Object.values(data).reduce((a, b) => a + b, 0);
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    container.style.background = 'conic-gradient(' + Object.entries(data).map(([_, v], i) => {
-      const start = (Object.values(data).slice(0, i).reduce((a,b)=>a+b,0)/totalData)*100;
-      const end = (Object.values(data).slice(0, i+1).reduce((a,b)=>a+b,0)/totalData)*100;
-      return colors[i % colors.length] + ' ' + start + '%, ' + colors[i % colors.length] + ' ' + end + '%';
-    }).join(', ') + ')';
-  }
-
-  function renderLegend(containerId, data, colors, total) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    let index = 0;
-    for (const [label, value] of Object.entries(data)) {
-      const percent = ((value / total) * 100).toFixed(1);
-      const li = document.createElement('li');
-      li.innerHTML = `<span style="display:inline-block;width:12px;height:12px;background:${colors[index % colors.length]};margin-right:8px;border-radius:2px;"></span> ${label} (${percent}%)`;
-      container.appendChild(li);
-      index++;
-    }
-  }
-
-  const statutColors = ['#4CAF50', '#FFC107', '#2196F3', '#F44336'];
-  const typeColors = ['#ffb347', '#87ceeb', '#c5e384', '#ff6961'];
-  renderCamembert('camembert-statut', statuts, statutColors);
-  renderCamembert('camembert-type', types, typeColors);
-  renderLegend('legende-statut', statuts, statutColors, total);
-  renderLegend('legende-type', types, typeColors, total);
-}
-function togglePasswordVisibility() {
-  const input = document.getElementById('client-password');
-  input.type = input.type === 'password' ? 'text' : 'password';
-}
-
-function modifierMotDePasse() {
-  const nouveau = prompt('Entrez votre nouveau mot de passe :');
-  if (nouveau) {
-    document.getElementById('client-password').value = nouveau;
-    alert('Mot de passe mis à jour (non enregistré côté serveur dans cette démo).');
-  }
-}
-</script>
-<script>
-// Rotation 3D interactive sur les camemberts
-window.addEventListener('DOMContentLoaded', () => {
-    genererCamembertsDepuisTableau();
-  const charts = document.querySelectorAll('#camembert-statut, #camembert-type');
-  charts.forEach(chart => {
-    const container = chart.closest('.chart-box');
-    container.style.perspective = '800px';
-    chart.style.transformStyle = 'preserve-3d';
-    chart.addEventListener('mousemove', (e) => {
-      const rect = chart.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      const rotateX = -(y / rect.height) * 20;
-      const rotateY = (x / rect.width) * 20;
-      chart.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-    chart.addEventListener('mouseleave', () => {
-      chart.style.transform = 'rotateX(0deg) rotateY(0deg)';
-    });
-  });
-});
-</script>
-<main id="retours" style="display: none;">
-  <h2>Historique de mes retours</h2>
-  <div class="table-actions">
-    <label for="search-bar">🔍 Rechercher :</label>
-    <input type="text" id="search-bar" placeholder="Filtrer...">
-    <button class="button-jaune" onclick="exportSelectedRowsToCSV()">📤 Exporter la sélection</button>
-  </div>
-  <table>
-    <thead>
-      <tr>
-        <th><input type="checkbox" id="select-all"></th>
-        <th>Date <button-bleu onclick="toggleFilter(0)">🔍</button-bleu><br><input class="filter-input" type="text" placeholder="Date" onkeyup="filterTable(0)" style="display:none;"></th>
-        <th>Référence <button-bleu onclick="toggleFilter(1)">🔍</button-bleu><br><input class="filter-input" type="text" placeholder="Référence" onkeyup="filterTable(1)" style="display:none;"></th>
-        <th>Désignation <button-bleu onclick="toggleFilter(2)">🔍</button-bleu><br><input class="filter-input" type="text" placeholder="Désignation" onkeyup="filterTable(2)" style="display:none;"></th>
-        <th>Type <button-bleu onclick="toggleFilter(3)">🔍</button-bleu><br><input class="filter-input" type="text" placeholder="Type de retour" onkeyup="filterTable(3)" style="display:none;"></th>
-        <th>Qté <button-bleu onclick="toggleFilter(4)">🔍</button-bleu><br><input class="filter-input" type="text" placeholder="Quantité" onkeyup="filterTable(4)" style="display:none;"></th>
-        <th>Précision <button-bleu onclick="toggleFilter(5)">🔍</button-bleu><br><input class="filter-input" type="text" placeholder="Précision" onkeyup="filterTable(5)" style="display:none;"></th>
-        <th>N° Retour <button-bleu onclick="toggleFilter(6)">🔍</button-bleu><br><input class="filter-input" type="text" placeholder="Numéro" onkeyup="filterTable(6)" style="display:none;"></th>
-        <th>Statut <button-bleu onclick="toggleFilter(7)">🔍</button-bleu><br><input class="filter-input" type="text" placeholder="Statut" onkeyup="filterTable(7)" style="display:none;"></th>
-        <th>PDF</th>
-      </tr>
-    </thead>
-    <tr>
-        <td><input type="checkbox" class="row-checkbox"></td>
-      <td>29/03/2025 17:19:29</td>
-      <td>L1044</td>
-      <td>nan</td>
-      <td>PIÈCE</td>
-      <td>1</td>
-      <td>PAS MONTÉ</td>
-      <td>24868-2025-03-0020</td>
-      <td>PRIS EN CHARGE</td>
-      <td> <button class="button-bleu" onclick="ouvrirPDF(this)">📄 PDF</button>
-    </tr>
-
-    <tr>
-      <td><input type="checkbox" class="row-checkbox"></td>
-      <td>29/03/2025 17:46:39</td>
-      <td>AH245-2</td>
-      <td>nan</td>
-      <td>PIÈCE</td>
-      <td>1</td>
-      <td>PAS EU BESOIN</td>
-      <td>24868-2025-03-0021</td>
-      <td>VALIDÉ</td>
-      <td> <button class="button-bleu" onclick="ouvrirPDF(this)">📄 PDF</button>
-    </tr>
-
-    <tr>
-      <td><input type="checkbox" class="row-checkbox"></td>
-      <td>30/03/2025 11:05:03</td>
-      <td>L343D</td>
-      <td>nan</td>
-      <td>PIÈCE</td>
-      <td>1</td>
-      <td>PAS MONTÉ</td>
-      <td>24868-2025-03-0022</td>
-      <td><span title="PAS OUVERT PROPREMENT">REFUSÉ</span></td>
-      <td> <button class="button-bleu" onclick="ouvrirPDF(this)">📄 PDF</button>
-    </tr>
-
-    <tr>
-      <td><input type="checkbox" class="row-checkbox"></td>
-      <td>30/03/2025 11:06:52</td>
-      <td>AH245-2</td>
-      <td>nan</td>
-      <td>PIÈCE</td>
-      <td>1</td>
-      <td>PAS MONTÉ</td>
-      <td>24868-2025-03-0023</td>
-      <td>EN ATTENTE</td>
-      <td> <button class="button-bleu" onclick="ouvrirPDF(this)">📄 PDF</button>
-    </tr>
-
-    <tr>
-      <td><input type="checkbox" class="row-checkbox"></td>
-      <td>30/03/2025 16:00:24</td>
-      <td>L343D</td>
-      <td>nan</td>
-      <td>PIÈCE</td>
-      <td>1</td>
-      <td>PAS MONTÉ</td>
-      <td>24868-2025-03-0024</td>
-      <td>EN ATTENTE</td>
-      <td> <button class="button-bleu" onclick="ouvrirPDF(this)">📄 PDF</button>
-    </tr>
-  </table>
-</main>
-
-  <main id="mon-compte" style="display: none;">
-  <section class="dashboard-cards">
-    <div class="card" style="grid-column: span 2;">
-      <h2>👤 Informations client</h2>
-      <p><strong>Nom :</strong> <span id="client-nom">Jean Dupont</span></p>
-      <p><strong>Numéro client :</strong> <span id="client-id">C24868</span></p>
-      <p><strong>Adresse :</strong> <span id="client-adresse">123 rue de l'Industrie, 75000 Paris</span></p>
-      <p><strong>Téléphone :</strong> <span id="client-tel">06 12 34 56 78</span></p>
-      <p><strong>Email :</strong> <span id="client-mail">jean.dupont@email.com</span></p>
-    </div>
-
-    <div class="card">
-      <h2>🔐 Mot de passe</h2>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <input type="password" id="client-password" value="motdepasse123" style="flex:1; padding: 0.5rem;">
-        <button class="button-jaune" onclick="togglePasswordVisibility()">👁️</button>
+    <section id="retours" class="tab-content">
+      <h2>Historique de mes retours</h2>
+      <div class="table-container">
+        <div class="table-header">
+          <h3>Liste des retours</h3>
+          <button onclick="exporterCSV()">📤 Exporter CSV</button>
+        </div>
+        <table id="tableRetours">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Référence</th>
+              <th>Type</th>
+              <th>Quantité</th>
+              <th>Précision</th>
+              <th>Statut</th>
+              <th>PDF</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      <button class="button-bleu" onclick="modifierMotDePasse()" style="margin-top: 1rem;">Modifier mon mot de passe</button>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>🏬 Contact magasin</h2>
-      <p><strong>Magasin :</strong> <span id="magasin-nom">AAI Marseille</span> (N° 0123)</p>
-      <p><strong>Téléphone :</strong> <span id="magasin-tel">04 91 23 45 67</span></p>
-      <p><strong>Email :</strong> <span id="magasin-mail">contact@aai-marseille.com</span></p>
-    </div>
+    <section id="formulaire" class="tab-content">
+      <h2>Ajouter un retour</h2>
+      <form id="formRetour">
+        <div class="ligneRetour">
+          <input name="reference" placeholder="Référence" onblur="verifierReferenceAuto(this)" required>
+          <input name="designation" placeholder="Désignation" required>
+          <input name="quantite" type="number" placeholder="Quantité" required>
+          <select name="type" id="typeRetour" onchange="toggleNoticeGarantie()" required>
+            <option value="">Type</option>
+            <option value="Pièce">Pièce</option>
+            <option value="Garantie">Garantie</option>
+            <option value="Consigne">Consigne</option>
+          </select>
+          <input name="precision" placeholder="Précision" required>
+        </div>
+        <div id="notice-garantie" class="notice-garantie">
+          <strong>📦 Retour GARANTIE :</strong><br>
+          Fournir BL, facture client, carte grise, photo du montage…
+        </div>
+        <button type="submit">📤 Envoyer</button>
+      </form>
+    </section>
 
-    <div class="card">
-      <h2>📞 Votre commercial</h2>
-      <p><strong>Nom :</strong> <span id="commercial-nom">Sophie Martin</span> (Secteur 05)</p>
-      <p><strong>Téléphone :</strong> <span id="commercial-tel">06 78 90 12 34</span></p>
-      <p><strong>Email :</strong> <span id="commercial-mail">sophie.martin@aai.fr</span></p>
-    </div>
-  </section>
-</main>
+    <section id="compte" class="tab-content">
+      <h2>Mon Compte</h2>
+      <p><strong>Nom :</strong> <span id="client-nom">-</span></p>
+      <p><strong>Email :</strong> <span id="client-email">-</span></p>
+      <h3>🔐 Mot de passe</h3>
+      <input type="password" id="client-password" value="" readonly>
+      <button onclick="modifierMotDePasse()">Changer</button>
+      <h3>🏬 Contact Magasin</h3>
+      <p><strong>Magasin :</strong> <span id="magasin-nom">-</span></p>
+      <p><strong>Email :</strong> <span id="magasin-mail">-</span></p>
+      <h3>📞 Votre commercial</h3>
+      <p><strong>Nom :</strong> <span id="commercial-nom">-</span></p>
+      <p><strong>Email :</strong> <span id="commercial-mail">-</span></p>
+    </section>
+  </main>
 </body>
 </html>
 
