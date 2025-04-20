@@ -1,222 +1,114 @@
-// ========== CLIENT.JS (COMPLETEMENT REPRIS) ==========
-window.addEventListener("DOMContentLoaded", () => {
-  const baseURL = "https://script.google.com/macros/s/AKfycbx65IRqIby9U0zUdOxg9JkmIo-g1FW4DJos3lDHH2rjL9nSGUyXaWFK03fTqfaUMwO6/exec";
-  const email = localStorage.getItem("email");
-  const nom = localStorage.getItem("nom");
-  const role = localStorage.getItem("role");
-  const numero = localStorage.getItem("numClient");
+// client.js — Fonctions JS enrichies pour le portail client AAI
 
-  if (!email || role !== "client") {
-    window.location.href = "login.html";
+document.addEventListener("DOMContentLoaded", () => {
+  const tabs = document.querySelectorAll(".tab-content");
+  const showTab = id => {
+    tabs.forEach(tab => tab.style.display = "none");
+    document.getElementById(id).style.display = "block";
+  };
+
+  document.getElementById("btnAccueil").onclick = () => showTab("accueil");
+  document.getElementById("btnCompte").onclick = () => showTab("compte");
+  document.getElementById("btnAjoutRetour").onclick = () => showTab("ajoutRetour");
+  document.getElementById("btnContact").onclick = () => showTab("contact");
+  document.getElementById("btnLogout").onclick = () => {
+    localStorage.clear();
+    location.reload();
+  };
+
+  const utilisateur = JSON.parse(localStorage.getItem("utilisateur"));
+  if (!utilisateur) {
+    alert("Veuillez vous connecter");
     return;
   }
 
-  // === DOM Injection ===
-  document.getElementById("client-id")?.setAttribute("value", numero);
-  document.getElementById("email")?.innerText = email;
-  document.getElementById("nom")?.innerText = nom;
-  document.getElementById("numClient")?.innerText = numero;
+  chargerRetours(utilisateur.client);
+  chargerInfosClient(utilisateur.client);
+  chargerContact(utilisateur.client);
 
-  document.getElementById("logout")?.addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "login.html";
-  });
+  const formRetour = document.getElementById("formRetour");
+  formRetour.onsubmit = e => {
+    e.preventDefault();
+    const ligne = formRetour.querySelector(".ligneRetour");
+    const retour = {
+      numeroClient: utilisateur.client,
+      nom: utilisateur.nom,
+      email: utilisateur.email,
+      reference: ligne.querySelector("[name='reference']").value,
+      quantite: ligne.querySelector("[name='quantite']").value,
+      type: ligne.querySelector("[name='type']").value,
+      precision: ligne.querySelector("[name='precision']").value,
+      designation: ligne.querySelector("[name='designation']").value,
+      statut: "En attente"
+    };
 
-  // === Chargement des infos client ===
-  async function chargerInfosClient() {
-    try {
-      const res = await fetch(`${baseURL}?action=getInfosClient&email=${encodeURIComponent(email)}`);
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById("info-nom").innerText = data.nom || "";
-        document.getElementById("info-email").innerText = data.email || "";
-        document.getElementById("info-num").innerText = data.numero || "";
-        document.getElementById("info-adresse").innerText = data.adresse || "";
-        document.getElementById("info-cp").innerText = data.cp || "";
-        document.getElementById("info-ville").innerText = data.ville || "";
-        document.getElementById("info-tel").innerText = data.telephone || "";
-      }
-    } catch (e) {
-      console.error("❌ Infos client non chargées", e);
-    }
-  }
-
-  // === Génération PDF ===
-  function voirPdf(numeroRetour) {
-    const url = `${baseURL}?action=genererPdfDepuisRetour&numero=${numeroRetour}`;
-    window.open(url, "_blank");
-  }
-
-  // === Affichage des retours ===
-  function afficherRetours(retours) {
-    const statutFiltre = document.getElementById("filtre-statut")?.value || "";
-    const referenceFiltre = document.getElementById("filtre-reference")?.value?.toLowerCase() || "";
-    const typeFiltre = document.getElementById("filtre-type")?.value || "";
-    const conteneur = document.getElementById("retours-table");
-    conteneur.innerHTML = "";
-
-    if (!retours.length) {
-      conteneur.textContent = "Aucun retour enregistré.";
+    if (!retour.reference || !retour.designation || !retour.type || !retour.precision) {
+      alert("Veuillez remplir tous les champs obligatoires.");
       return;
     }
 
-    const table = document.createElement("table");
-    table.className = "retours-table";
-
-    const thead = document.createElement("thead");
-    const trHead = document.createElement("tr");
-    ["Date", "Référence", "Désignation", "Type", "Quantité", "Statut", "📄"].forEach(h => {
-      const th = document.createElement("th");
-      th.textContent = h;
-      trHead.appendChild(th);
-    });
-    thead.appendChild(trHead);
-    table.appendChild(thead);
-
-    const tbody = document.createElement("tbody");
-    retours
-      .filter(row => {
-        const statutOK = !statutFiltre || row["STATUT DE RETOUR"] === statutFiltre;
-        const referenceOK = !referenceFiltre || (row["REFERENCE"] || "").toLowerCase().includes(referenceFiltre);
-        const typeOK = !typeFiltre || row["TYPE DE RETOUR"] === typeFiltre;
-        return statutOK && referenceOK && typeOK;
-      })
-      .forEach(row => {
-        const tr = document.createElement("tr");
-
-        const tdDate = document.createElement("td");
-        tdDate.textContent = new Date(row["DATE"]).toLocaleDateString("fr-FR");
-        tr.appendChild(tdDate);
-
-        const tdRef = document.createElement("td");
-        tdRef.textContent = row["REFERENCE"];
-        tr.appendChild(tdRef);
-
-        const tdDes = document.createElement("td");
-        tdDes.textContent = row["DESIGNATION"] || "–";
-        tr.appendChild(tdDes);
-
-        const tdType = document.createElement("td");
-        tdType.textContent = row["TYPE DE RETOUR"];
-        tr.appendChild(tdType);
-
-        const tdQte = document.createElement("td");
-        tdQte.textContent = row["QUANTITE"];
-        tr.appendChild(tdQte);
-
-        const tdStatut = document.createElement("td");
-        tdStatut.textContent = row["STATUT DE RETOUR"];
-        tdStatut.classList.add(`statut-${tdStatut.textContent.toLowerCase().replace(" ", "_")}`);
-        if (tdStatut.textContent === "REFUSÉ" && row["MOTIFS REFUS MAGASIN"]) {
-          tdStatut.title = row["MOTIFS REFUS MAGASIN"];
-        }
-        tr.appendChild(tdStatut);
-
-        const tdBtn = document.createElement("td");
-        const btn = document.createElement("button");
-        btn.textContent = "Voir PDF";
-        btn.onclick = () => voirPdf(row["NUMÉRO DE RETOUR"]);
-        tdBtn.appendChild(btn);
-        tr.appendChild(tdBtn);
-
-        tbody.appendChild(tr);
-      });
-
-    table.appendChild(tbody);
-    conteneur.appendChild(table);
-  }
-
-  // === Chargement initial des retours ===
-  async function chargerRetours() {
-    const conteneur = document.getElementById("retours");
-    conteneur.innerHTML = "Chargement...";
-
-    try {
-      const res = await fetch(`${baseURL}?action=getRetoursParNumeroClient&numero=${encodeURIComponent(numero)}`);
-      const data = await res.json();
-      if (data.success) {
-        afficherRetours(data.retours);
-      } else {
-        conteneur.textContent = "Erreur lors du chargement.";
-      }
-    } catch (e) {
-      conteneur.textContent = "Erreur de connexion au serveur.";
+    if (ligne.querySelector("[name='designation']").dataset.manual === "true") {
+      google.script.run.alerterRDMpourDesignationManuelle(retour);
     }
-  }
 
-  // === Événements des filtres ===
-  document.getElementById("filtre-statut")?.addEventListener("change", chargerRetours);
-  document.getElementById("filtre-reference")?.addEventListener("input", chargerRetours);
-  document.getElementById("filtre-type")?.addEventListener("change", chargerRetours);
-
-  // === Soumission du formulaire de retour ===
-  const form = document.getElementById("form-retour");
-  if (form) {
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const lignes = [...document.querySelectorAll(".ligne-retour")].map(ligne => ({
-        reference: ligne.querySelector("input[name='reference[]']").value,
-        quantite: ligne.querySelector("input[name='quantite[]']").value,
-        precision: ligne.querySelector("input[name='precision[]']").value,
-        type: ligne.querySelector("select[name='type[]']").value
-      }));
-
-      const body = JSON.stringify({ email, nom, numClient: numero, lignes });
-
-      try {
-        const response = await fetch(baseURL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body,
-        });
-        const result = await response.json();
-        if (result.success) {
-          chargerRetours();
-          afficherSection("retours");
-        } else {
-          alert("❌ Erreur retour.");
-        }
-      } catch (err) {
-        alert("❌ Connexion serveur.");
-        console.error(err);
-      }
-    });
-  }
-
-  // === Export CSV ===
-  document.getElementById("exportCSV")?.addEventListener("click", () => {
-    const filtreStatut = document.getElementById("filtre-statut")?.value || "";
-    const lignes = [...document.querySelectorAll("#retours table tbody tr")];
-
-    const enTete = ["Date", "Référence", "Désignation", "Type", "Quantité", "Statut"];
-    const csv = [enTete.join(",")];
-
-    lignes.forEach(row => {
-      const cells = row.querySelectorAll("td");
-      if (!cells.length) return;
-
-      const statut = cells[5]?.innerText;
-      if (filtreStatut && statut !== filtreStatut) return;
-
-      const ligneCsv = Array.from(cells).slice(0, 6).map(cell =>
-        `"${cell.innerText.replace(/"/g, '""')}"`
-      ).join(",");
-      csv.push(ligneCsv);
-    });
-
-    const blob = new Blob([csv.join("\n")], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `retours-client-${new Date().toISOString().split("T")[0]}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  });
-
-  // Init
-  chargerInfosClient();
-  chargerRetours();
+    google.script.run.enregistrerRetour(retour);
+    alert("Retour enregistré");
+    formRetour.reset();
+    chargerRetours(utilisateur.client);
+  };
 });
 
+function verifierReferenceAuto(inputRef) {
+  const ref = inputRef.value.trim();
+  if (ref === '') return;
+
+  google.script.run.withSuccessHandler(designation => {
+    const row = inputRef.closest('tr');
+    const champDesignation = row.querySelector("input[name='designation']");
+
+    if (designation && designation !== '') {
+      champDesignation.value = designation;
+      champDesignation.disabled = true;
+      champDesignation.dataset.manual = "false";
+    } else {
+      champDesignation.value = '';
+      champDesignation.disabled = false;
+      champDesignation.placeholder = "À compléter manuellement";
+      champDesignation.dataset.manual = "true";
+    }
+  }).getDesignationFromReference(ref);
+}
+
+function chargerRetours(numeroClient) {
+  google.script.run.withSuccessHandler(data => {
+    const tbody = document.querySelector("#tableRetours tbody");
+    tbody.innerHTML = "";
+    data.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r[0]}</td>
+        <td>${r[4]}</td>
+        <td>${r[6]}</td>
+        <td>${r[7]}</td>
+        <td>${r[8]}</td>
+        <td>${r[9]}</td>
+        <td><button onclick="ouvrirPDF('${r[10]}')">📄 Voir PDF</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }).getRetoursClient(numeroClient);
+}
+
+function ouvrirPDF(numeroRetour) {
+  google.script.run.genererPDFpourRetour(numeroRetour);
+}
+
+function chargerInfosClient(numeroClient) {
+  google.script.run.withSuccessHandler(data => {
+    document.getElementById("infosCompte").innerText = `Client : ${data[1]}\nEmail : ${data[2]}`;
+  }).getInfosClient(numeroClient);
+}
+
+function chargerContact(numeroClient) {
+  // À implémenter : récupération et affichage des contacts liés au client
+}
