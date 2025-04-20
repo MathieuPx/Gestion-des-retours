@@ -1,5 +1,7 @@
 // client.js — Fonctions JS enrichies pour le portail client AAI
 
+const baseURL = "https://script.google.com/macros/s/AKfycbwHGcjwQZj3nieAjKpAUkepql038zbX1eG8EUpHArxEQ6lZemeQfBKK6aYoOtaNh5Qs/exec";
+
 document.addEventListener("DOMContentLoaded", () => {
   const tabs = document.querySelectorAll(".tab-content");
   const showTab = id => {
@@ -105,10 +107,17 @@ function ouvrirPDF(numeroRetour) {
 
 function chargerInfosClient(numeroClient) {
   google.script.run.withSuccessHandler(data => {
-    document.getElementById("infosCompte").innerText = `Client : ${data[1]}\nEmail : ${data[2]}`;
+    document.getElementById("client-nom").textContent = data[1];
+    document.getElementById("client-email").textContent = data[2];
   }).getInfosClient(numeroClient);
 }
 
 function chargerContact(numeroClient) {
-  // À implémenter : récupération et affichage des contacts liés au client
+  google.script.run.withSuccessHandler(data => {
+    document.getElementById("magasin-nom").textContent = data.magasin.nom;
+    document.getElementById("magasin-mail").textContent = data.magasin.email;
+    document.getElementById("commercial-nom").textContent = data.commercial.nom;
+    document.getElementById("commercial-mail").textContent = data.commercial.email;
+  }).getContactsClient(numeroClient);
 }
+
