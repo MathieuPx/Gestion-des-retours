@@ -20,6 +20,11 @@
       background-size: cover;
       padding: 1rem;
       font-family: 'Inter', sans-serif;
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .login-container {
       background: #ffffff;
@@ -28,6 +33,11 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
+      animation: slideUp 0.6s ease forwards;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
     .logo {
       max-width: 100%;
@@ -35,12 +45,18 @@
       display: block;
       margin-left: auto;
       margin-right: auto;
+      animation: pop 0.6s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
     h1 {
       font-size: 1.5rem;
       text-align: center;
       margin-bottom: 1rem;
       color: #0b1e49;
+      animation: fadeIn 1s ease;
     }
     form label {
       display: block;
@@ -54,6 +70,11 @@
       border: 1px solid #ccc;
       border-radius: 6px;
       margin-bottom: 1rem;
+      transition: box-shadow 0.3s;
+    }
+    input:focus {
+      box-shadow: 0 0 0 3px rgba(17, 50, 103, 0.2);
+      outline: none;
     }
     button[type="submit"] {
       width: 100%;
@@ -64,9 +85,11 @@
       border-radius: 6px;
       font-size: 1rem;
       cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s;
     }
     button[type="submit"]:hover {
       background-color: #0b1e49;
+      transform: scale(1.02);
     }
     .loading {
       margin-top: 1rem;
@@ -74,15 +97,18 @@
       color: #64748b;
       display: none;
       text-align: center;
+      animation: fadeIn 0.3s ease;
     }
     .success-msg {
       color: green;
       font-weight: bold;
       text-align: center;
+      animation: fadeIn 0.4s ease-in-out;
     }
     .error-msg {
       color: red;
       text-align: center;
+      animation: fadeIn 0.4s ease-in-out;
     }
     @media screen and (max-width: 480px) {
       .login-container {
