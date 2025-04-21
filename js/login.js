@@ -1,12 +1,18 @@
-// login.js — Gère l'authentification et redirection selon rôle
+// login.js — compatible GitHub Pages + Apps Script
+
+const baseURL = "https://script.google.com/macros/s/TON_ID_SCRIPT/exec"; // <-- remplace TON_ID_SCRIPT
 
 window.onload = () => {
   const savedEmail = localStorage.getItem("email");
   if (savedEmail) document.getElementById("email").value = savedEmail;
+
+  const form = document.getElementById("loginForm");
+  form.addEventListener("submit", handleLogin);
 };
 
-function handleLogin(event) {
-  event.preventDefault();
+function handleLogin(e) {
+  e.preventDefault();
+
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
   const remember = document.getElementById("rememberMe").checked;
@@ -15,30 +21,32 @@ function handleLogin(event) {
   message.textContent = "Connexion en cours...";
   message.className = "msg loading";
 
-  google.script.run.withSuccessHandler(response => {
-    if (response.success) {
-      localStorage.setItem("utilisateur", JSON.stringify(response));
-      if (remember) localStorage.setItem("email", email);
+  fetch(baseURL + "?action=authentifier", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  })
+    .then(res => res.json())
+    .then(response => {
+      if (response.success) {
+        localStorage.setItem("utilisateur", JSON.stringify(response));
+        if (remember) localStorage.setItem("email", email);
 
-      message.textContent = "Connexion réussie !";
-      message.className = "msg success";
+        message.textContent = "Connexion réussie !";
+        message.className = "msg success";
 
-      setTimeout(() => {
-        switch (response.role.toLowerCase()) {
-          case "client": window.location.href = "client"; break;
-          case "commercial": window.location.href = "commercial"; break;
-          case "magasin": window.location.href = "magasin"; break;
-          case "cdv": window.location.href = "cdv"; break;
-          case "rdm": window.location.href = "rdm"; break;
-          case "admin": window.location.href = "admin"; break;
-          default:
-            message.textContent = "Rôle non reconnu.";
-            message.className = "msg error";
-        }
-      }, 1000);
-    } else {
-      message.textContent = "Identifiants incorrects.";
+        setTimeout(() => {
+          const role = response.role.toLowerCase();
+          window.location.href = `${role}.html`;
+        }, 800);
+      } else {
+        message.textContent = "Identifiants incorrects.";
+        message.className = "msg error";
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      message.textContent = "Erreur lors de la connexion.";
       message.className = "msg error";
-    }
-  }).authentifier(email, password);
+    });
 }
