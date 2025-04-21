@@ -1,6 +1,6 @@
 // login.js — compatible GitHub Pages + Apps Script
 
-const baseURL = "https://script.google.com/macros/s/TON_ID_SCRIPT/exec"; // <-- remplace TON_ID_SCRIPT
+const baseURL = "https://script.google.com/macros/s/AKfycbwHGcjwQZj3nieAjKpAUkepql038zbX1eG8EUpHArxEQ6lZemeQfBKK6aYoOtaNh5Qs/exec"; // <-- remplace TON_ID_SCRIPT
 
 window.onload = () => {
   const savedEmail = localStorage.getItem("email");
