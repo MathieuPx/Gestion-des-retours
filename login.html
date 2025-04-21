@@ -4,129 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion AAI</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(to bottom right, #ffe04c, #113267);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .login-container {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-      width: 100%;
-    }
-    .login-container img {
-      display: block;
-      margin: 0 auto 1rem;
-      max-width: 160px;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-      color: #0b1e49;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    input[type="email"], input[type="password"] {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.3rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 1rem;
-    }
-    button[type="submit"] {
-      background-color: #113267;
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      width: 100%;
-      margin-top: 1rem;
-    }
-    .msg {
-      margin-top: 1rem;
-      text-align: center;
-      font-size: 0.9rem;
-    }
-    .success { color: green; }
-    .error { color: red; }
-    .loading { color: #64748b; }
-  </style>
-  <script>
-    function handleLogin(event) {
-      event.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const remember = document.getElementById("rememberMe").checked;
-      const message = document.getElementById("loginMessage");
-
-      message.textContent = "Connexion en cours...";
-      message.className = "msg loading";
-
-      google.script.run.withSuccessHandler(response => {
-        if (response.success) {
-          localStorage.setItem("utilisateur", JSON.stringify(response));
-          if (remember) localStorage.setItem("email", email);
-
-          message.textContent = "Connexion réussie !";
-          message.className = "msg success";
-
-          setTimeout(() => {
-            switch (response.role.toLowerCase()) {
-              case "client": window.location.href = "client"; break;
-              case "commercial": window.location.href = "commercial"; break;
-              case "magasin": window.location.href = "magasin"; break;
-              case "cdv": window.location.href = "cdv"; break;
-              case "rdm": window.location.href = "rdm"; break;
-              case "admin": window.location.href = "admin"; break;
-              default:
-                message.textContent = "Rôle non reconnu.";
-                message.className = "msg error";
-            }
-          }, 1000);
-        } else {
-          message.textContent = "Identifiants incorrects.";
-          message.className = "msg error";
-        }
-      }).authentifier(email, password);
-    }
-
-    window.onload = () => {
-      const saved = localStorage.getItem("email");
-      if (saved) document.getElementById("email").value = saved;
-    };
-  </script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="login.js"></script>
 </head>
 <body>
   <div class="login-container">
     <img src="logo-aai.png" alt="Logo AAI">
     <h1>Connexion</h1>
-    <form onsubmit="handleLogin(event)">
+    <form id="loginForm">
       <label for="email">Email</label>
       <input type="email" id="email" required>
 
       <label for="password">Mot de passe</label>
       <input type="password" id="password" required>
 
-      <label style="font-weight: normal; font-size: 0.9rem;">
+      <label class="checkbox-label">
         <input type="checkbox" id="rememberMe"> Se souvenir de moi
       </label>
 
