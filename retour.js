@@ -1,81 +1,166 @@
-// ===== JS DYNAMIQUE POUR FORMULAIRE MULTI-RÉFÉRENCES AAI =====
+// ===== GOOGLE APPS SCRIPT - BACKEND AAI RETOURS COMPLET AVEC PDF ÉPHÉMÈRE =====
 
-const addBtn = document.getElementById("add-reference-btn");
-const container = document.getElementById("references-container");
+function doPost(e) {
+  const data = JSON.parse(e.postData.contents);
+  const action = data.action;
 
-addBtn.addEventListener("click", () => {
-  const clone = container.querySelector(".reference-block").cloneNode(true);
-  clone.querySelectorAll("input, textarea, select").forEach(input => input.value = "");
-  clone.querySelector(".pense-bete").classList.add("hidden");
-  container.appendChild(clone);
-});
+  switch (action) {
+    case "login":
+      return jsonResponse(login(data.email, data.password));
+    case "getRetours":
+      return jsonResponse(getRetours(data.email));
+    case "createRetour":
+      return createRetour(data.retour); // réponse spéciale : ContentService avec PDF
+    default:
+      return jsonResponse({ success: false, error: "Action inconnue." });
+  }
+}
 
-container.addEventListener("click", (e) => {
-  if (e.target.classList.contains("remove-btn")) {
-    const blocks = container.querySelectorAll(".reference-block");
-    if (blocks.length > 1) {
-      e.target.closest(".reference-block").remove();
+function jsonResponse(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function login(email, password) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const usersSheet = ss.getSheetByName("UTILISATEURS");
+  const adminsSheet = ss.getSheetByName("ADMIN");
+  const users = usersSheet.getDataRange().getValues();
+  const admins = adminsSheet.getDataRange().getValues();
+
+  for (let i = 1; i < admins.length; i++) {
+    const [nom, mail, pass] = admins[i];
+    if (mail === email && pass === password) {
+      return { success: true, nom, role: "admin", email };
     }
   }
-});
 
-container.addEventListener("change", (e) => {
-  if (e.target.classList.contains("type-produit")) {
-    const block = e.target.closest(".reference-block");
-    const penseBete = block.querySelector(".pense-bete");
-    if (e.target.value === "garantie") {
-      penseBete.classList.remove("hidden");
-    } else {
-      penseBete.classList.add("hidden");
+  for (let i = 1; i < users.length; i++) {
+    const [mail, nom, numero, role, actif, pass] = users[i];
+    if (mail === email && pass === password && actif.toLowerCase() === "oui") {
+      return { success: true, nom, role, numero, email };
     }
   }
-});
 
-// Soumission du formulaire vers Apps Script
-const retourForm = document.getElementById("retour-form");
-retourForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  return { success: false };
+}
 
-  const formData = new FormData(retourForm);
-  const retour = {
-    CLIENT: formData.get("CLIENT"),
-    NUM_CLIENT: formData.get("NUM_CLIENT"),
-    MAGASIN: formData.get("MAGASIN"),
-    NUM_MAGASIN: formData.get("NUM_MAGASIN"),
-    DATE: formData.get("DATE"),
-    NUM_COMMERCIAL: "", // à remplir si utile
-    REFERENCES: []
-  };
+function getRetours(email) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const usersSheet = ss.getSheetByName("UTILISATEURS");
+  const retoursSheet = ss.getSheetByName("RETOURS");
+  const users = usersSheet.getDataRange().getValues();
+  let userData = null;
 
-  const refs = container.querySelectorAll(".reference-block");
-  refs.forEach(block => {
-    retour.REFERENCES.push({
-      REFERENCE: block.querySelector('[name="REFERENCE[]"]').value,
-      MOTIF: block.querySelector('[name="MOTIF[]"]').value,
-      TYPE: block.querySelector('[name="TYPE[]"]').value,
-      OBSERVATIONS: block.querySelector('[name="OBSERVATIONS[]"]').value
-    });
+  for (let i = 1; i < users.length; i++) {
+    const [mail, nom, numero, role, actif, pass] = users[i];
+    if (mail === email) {
+      userData = { role, numero };
+      break;
+    }
+  }
+  if (!userData) return { success: false, error: "Utilisateur introuvable." };
+
+  const data = retoursSheet.getDataRange().getValues();
+  const headers = data[0];
+  const rows = data.slice(1);
+  let filtered = [];
+
+  rows.forEach(row => {
+    const retour = {};
+    headers.forEach((h, i) => retour[h] = row[i]);
+
+    switch (userData.role) {
+      case "client":
+        if (retour.NUM_CLIENT == userData.numero) filtered.push(retour);
+        break;
+      case "commercial":
+        if (retour.NUM_COMMERCIAL == userData.numero) filtered.push(retour);
+        break;
+      case "magasin":
+      case "rdm":
+        if (retour.NUM_MAGASIN == userData.numero) filtered.push(retour);
+        break;
+      case "cdv":
+        if (retour.MAGASIN_CDV && retour.MAGASIN_CDV.split(',').includes(userData.numero)) filtered.push(retour);
+        break;
+      case "admin":
+        filtered.push(retour);
+        break;
+    }
+  });
+  return { success: true, retours: filtered };
+}
+
+function createRetour(retour) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName("RETOURS");
+  const configSheet = ss.getSheetByName("CONFIG");
+
+  const now = new Date();
+  const mois = (now.getMonth() + 1).toString().padStart(2, '0');
+  const annee = now.getFullYear();
+
+  const config = configSheet.getDataRange().getValues();
+  let compteur = 1;
+  for (let i = 1; i < config.length; i++) {
+    if (config[i][0] == mois && config[i][1] == annee) {
+      compteur = parseInt(config[i][2]) + 1;
+      configSheet.getRange(i + 1, 3).setValue(compteur);
+      break;
+    }
+  }
+  if (compteur === 1) configSheet.appendRow([mois, annee, compteur]);
+
+  const numeros = [];
+  const baseNumero = `${retour.NUM_CLIENT}-${mois}-${annee}`;
+  const body = [];
+
+  retour.REFERENCES.forEach((ref, index) => {
+    const numeroRetour = `${(compteur + index).toString().padStart(3, '0')}-${baseNumero}`;
+    const ligne = [
+      numeroRetour,
+      retour.NUM_CLIENT,
+      retour.CLIENT,
+      retour.NUM_MAGASIN,
+      retour.MAGASIN,
+      retour.NUM_COMMERCIAL || "",
+      ref.REFERENCE,
+      ref.MOTIF,
+      ref.TYPE,
+      retour.DATE,
+      "En attente",
+      "",
+      ref.OBSERVATIONS
+    ];
+    sheet.appendRow(ligne);
+    numeros.push(numeroRetour);
+
+    body.push(`<tr><td>${ref.REFERENCE}</td><td>${ref.TYPE}</td><td>${ref.MOTIF}</td></tr>`);
   });
 
-  try {
-    const response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
-      method: "POST",
-      body: JSON.stringify({
-        action: "createRetour",
-        retour,
-      }),
-    });
-    const result = await response.json();
-    if (result.success) {
-      alert("Retour enregistré avec le n° : " + result.numero);
-      retourForm.reset();
-      container.innerHTML = "";
-      container.appendChild(document.querySelector(".reference-block").cloneNode(true));
-    } else {
-      alert("Erreur : " + result.error);
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Erreur de connexion au serveur.");
-  }
-});
+  const html = HtmlService.createHtmlOutput(`
+    <style>
+      body { font-family: Arial; font-size: 12px; }
+      h2 { color: #014389; }
+      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+      th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+    </style>
+    <h2>PRÉ-ACCORD DE RETOUR N° ${numeros.join(", ")}</h2>
+    <p><strong>Date :</strong> ${Utilities.formatDate(now, Session.getScriptTimeZone(), "dd/MM/yyyy")}</p>
+    <p><strong>Client :</strong> ${retour.CLIENT} (${retour.NUM_CLIENT})</p>
+    <table>
+      <thead><tr><th>Référence</th><th>Type</th><th>Motif</th></tr></thead>
+      <tbody>${body.join("")}</tbody>
+    </table>
+    <p style="margin-top:20px;font-size:11px;color:#444;">
+      Le magasin se réserve le droit d'accepter ou non les retours clients.<br>
+      Les pièces électriques ne sont ni reprises, ni échangées.<br>
+      Une décote sera appliquée si l'achat de la pièce date de plus de 30 jours :<br>
+      <em>Retour&lt;30j : Décote 0% - 30j&lt;Retour&lt;60j : 20% - 60j&lt;Retour&lt;90j : 40% - 90j&lt;Retour : 60%</em>
+    </p>
+  `);
+
+  const blob = Utilities.newBlob(html.getContent(), "text/html").getAs("application/pdf").setName(`Retour-${numeros[0]}.pdf`);
+  return ContentService.createTextOutput(blob.getBytes()).setMimeType(ContentService.MimeType.PDF);
+}
+
