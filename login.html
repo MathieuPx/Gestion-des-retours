@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connexion AAI</title>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="login.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AAI - Interface Retours</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="assets/logo-aai.png" />
 </head>
 <body>
-  <div class="login-container">
-    <img src="logo-aai.png" alt="Logo AAI">
-    <h1>Connexion</h1>
-    <form id="loginForm">
-      <label for="email">Email</label>
-      <input type="email" id="email" required>
+  <header class="header">
+    <img src="assets/logo-aai.png" alt="Logo AAI" class="logo" />
+  </header>
 
-      <label for="password">Mot de passe</label>
-      <input type="password" id="password" required>
+  <main id="app">
+    <!-- Login form (initial screen) -->
+    <section id="login-view" class="view active">
+      <h1>Connexion</h1>
+      <form id="login-form">
+        <input type="email" placeholder="Adresse email" required />
+        <input type="password" placeholder="Mot de passe" required />
+        <button type="submit">Se connecter</button>
+      </form>
+      <p id="login-error" class="error"></p>
+    </section>
 
-      <label class="checkbox-label">
-        <input type="checkbox" id="rememberMe"> Se souvenir de moi
-      </label>
+    <!-- Dashboard placeholder (will be replaced per role) -->
+    <section id="dashboard-view" class="view hidden">
+      <h2>Bienvenue, <span id="user-name"></span></h2>
+      <div id="dashboard-content">
+        <!-- dynamic role-based content here -->
+      </div>
+      <button id="logout-btn">Se déconnecter</button>
+    </section>
+  </main>
 
-      <button type="submit">Se connecter</button>
-      <div id="loginMessage" class="msg"></div>
-    </form>
-  </div>
+  <script src="app.js"></script>
 </body>
 </html>
