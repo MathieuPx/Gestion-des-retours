@@ -9,7 +9,7 @@ async function chargerDashboardMagasin(user) {
   section.classList.remove("hidden");
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbz_L4-i-8lgLrWCoRni-ImJMoAQa2jDUJm7Ct00cEsZlsS1O_5RMdNE75yCxEafNaU/exec", {
       method: "POST",
       body: JSON.stringify({
         action: "getRetours",
@@ -82,7 +82,7 @@ function telechargerPdf(numero) {
 
 async function updateStatutRetour(idRetour, statut, motif = "") {
   try {
-    const response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbz_L4-i-8lgLrWCoRni-ImJMoAQa2jDUJm7Ct00cEsZlsS1O_5RMdNE75yCxEafNaU/exec", {
       method: "POST",
       body: JSON.stringify({
         action: "updateRetourStatut",
