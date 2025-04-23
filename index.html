@@ -72,6 +72,8 @@
           <th>Statut</th>
           <th>Pré-accord</th>
           <th>PDF</th>
+          <th>Magasinier</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody id="table-retours">
@@ -80,6 +82,17 @@
     </table>
   </div>
 </section>
+
+<!-- Fenêtre de refus avec motif -->
+<div id="popup-refus" class="view hidden" style="position: fixed; top: 20%; left: 50%; transform: translateX(-50%); background: white; padding: 1.5rem; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 1000;">
+  <h3>Refuser un retour</h3>
+  <p><strong>Motif du refus :</strong></p>
+  <textarea id="motif-refus" rows="4" style="width:100%;"></textarea>
+  <br /><br />
+  <button id="btn-envoyer-refus" class="btn-primary">Confirmer le refus</button>
+  <button onclick="document.getElementById('popup-refus').classList.add('hidden')">Annuler</button>
+</div>
+
 
   
   <!-- DASHBOARD CLIENT - AAI RETOURS -->
