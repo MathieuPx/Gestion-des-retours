@@ -30,6 +30,9 @@ async function chargerDashboardMagasin(user) {
       if (r.STATUT === "Refusé") refuses++;
 
       const pdfCell = r.ID_RETOUR ? `<button onclick=\"telechargerPdf('${r.ID_RETOUR}')\">📄</button>` : "-";
+      const actionCell = r.STATUT === "En attente" ?
+        `<button class='btn-valider-retour' data-id='${r.ID_RETOUR}'>✅</button>
+         <button class='btn-refuser-retour' data-id='${r.ID_RETOUR}'>❌</button>` : "-";
 
       rows += `<tr>
         <td>${r.DATE}</td>
@@ -39,6 +42,8 @@ async function chargerDashboardMagasin(user) {
         <td>${r.STATUT}</td>
         <td>${r.ID_RETOUR || "-"}</td>
         <td>${pdfCell}</td>
+        <td>${r.MAGASINIER || ""}</td>
+        <td>${actionCell}</td>
       </tr>`;
     });
 
@@ -46,10 +51,11 @@ async function chargerDashboardMagasin(user) {
     document.getElementById("stat-valides").textContent = valides;
     document.getElementById("stat-refuses").textContent = refuses;
     tableBody.innerHTML = rows;
+    bindActionsMagasin();
 
   } catch (err) {
     console.error("Erreur chargement retours:", err);
-    tableBody.innerHTML = `<tr><td colspan="7">Erreur de chargement des données</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="9">Erreur de chargement des données</td></tr>`;
   }
 }
 
@@ -70,7 +76,8 @@ function telechargerPdf(numero) {
     a.click();
   })
   .catch(err => alert("Erreur lors du téléchargement du PDF."));
-} 
+}
+
 // ===== MAGASIN - LOGIQUE DE VALIDATION / REFUS RETOURS =====
 
 async function updateStatutRetour(idRetour, statut, motif = "") {
@@ -81,7 +88,8 @@ async function updateStatutRetour(idRetour, statut, motif = "") {
         action: "updateRetourStatut",
         idRetour,
         statut,
-        motif
+        motif,
+        magasinier: CURRENT_USER_NOM || "Inconnu"
       })
     });
     const result = await response.json();
@@ -118,4 +126,4 @@ function bindActionsMagasin() {
       };
     };
   });
-}
+} 
