@@ -60,3 +60,7 @@ logoutBtn.addEventListener("click", () => {
   dashboardView.classList.remove("active");
   loginForm.reset();
 });
+return ContentService
+  .createTextOutput(JSON.stringify(responseObj))
+  .setMimeType(ContentService.MimeType.JSON)
+  .setHeader("Access-Control-Allow-Origin", "*");
