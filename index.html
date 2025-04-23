@@ -33,56 +33,64 @@
       <button id="logout-btn">Se déconnecter</button>
     </section>
   </main>
-  
-<!-- DASHBOARD MAGASIN - AAI RETOURS -->
-<section id="dashboard-magasin" class="view hidden">
-  <h2>Tableau de bord - Magasin</h2>
+  <!-- DASHBOARD CLIENT - AAI RETOURS -->
+<section id="dashboard-client" class="view hidden">
+  <h2>Tableau de bord - Client</h2>
 
-  <!-- Statistiques clés -->
-  <div class="stats-box">
-    <div>
-      <h3>En attente</h3>
-      <p id="stat-attente">12</p>
-    </div>
-    <div>
-      <h3>Validés</h3>
-      <p id="stat-valides">24</p>
-    </div>
-    <div>
-      <h3>Refusés</h3>
-      <p id="stat-refuses">6</p>
+  <!-- Informations personnelles -->
+  <div class="card" style="margin-bottom: 2rem;">
+    <h3>Mes informations</h3>
+    <form id="client-info-form" style="display: grid; gap: 1rem;">
+      <div><strong>Nom :</strong> <span id="client-nom"></span> (<span id="client-numero"></span>)</div>
+      <div><label>Email :</label><input type="email" id="client-email" /></div>
+      <div><label>Téléphone :</label><input type="tel" id="client-tel" /></div>
+      <div><label>Adresse :</label><input type="text" id="client-adresse" /></div>
+      <div><label>Nouveau mot de passe :</label><input type="password" id="client-password" /></div>
+      <button type="submit" class="btn-primary" style="max-width: 200px;">Mettre à jour</button>
+    </form>
+  </div>
+
+  <!-- Contact du magasin et commercial -->
+  <div class="card" style="margin-bottom: 2rem;">
+    <h3>Contacts utiles</h3>
+    <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.95rem;">
+      <div><strong>Magasin :</strong> <span id="magasin-nom"></span> (<span id="magasin-numero"></span>)<br>
+        Tél : <span id="magasin-tel"></span> | Email : <span id="magasin-email"></span>
+      </div>
+      <div><strong>Commercial :</strong> <span id="commercial-nom"></span> (<span id="commercial-secteur"></span>)<br>
+        Tél : <span id="commercial-tel"></span> | Email : <span id="commercial-email"></span>
+      </div>
     </div>
   </div>
 
   <!-- Actions principales -->
   <div style="text-align:center; margin: 2rem 0;">
-    <button id="btn-creer-retour" class="btn-primary">+ Créer un retour</button>
+    <button id="btn-creer-retour-client" class="btn-primary">+ Faire une demande de retour</button>
   </div>
 
-  <!-- Historique des retours -->
+  <!-- Historique des demandes de retour -->
   <div class="card">
-    <h3>Historique des retours</h3>
+    <h3>Mes demandes de retour</h3>
     <table style="width:100%; border-collapse: collapse;">
       <thead>
         <tr>
           <th>Date</th>
-          <th>Client</th>
+          <th>Magasin</th>
           <th>Référence</th>
           <th>Motif</th>
           <th>Statut</th>
-          <th>Pré-accord</th>
+          <th>Accord</th>
           <th>PDF</th>
-          <th>Magasinier</th>
-          <th>Action</th>
         </tr>
       </thead>
-      <tbody id="table-retours">
+      <tbody id="table-retours-client">
+        <tr class="no-retour" style="display:none;">
+          <td colspan="7" style="text-align:center; font-style: italic; color: #999;">Aucun retour enregistré pour le moment.</td>
+        </tr>
         <!-- lignes dynamiques -->
       </tbody>
     </table>
   </div>
-</section>
-
 <!-- Fenêtre de refus avec motif -->
 <div id="popup-refus" class="view hidden" style="position: fixed; top: 20%; left: 50%; transform: translateX(-50%); background: white; padding: 1.5rem; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 1000;">
   <h3>Refuser un retour</h3>
@@ -92,8 +100,7 @@
   <button id="btn-envoyer-refus" class="btn-primary">Confirmer le refus</button>
   <button onclick="document.getElementById('popup-refus').classList.add('hidden')">Annuler</button>
 </div>
-
-
+</section>
   
   <!-- DASHBOARD CLIENT - AAI RETOURS -->
 <section id="dashboard-client" class="view hidden">
