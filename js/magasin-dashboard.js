@@ -29,6 +29,8 @@ async function chargerDashboardMagasin(user) {
       if (r.STATUT === "Validé") valides++;
       if (r.STATUT === "Refusé") refuses++;
 
+      const pdfCell = r.ID_RETOUR ? `<button onclick=\"telechargerPdf('${r.ID_RETOUR}')\">📄</button>` : "-";
+
       rows += `<tr>
         <td>${r.DATE}</td>
         <td>${r.CLIENT}</td>
@@ -36,6 +38,7 @@ async function chargerDashboardMagasin(user) {
         <td>${r.MOTIF}</td>
         <td>${r.STATUT}</td>
         <td>${r.ID_RETOUR || "-"}</td>
+        <td>${pdfCell}</td>
       </tr>`;
     });
 
@@ -46,6 +49,25 @@ async function chargerDashboardMagasin(user) {
 
   } catch (err) {
     console.error("Erreur chargement retours:", err);
-    tableBody.innerHTML = `<tr><td colspan="6">Erreur de chargement des données</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="7">Erreur de chargement des données</td></tr>`;
   }
 }
+
+function telechargerPdf(numero) {
+  fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      action: "getPdfByNumRetour",
+      numero
+    })
+  })
+  .then(res => res.blob())
+  .then(blob => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Retour-${numero}.pdf`;
+    a.click();
+  })
+  .catch(err => alert("Erreur lors du téléchargement du PDF."));
+} 
