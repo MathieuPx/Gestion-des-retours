@@ -9,7 +9,7 @@ async function chargerDashboardMagasin(user) {
   section.classList.remove("hidden");
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbz_L4-i-8lgLrWCoRni-ImJMoAQa2jDUJm7Ct00cEsZlsS1O_5RMdNE75yCxEafNaU/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbynr1wqdkwPUoXB-MrNsw_mViCDqJWHIU8_vyDLPB7f9fHjGz6-ED70cWnOfgzKLFd_/exec", {
       method: "POST",
       body: JSON.stringify({
         action: "getRetours",
@@ -60,7 +60,7 @@ async function chargerDashboardMagasin(user) {
 }
 
 function telechargerPdf(numero) {
-  fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbynr1wqdkwPUoXB-MrNsw_mViCDqJWHIU8_vyDLPB7f9fHjGz6-ED70cWnOfgzKLFd_/exec", {
     method: "POST",
     body: JSON.stringify({
       action: "getPdfByNumRetour",
@@ -82,7 +82,7 @@ function telechargerPdf(numero) {
 
 async function updateStatutRetour(idRetour, statut, motif = "") {
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbz_L4-i-8lgLrWCoRni-ImJMoAQa2jDUJm7Ct00cEsZlsS1O_5RMdNE75yCxEafNaU/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbynr1wqdkwPUoXB-MrNsw_mViCDqJWHIU8_vyDLPB7f9fHjGz6-ED70cWnOfgzKLFd_/exec", {
       method: "POST",
       body: JSON.stringify({
         action: "updateRetourStatut",
