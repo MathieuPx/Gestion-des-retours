@@ -71,3 +71,51 @@ function telechargerPdf(numero) {
   })
   .catch(err => alert("Erreur lors du téléchargement du PDF."));
 } 
+// ===== MAGASIN - LOGIQUE DE VALIDATION / REFUS RETOURS =====
+
+async function updateStatutRetour(idRetour, statut, motif = "") {
+  try {
+    const response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+      method: "POST",
+      body: JSON.stringify({
+        action: "updateRetourStatut",
+        idRetour,
+        statut,
+        motif
+      })
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert("Retour mis à jour avec succès.");
+      chargerDashboardMagasin({ email: CURRENT_USER_EMAIL });
+    } else {
+      alert("Erreur: " + result.error);
+    }
+  } catch (err) {
+    console.error("Erreur API statut retour:", err);
+    alert("Erreur de connexion serveur.");
+  }
+}
+
+function bindActionsMagasin() {
+  document.querySelectorAll(".btn-valider-retour").forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.id;
+      updateStatutRetour(id, "Validé");
+    };
+  });
+
+  document.querySelectorAll(".btn-refuser-retour").forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.id;
+      document.getElementById("popup-refus").classList.remove("hidden");
+      document.getElementById("btn-envoyer-refus").onclick = () => {
+        const motif = document.getElementById("motif-refus").value.trim();
+        if (!motif) return alert("Merci de renseigner un motif de refus.");
+        updateStatutRetour(id, "Refusé", motif);
+        document.getElementById("popup-refus").classList.add("hidden");
+        document.getElementById("motif-refus").value = "";
+      };
+    };
+  });
+}
