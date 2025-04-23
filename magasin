@@ -1,0 +1,45 @@
+<!-- DASHBOARD MAGASIN - AAI RETOURS -->
+<section id="dashboard-magasin" class="view hidden">
+  <h2>Tableau de bord - Magasin</h2>
+
+  <!-- Statistiques clés -->
+  <div class="stats-box">
+    <div>
+      <h3>En attente</h3>
+      <p id="stat-attente">12</p>
+    </div>
+    <div>
+      <h3>Validés</h3>
+      <p id="stat-valides">24</p>
+    </div>
+    <div>
+      <h3>Refusés</h3>
+      <p id="stat-refuses">6</p>
+    </div>
+  </div>
+
+  <!-- Actions principales -->
+  <div style="text-align:center; margin: 2rem 0;">
+    <button id="btn-creer-retour" class="btn-primary">+ Créer un retour</button>
+  </div>
+
+  <!-- Historique des retours -->
+  <div class="card">
+    <h3>Historique des retours</h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Client</th>
+          <th>Référence</th>
+          <th>Motif</th>
+          <th>Statut</th>
+          <th>Pré-accord</th>
+        </tr>
+      </thead>
+      <tbody id="table-retours">
+        <!-- lignes dynamiques -->
+      </tbody>
+    </table>
+  </div>
+</section>
