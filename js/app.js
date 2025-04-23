@@ -10,7 +10,7 @@ const logoutBtn = document.getElementById("logout-btn");
 
 // Simulated backend call to Apps Script API (will be replaced)
 async function loginUser(email, password) {
-  const response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+  const response = await fetch("https://script.google.com/macros/s/AKfycbynr1wqdkwPUoXB-MrNsw_mViCDqJWHIU8_vyDLPB7f9fHjGz6-ED70cWnOfgzKLFd_/exec", {
     method: "POST",
     body: JSON.stringify({
       action: "login",
