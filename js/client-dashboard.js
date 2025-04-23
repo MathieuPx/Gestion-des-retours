@@ -17,7 +17,7 @@ async function chargerRetoursClient(user) {
   const noRetour = tableBody.querySelector(".no-retour");
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbz_L4-i-8lgLrWCoRni-ImJMoAQa2jDUJm7Ct00cEsZlsS1O_5RMdNE75yCxEafNaU/exec", {
       method: "POST",
       body: JSON.stringify({
         action: "getRetours",
@@ -58,7 +58,7 @@ async function chargerRetoursClient(user) {
 }
 
 function telechargerPdf(numero) {
-  fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbz_L4-i-8lgLrWCoRni-ImJMoAQa2jDUJm7Ct00cEsZlsS1O_5RMdNE75yCxEafNaU/exec", {
     method: "POST",
     body: JSON.stringify({
       action: "getPdfByNumRetour",
@@ -78,7 +78,7 @@ function telechargerPdf(numero) {
 
 async function chargerInfosClient(user) {
   try {
-    const response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbz_L4-i-8lgLrWCoRni-ImJMoAQa2jDUJm7Ct00cEsZlsS1O_5RMdNE75yCxEafNaU/exec", {
       method: "POST",
       body: JSON.stringify({
         action: "getClientInfo",
@@ -115,7 +115,7 @@ document.getElementById("client-info-form").addEventListener("submit", async (e)
     motdepasse: document.getElementById("client-password").value,
   };
   try {
-    const res = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbz_L4-i-8lgLrWCoRni-ImJMoAQa2jDUJm7Ct00cEsZlsS1O_5RMdNE75yCxEafNaU/exec", {
       method: "POST",
       body: JSON.stringify({
         action: "updateClientInfo",
