@@ -1,169 +1,84 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AAI - Interface Retours</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="logo-AAI.png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alliance Auto Industrie - Retours</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #014389, #ffffff);
+      color: #014389;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    .logo {
+      max-width: 160px;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      font-size: 1.1rem;
+      max-width: 600px;
+    }
+    .cta {
+      margin-top: 2rem;
+    }
+    .cta a {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: #ffdc00;
+      color: #014389;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .cta a:hover {
+      background: #e6c900;
+    }
+    .features {
+      margin-top: 3rem;
+      max-width: 800px;
+      text-align: left;
+    }
+    .features ul {
+      list-style: none;
+      padding: 0;
+    }
+    .features li {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+  </style>
 </head>
 <body>
-  <header class="header">
-    <img src="logo-AAI.png" alt="Logo AAI" class="logo" />
-  </header>
+  <img src="logo-aai.png" alt="Logo AAI" class="logo">
+  <h1>Bienvenue sur l'interface de gestion des retours AAI</h1>
+  <p>Alliance Auto Industrie vous propose une interface intuitive et centralisée pour le suivi, la validation et la création de retours clients.</p>
 
-  <main id="app">
-    <!-- Login form (initial screen) -->
-    <section id="login-view" class="view active">
-      <h1>Connexion</h1>
-      <form id="login-form">
-        <input type="email" placeholder="Adresse email" required />
-        <input type="password" placeholder="Mot de passe" required />
-        <button type="submit">Se connecter</button>
-      </form>
-      <p id="login-error" class="error"></p>
-    </section>
-
-    <!-- Dashboard placeholder (will be replaced per role) -->
-    <section id="dashboard-view" class="view hidden">
-      <h2>Bienvenue, <span id="user-name"></span></h2>
-      <div id="dashboard-content">
-        <!-- dynamic role-based content here -->
-      </div>
-      <button id="logout-btn">Se déconnecter</button>
-    </section>
-  </main>
-  <!-- DASHBOARD CLIENT - AAI RETOURS -->
-<section id="dashboard-client" class="view hidden">
-  <h2>Tableau de bord - Client</h2>
-
-  <!-- Informations personnelles -->
-  <div class="card" style="margin-bottom: 2rem;">
-    <h3>Mes informations</h3>
-    <form id="client-info-form" style="display: grid; gap: 1rem;">
-      <div><strong>Nom :</strong> <span id="client-nom"></span> (<span id="client-numero"></span>)</div>
-      <div><label>Email :</label><input type="email" id="client-email" /></div>
-      <div><label>Téléphone :</label><input type="tel" id="client-tel" /></div>
-      <div><label>Adresse :</label><input type="text" id="client-adresse" /></div>
-      <div><label>Nouveau mot de passe :</label><input type="password" id="client-password" /></div>
-      <button type="submit" class="btn-primary" style="max-width: 200px;">Mettre à jour</button>
-    </form>
+  <div class="cta">
+    <a href="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">Se connecter à l'interface</a>
   </div>
 
-  <!-- Contact du magasin et commercial -->
-  <div class="card" style="margin-bottom: 2rem;">
-    <h3>Contacts utiles</h3>
-    <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.95rem;">
-      <div><strong>Magasin :</strong> <span id="magasin-nom"></span> (<span id="magasin-numero"></span>)<br>
-        Tél : <span id="magasin-tel"></span> | Email : <span id="magasin-email"></span>
-      </div>
-      <div><strong>Commercial :</strong> <span id="commercial-nom"></span> (<span id="commercial-secteur"></span>)<br>
-        Tél : <span id="commercial-tel"></span> | Email : <span id="commercial-email"></span>
-      </div>
-    </div>
+  <div class="features">
+    <h2>Fonctionnalités disponibles :</h2>
+    <ul>
+      <li>Créer une demande de retour en quelques clics</li>
+      <li>Suivre les validations et refus en temps réel</li>
+      <li>Télécharger les pré-accords au format PDF</li>
+      <li>Accéder à vos statistiques de retours</li>
+      <li>Un accès personnalisé.)</li>
+    </ul>
   </div>
-
-  <!-- Actions principales -->
-  <div style="text-align:center; margin: 2rem 0;">
-    <button id="btn-creer-retour-client" class="btn-primary">+ Faire une demande de retour</button>
-  </div>
-
-  <!-- Historique des demandes de retour -->
-  <div class="card">
-    <h3>Mes demandes de retour</h3>
-    <table style="width:100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Magasin</th>
-          <th>Référence</th>
-          <th>Motif</th>
-          <th>Statut</th>
-          <th>Accord</th>
-          <th>PDF</th>
-        </tr>
-      </thead>
-      <tbody id="table-retours-client">
-        <tr class="no-retour" style="display:none;">
-          <td colspan="7" style="text-align:center; font-style: italic; color: #999;">Aucun retour enregistré pour le moment.</td>
-        </tr>
-        <!-- lignes dynamiques -->
-      </tbody>
-    </table>
-  </div>
-<!-- Fenêtre de refus avec motif -->
-<div id="popup-refus" class="view hidden" style="position: fixed; top: 20%; left: 50%; transform: translateX(-50%); background: white; padding: 1.5rem; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 1000;">
-  <h3>Refuser un retour</h3>
-  <p><strong>Motif du refus :</strong></p>
-  <textarea id="motif-refus" rows="4" style="width:100%;"></textarea>
-  <br /><br />
-  <button id="btn-envoyer-refus" class="btn-primary">Confirmer le refus</button>
-  <button onclick="document.getElementById('popup-refus').classList.add('hidden')">Annuler</button>
-</div>
-</section>
-  
-  <!-- DASHBOARD CLIENT - AAI RETOURS -->
-<section id="dashboard-client" class="view hidden">
-  <h2>Tableau de bord - Client</h2>
-
-  <!-- Informations personnelles -->
-  <div class="card" style="margin-bottom: 2rem;">
-    <h3>Mes informations</h3>
-    <form id="client-info-form" style="display: grid; gap: 1rem;">
-      <div><strong>Nom :</strong> <span id="client-nom"></span> (<span id="client-numero"></span>)</div>
-      <div><label>Email :</label><input type="email" id="client-email" /></div>
-      <div><label>Téléphone :</label><input type="tel" id="client-tel" /></div>
-      <div><label>Adresse :</label><input type="text" id="client-adresse" /></div>
-      <div><label>Nouveau mot de passe :</label><input type="password" id="client-password" /></div>
-      <button type="submit" class="btn-primary" style="max-width: 200px;">Mettre à jour</button>
-    </form>
-  </div>
-
-  <!-- Contact du magasin et commercial -->
-  <div class="card" style="margin-bottom: 2rem;">
-    <h3>Contacts utiles</h3>
-    <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.95rem;">
-      <div><strong>Magasin :</strong> <span id="magasin-nom"></span> (<span id="magasin-numero"></span>)<br>
-        Tél : <span id="magasin-tel"></span> | Email : <span id="magasin-email"></span>
-      </div>
-      <div><strong>Commercial :</strong> <span id="commercial-nom"></span> (<span id="commercial-secteur"></span>)<br>
-        Tél : <span id="commercial-tel"></span> | Email : <span id="commercial-email"></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Actions principales -->
-  <div style="text-align:center; margin: 2rem 0;">
-    <button id="btn-creer-retour-client" class="btn-primary">+ Faire une demande de retour</button>
-  </div>
-
-  <!-- Historique des demandes de retour -->
-  <div class="card">
-    <h3>Mes demandes de retour</h3>
-    <table style="width:100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Magasin</th>
-          <th>Référence</th>
-          <th>Motif</th>
-          <th>Statut</th>
-          <th>Accord</th>
-          <th>PDF</th>
-        </tr>
-      </thead>
-      <tbody id="table-retours-client">
-        <tr class="no-retour" style="display:none;">
-          <td colspan="7" style="text-align:center; font-style: italic; color: #999;">Aucun retour enregistré pour le moment.</td>
-        </tr>
-        <!-- lignes dynamiques -->
-      </tbody>
-    </table>
-  </div>
-</section>
-<script src="client-dashboard.js"></script>
-<script src="magasin-dashboard.js"></script>
-  <script src="app.js"></script>
 </body>
 </html>
 
