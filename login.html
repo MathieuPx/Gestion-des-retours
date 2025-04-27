@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion - Gestion Retours AAI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="banner">
+  <img src="brandsBar.png" alt="Partenaires" class="banner-image">
+</div>
+
+<div class="login-container">
+  <img src="logo-AAI.png" alt="Logo AAI" class="logo">
+  <h2>Connexion</h2>
+  <form id="login-form">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Mot de passe" required>
+    <button type="submit">Se connecter</button>
+  </form>
+  <div id="error" class="error-message"></div>
+</div>
+
+<script>
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    document.getElementById('error').textContent = '';
+
+    google.script.run.withSuccessHandler(function(response) {
+      if (response.success) {
+        window.location.href = 'dashboard-client.html';
+      } else {
+        document.getElementById('error').textContent = response.message;
+      }
+    }).checkLogin(email, password);
+  });
+</script>
+
+</body>
+</html>
