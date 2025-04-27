@@ -1,0 +1,119 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', Arial, sans-serif;
+  background: linear-gradient(to right, #f4f6fa, #e6ecf5), url('fond.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.banner {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem 0;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  animation: bannerFadeIn 1.5s ease-in-out;
+}
+
+@keyframes bannerFadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.banner-image {
+  width: 80%;
+  max-width: 600px;
+  filter: brightness(0.95);
+}
+
+.login-container {
+  background: rgba(255, 255, 255, 0.98);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 320px;
+  text-align: center;
+  margin-top: 160px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 1.5rem;
+}
+
+input[type="email"], input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+input[type="email"]:focus, input[type="password"]:focus {
+  border: 1px solid #014389;
+  box-shadow: 0 0 8px rgba(1, 67, 137, 0.3);
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 1rem;
+  background: linear-gradient(to right, #014389, #0277bd);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background: linear-gradient(to right, #012f63, #01579b);
+  transform: scale(1.03);
+}
+
+.error-message {
+  color: #e63946;
+  margin-top: 15px;
+  font-weight: bold;
+  animation: shake 0.3s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+@media screen and (max-width: 480px) {
+  .login-container {
+    width: 90%;
+    padding: 2rem;
+    margin-top: 180px;
+  }
+
+  .banner-image {
+    width: 95%;
+  }
+}
