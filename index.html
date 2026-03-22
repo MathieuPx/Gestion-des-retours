@@ -153,13 +153,13 @@
     }
 
     .hero-main h1{
-      margin:0;
-      font-size:clamp(34px, 7vw, 62px);
-      line-height:1.02;
-      font-weight:900;
-      letter-spacing:-.05em;
-      max-width:900px;
-    }
+  margin:0;
+  font-size:clamp(22px, 7vw, 62px);
+  line-height:1.02;
+  font-weight:900;
+  letter-spacing:-.05em;
+  max-width:900px;
+}
 
     .brand-line{
       display:flex;
@@ -169,20 +169,16 @@
     }
 
     .brand-line em{
-      margin:0;
-      font-style:normal;
-      font-size:.98rem;
-      opacity:.84;
-    }
+  font-size:clamp(12px, 2.8vw, 16px);
+}
 
-    .brand-line h2{
-      margin:0;
-      font-size:1.2rem;
-      font-weight:800;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      color:#fff;
-    }
+.brand-line h2{
+  font-size:clamp(16px, 4.2vw, 22px);
+}
+
+.brand-line span{
+  font-size:clamp(14px, 3.6vw, 20px);
+}
 
     .brand-line span{
       margin:0;
@@ -258,23 +254,23 @@
     }
 
     .quick-grid{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:12px;
-    }
+  display:grid;
+  grid-template-columns:repeat(3,minmax(90px,1fr));
+  gap:12px;
+}
 
     .quick-btn{
-      border:none;
-      min-height:66px;
-      border-radius:18px;
-      background:#EEF3F9;
-      color:var(--text);
-      font-size:20px;
-      font-weight:900;
-      cursor:pointer;
-      transition:.18s ease;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
-    }
+  border:none;
+  min-height:clamp(72px, 16vw, 66px);
+  border-radius:18px;
+  background:#EEF3F9;
+  color:var(--text);
+  font-size:clamp(18px, 5.2vw, 20px);
+  font-weight:900;
+  cursor:pointer;
+  transition:.18s ease;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+}
 
     .quick-btn:hover{
       transform:translateY(-1px);
@@ -287,10 +283,10 @@
     }
 
     .fields{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-    }
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:14px;
+}
 
     .field{
       display:flex;
@@ -299,25 +295,16 @@
     }
 
     .field label{
-      font-size:14px;
-      font-weight:800;
-      color:var(--text);
-    }
+  font-size:clamp(12px, 3.2vw, 14px);
+  font-weight:800;
+}
 
-    .field input{
-      width:100%;
-      height:66px;
-      border:1px solid var(--border);
-      border-radius:18px;
-      background:#fff;
-      padding:0 18px;
-      font-size:24px;
-      font-weight:900;
-      color:var(--text);
-      outline:none;
-      transition:.18s ease;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
-    }
+.field input{
+  width:100%;
+  height:clamp(54px, 14vw, 66px);
+  font-size:clamp(18px, 6vw, 24px);
+  padding:0 16px;
+}
 
     .field input:focus{
       border-color:var(--brand-2);
@@ -331,16 +318,9 @@
     }
 
     .chip{
-      border:none;
-      border-radius:999px;
-      padding:12px 18px;
-      background:var(--brand-soft);
-      color:var(--brand);
-      font-size:14px;
-      font-weight:900;
-      cursor:pointer;
-      transition:.18s ease;
-    }
+  font-size:clamp(12px, 3.5vw, 14px);
+  padding:clamp(10px, 2.5vw, 12px) clamp(14px, 3.8vw, 18px);
+}
 
     .chip.active{
       background:var(--brand);
@@ -355,15 +335,9 @@
     }
 
     .btn{
-      border:none;
-      min-height:68px;
-      border-radius:20px;
-      padding:16px 20px;
-      font-size:20px;
-      font-weight:900;
-      cursor:pointer;
-      transition:.18s ease;
-    }
+  min-height:clamp(56px, 14vw, 68px);
+  font-size:clamp(18px, 5vw, 20px);
+}
 
     .btn:hover{
       transform:translateY(-1px);
@@ -442,19 +416,14 @@
     }
 
     .hero-result-value{
-      font-size:clamp(34px, 5vw, 58px);
-      font-weight:900;
-      line-height:1;
-      letter-spacing:-.05em;
-    }
+  font-size:clamp(26px, 8vw, 58px);
+  line-height:1;
+}
 
-    .hero-result-side{
-      text-align:right;
-      font-size:14px;
-      opacity:.92;
-      line-height:1.5;
-      font-weight:700;
-    }
+.hero-result-side{
+  font-size:clamp(12px, 3.5vw, 14px);
+  line-height:1.45;
+}
 
     .summary-grid{
       display:grid;
@@ -477,12 +446,9 @@
     }
 
     .summary-value{
-      font-size:clamp(22px,2.5vw,34px);
-      font-weight:900;
-      color:var(--brand);
-      line-height:1.08;
-      letter-spacing:-.03em;
-    }
+  font-size:clamp(18px, 5.5vw, 34px);
+  line-height:1.08;
+}
 
     .prep-card{
       background:#FBFCFF;
@@ -493,14 +459,7 @@
       flex-direction:column;
       gap:14px;
     }
-
-    .prep-title{
-      font-size:20px;
-      font-weight:900;
-      letter-spacing:-.03em;
-      color:var(--text);
-      margin:0;
-    }
+    
 
     .prep-list{
       display:grid;
@@ -530,19 +489,18 @@
       font-weight:900;
     }
 
-    .prep-text{
-      font-size:15px;
-      font-weight:800;
-      color:var(--text);
-      line-height:1.4;
-    }
+    .prep-title{
+  font-size:clamp(18px, 5.5vw, 20px);
+}
 
-    .prep-qty{
-      font-size:18px;
-      font-weight:900;
-      color:var(--brand);
-      white-space:nowrap;
-    }
+.prep-text{
+  font-size:clamp(14px, 4.4vw, 15px);
+  line-height:1.35;
+}
+
+.prep-qty{
+  font-size:clamp(16px, 5vw, 18px);
+}
 
     .copy-row{
       display:grid;
@@ -573,136 +531,16 @@
     }
 
     @media (max-width: 760px){
-
-  .app{
-    padding:14px;
-  }
-
-  .hero{
-    padding:20px 18px;
-  }
-
-  .logo-lysma{
-    height:82px;
-    max-width:190px;
-  }
-
-  .hero-main h1{
-    font-size:clamp(28px, 8vw, 46px);
-    line-height:1.02;
-  }
-
-  .brand-line em{
-    font-size:.9rem;
-  }
-
-  .brand-line h2{
-    font-size:1.05rem;
-  }
-
-  .brand-line span{
-    font-size:.95rem;
-  }
-
-  .hero-sub{
-    font-size:14px;
-    line-height:1.45;
-  }
-
-  .panel{
-    padding:16px;
-  }
-
-  .section-title{
-    font-size:22px;
-    line-height:1.05;
-  }
-
-  .section-note{
-    font-size:12px;
-  }
-
-  .quick-btn{
-    min-height:58px;
-    font-size:18px;
-  }
-
-  .field label{
-    font-size:13px;
-  }
-
-  .field input{
-    height:58px;
-    font-size:20px;
-    padding:0 16px;
-  }
-
-  .chip{
-    font-size:13px;
-    padding:10px 14px;
-  }
-
-  .btn{
-    min-height:60px;
-    font-size:18px;
-  }
-
-  .hero-result{
-    padding:18px;
-  }
-
-  .hero-result-kicker{
-    font-size:11px;
-  }
-
-  .hero-result-title{
-    font-size:16px;
-  }
-
-  .hero-result-value{
-    font-size:clamp(28px, 8vw, 42px);
-    line-height:1;
-  }
-
-  .hero-result-side{
-    font-size:13px;
-    line-height:1.45;
-  }
-
-  .summary-label{
-    font-size:12px;
-  }
-
-  .summary-value{
-    font-size:clamp(18px, 5vw, 28px);
-    line-height:1.05;
-  }
-
-  .prep-title{
-    font-size:18px;
-  }
-
-  .prep-item{
-    padding:12px 14px;
-  }
-
-  .prep-text{
-    font-size:14px;
-    line-height:1.35;
-  }
-
-  .prep-qty{
-    font-size:16px;
-  }
-
-  .btn-copy{
-    min-height:58px;
-    font-size:16px;
-  }
-
-  .foot-note{
-    font-size:12px;
-  }
+  .hero-main h1{ font-size:clamp(22px, 7vw, 32px); }
+  .section-title{ font-size:clamp(18px, 6vw, 24px); }
+  .quick-btn{ font-size:clamp(18px, 5vw, 20px); }
+  .field input{ font-size:clamp(18px, 5.5vw, 22px); }
+  .chip{ font-size:clamp(12px, 3.2vw, 14px); }
+  .btn{ font-size:clamp(18px, 4.8vw, 20px); }
+  .hero-result-value{ font-size:clamp(26px, 8vw, 40px); }
+  .summary-value{ font-size:clamp(18px, 5vw, 26px); }
+  .prep-text{ font-size:clamp(14px, 4vw, 15px); }
+  .prep-qty{ font-size:clamp(16px, 4.8vw, 18px); }
 }
   </style>
 </head>
