@@ -114,22 +114,29 @@
     }
 
     .hero-top{
+      display:none;
+    }
+
+    .hero-main{
       position:relative;
       z-index:1;
       display:flex;
-      justify-content:flex-end;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .hero-title-row{
+      display:flex;
       align-items:center;
-      margin-bottom:10px;
+      gap:14px;
     }
 
     .logo-lysma{
       display:block;
       width:auto;
-      height:76px;
-      max-width:260px;
-      filter:drop-shadow(0 10px 20px rgba(0,0,0,.22));
-      transform-origin:center center;
-      will-change:transform;
+      height:48px;
+      flex-shrink:0;
+      filter:drop-shadow(0 4px 10px rgba(0,0,0,.20));
       animation:logoSwing 6s ease-in-out infinite;
     }
 
@@ -145,23 +152,12 @@
       100% { transform:rotate(0deg); }
     }
 
-    .hero-main{
-      position:relative;
-      z-index:1;
-      margin-top:6px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    /* FIX 1 : h1 seul, pas de heading imbriqué */
     .hero-main h1{
       margin:0;
-      font-size:clamp(22px, 7vw, 62px);
-      line-height:1.02;
+      font-size:26px;
+      line-height:1.1;
       font-weight:900;
-      letter-spacing:-.05em;
-      max-width:900px;
+      letter-spacing:-.03em;
     }
 
     /* FIX 2 : brand-line utilise des spans, plus de h2 imbriqué */
@@ -173,22 +169,22 @@
     }
 
     .brand-line .brand-em{
-      font-size:clamp(12px, 2.8vw, 16px);
+      font-size:13px;
       font-style:italic;
     }
 
-    /* FIX 3 : .brand-name remplace le h2 décoratif — une seule déclaration de font-size */
+    /* FIX 3 : .brand-name remplace le h2 décoratif */
     .brand-line .brand-name{
       margin:0;
-      font-size:clamp(16px, 4.2vw, 22px);
+      font-size:15px;
       font-weight:900;
       opacity:.88;
     }
 
-    /* FIX 4 : .brand-suffix — une seule déclaration, suppression du doublon */
+    /* FIX 4 : .brand-suffix */
     .brand-line .brand-suffix{
       margin:0;
-      font-size:clamp(14px, 3.6vw, 20px);
+      font-size:14px;
       opacity:.88;
     }
 
@@ -238,13 +234,13 @@
       color:var(--brand-2);
     }
 
-    /* FIX 5 : section-title est un h2 dans les panneaux, pas dans la hero */
+    /* FIX 5 : section-title */
     .section-title{
       margin:6px 0 0;
-      font-size:28px;
-      line-height:1.05;
+      font-size:20px;
+      line-height:1.1;
       font-weight:900;
-      letter-spacing:-.04em;
+      letter-spacing:-.03em;
       color:var(--text);
     }
 
@@ -305,14 +301,14 @@
     }
 
     .field label{
-      font-size:clamp(12px, 3.2vw, 14px);
-      font-weight:800;
+      font-size:13px;
+      font-weight:700;
     }
 
     .field input{
       width:100%;
-      height:clamp(48px, 12vw, 60px);
-      font-size:clamp(18px, 5.5vw, 22px);
+      height:48px;
+      font-size:17px;
       padding:0 14px;
       border:1.5px solid var(--border);
       border-radius:var(--radius-sm);
@@ -339,11 +335,11 @@
       border-radius:999px;
       background:#fff;
       color:var(--text);
-      font-weight:800;
+      font-weight:700;
       cursor:pointer;
       transition:.18s ease;
-      font-size:clamp(12px, 3.5vw, 14px);
-      padding:clamp(10px, 2.5vw, 12px) clamp(14px, 3.8vw, 18px);
+      font-size:13px;
+      padding:8px 14px;
     }
 
     .chip:hover{
@@ -371,8 +367,8 @@
       font-weight:900;
       cursor:pointer;
       transition:.18s ease;
-      min-height:clamp(56px, 14vw, 68px);
-      font-size:clamp(18px, 5vw, 20px);
+      min-height:50px;
+      font-size:16px;
     }
 
     .btn:hover{
@@ -453,7 +449,7 @@
     }
 
     .hero-result-value{
-      font-size:clamp(36px, 12vw, 58px);
+      font-size:32px;
       line-height:1;
       font-weight:900;
     }
@@ -508,7 +504,7 @@
     }
 
     .summary-value{
-      font-size:clamp(16px, 4.5vw, 28px);
+      font-size:20px;
       line-height:1.1;
       font-weight:900;
       white-space:nowrap;
@@ -525,10 +521,9 @@
       gap:14px;
     }
 
-    /* FIX 6 : prep-card-title distinct de prep-item-title pour éviter la confusion de nommage */
     .prep-card-title{
       margin:0;
-      font-size:clamp(18px, 5.5vw, 20px);
+      font-size:16px;
       font-weight:900;
       color:var(--text);
     }
@@ -605,17 +600,13 @@
       }
     }
 
-    @media (max-width:760px){
-      .hero-main h1        { font-size:clamp(22px, 7vw, 32px); }
-      .section-title       { font-size:clamp(18px, 6vw, 24px); }
-      .quick-btn           { font-size:clamp(18px, 5vw, 20px); }
-      .field input         { font-size:clamp(18px, 5.5vw, 22px); }
-      .chip                { font-size:clamp(12px, 3.2vw, 14px); }
-      .btn                 { font-size:clamp(18px, 4.8vw, 20px); }
-      .hero-result-value   { font-size:clamp(26px, 8vw, 40px); }
-      .summary-value       { font-size:clamp(18px, 5vw, 26px); }
-      .prep-item-text      { font-size:clamp(14px, 4vw, 15px); }
-      .prep-item-qty       { font-size:clamp(16px, 4.8vw, 18px); }
+    @media (min-width:760px){
+      .hero-main h1      { font-size:36px; }
+      .section-title     { font-size:26px; }
+      .field input       { font-size:20px; height:54px; }
+      .btn               { min-height:56px; font-size:17px; }
+      .hero-result-value { font-size:44px; }
+      .summary-value     { font-size:26px; }
     }
   </style>
 
@@ -626,19 +617,17 @@
 ```
 <!-- ── HERO ── -->
 <section class="hero">
-  <div class="hero-top">
-    <img
-      class="logo-lysma"
-      src="./logo-lysma.png"
-      alt="Logo LYSMA"
-    >
-  </div>
-
   <div class="hero-main">
-    <!-- FIX 1 : h1 seul, sans heading imbriqué -->
-    <h1>Calculateur e-liquide</h1>
+    <div class="hero-title-row">
+      <img
+        class="logo-lysma"
+        src="./logo-lysma.png"
+        alt="Logo LYSMA"
+      >
+      <h1>Calculateur e-liquide</h1>
+    </div>
 
-    <!-- FIX 2 & 3 : brand-line utilise uniquement des spans décoratifs -->
+    <!-- brand-line utilise uniquement des spans décoratifs -->
     <div class="brand-line" aria-label="By LYSMA solutions">
       <span class="brand-em">By</span>
       <span class="brand-name">LYSMA</span>
