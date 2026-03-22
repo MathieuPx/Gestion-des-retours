@@ -111,38 +111,21 @@
       background:rgba(255,255,255,.06);
     }
 
-    .hero-main{
+    .hero-top{
       position:relative;
       z-index:1;
-      margin-top:6px;
       display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .hero-title-row{
-      display:flex;
+      justify-content:flex-end;
       align-items:center;
-      justify-content:space-between;
-      gap:16px;
-    }
-
-    .hero-title-row h1{
-      margin:0;
-      font-size:clamp(34px, 7vw, 62px);
-      line-height:1.02;
-      font-weight:900;
-      letter-spacing:-.05em;
-      max-width:900px;
+      margin-bottom:10px;
     }
 
     .logo-lysma{
       display:block;
       width:auto;
-      height:220px;
-      max-width:320px;
-      flex-shrink:0;
-      filter:drop-shadow(0 12px 30px rgba(0,0,0,.25));
+      height:120px;
+      max-width:290px;
+      filter:drop-shadow(0 12px 26px rgba(0,0,0,.25));
       transform-origin:center center;
       will-change:transform;
       animation:logoSwing 6s ease-in-out infinite;
@@ -158,6 +141,24 @@
       48%  { transform:rotate(12deg); }
       56%  { transform:rotate(0deg); }
       100% { transform:rotate(0deg); }
+    }
+
+    .hero-main{
+      position:relative;
+      z-index:1;
+      margin-top:6px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .hero-main h1{
+      margin:0;
+      font-size:clamp(34px, 7vw, 62px);
+      line-height:1.02;
+      font-weight:900;
+      letter-spacing:-.05em;
+      max-width:900px;
     }
 
     .brand-line{
@@ -611,13 +612,9 @@
         grid-column:2;
       }
 
-      .hero-title-row{
-        align-items:flex-start;
-      }
-
       .logo-lysma{
-        height:120px;
-        max-width:290px;
+        height:90px;
+        max-width:220px;
       }
     }
   </style>
@@ -626,21 +623,27 @@
   <div class="app">
 
     <section class="hero">
+      <div class="hero-top">
+        <img
+          class="logo-lysma"
+          src="./logo-lysma.png"
+          alt="Logo LYSMA"
+        >
+      </div>
+
       <div class="hero-main">
-        <div class="hero-title-row">
-          <h1>Calculateur e-liquide</h1>
-          <img
-            class="logo-lysma"
-            src="./logo-lysma.png"
-            alt="Logo LYSMA"
-          >
-        </div>
+        <h1>Calculateur e-liquide</h1>
 
         <div class="brand-line">
           <em>By</em>
           <h2>LYSMA</h2>
           <span>solutions</span>
         </div>
+
+        <p class="hero-sub">
+          Un calculateur simple, rapide et lisible pour préparer tes mélanges avec un rendu premium,
+          pensé pour mobile comme pour desktop.
+        </p>
       </div>
     </section>
 
@@ -696,11 +699,11 @@
         <div>
           <p class="section-kicker">Presets nicotine</p>
           <div class="presets">
-            <button class="chip" type="button" onclick="setNicotine(0)">0 mg</button>
-            <button class="chip" type="button" onclick="setNicotine(3)">3 mg</button>
-            <button class="chip" type="button" onclick="setNicotine(6)">6 mg</button>
-            <button class="chip active" type="button" onclick="setNicotine(10)">10 mg</button>
-            <button class="chip" type="button" onclick="setNicotine(12)">12 mg</button>
+            <button class="chip" type="button" onclick="setNicotine(0)">0 mg/ml</button>
+            <button class="chip" type="button" onclick="setNicotine(3)">3 mg/ml</button>
+            <button class="chip" type="button" onclick="setNicotine(6)">6 mg/ml</button>
+            <button class="chip active" type="button" onclick="setNicotine(10)">10 mg/ml</button>
+            <button class="chip" type="button" onclick="setNicotine(12)">12 mg/ml</button>
           </div>
         </div>
 
@@ -719,22 +722,23 @@
       <div class="panel">
         <div class="panel-header">
           <div>
-            <h2 class="section-kicker">Résultat</h2>
-            <p class="section-title">Lecture immédiate</p>
+            <p class="section-kicker">Résultat</p>
+            <h2 class="section-title">Lecture immédiate</h2>
           </div>
+          <div class="section-note">Tout est résumé clairement.</div>
         </div>
 
         <div class="hero-result">
           <div>
             <div class="hero-result-kicker">Préparation finale</div>
             <div class="hero-result-title">Base à compléter</div>
-            <div class="hero-result-value" id="finalBaseDisplay">24.5 ml</div>
+            <div class="hero-result-value" id="finalBaseDisplay">24,5 ml</div>
           </div>
 
           <div class="hero-result-side">
             Nicotine : <span id="finalNicotineSide">10 mg/ml</span><br>
             Arôme : <span id="finalAromaSide">15 %</span><br>
-            Base à compléter : <span id="finalBaseSide">24.5 ml</span><br>
+            Base à compléter : <span id="finalBaseSide">24,5 ml</span><br>
             Volume final : <span id="finalVolumeSide">70 ml</span>
           </div>
         </div>
@@ -757,7 +761,7 @@
 
           <div class="summary-card">
             <div class="summary-label">Arôme</div>
-            <div class="summary-value" id="aromaDisplay">10.5 ml</div>
+            <div class="summary-value" id="aromaDisplay">10,50 ml</div>
           </div>
         </div>
 
@@ -774,13 +778,13 @@
             <div class="prep-item">
               <div class="prep-index">2</div>
               <div class="prep-text">Ajouter l’arôme</div>
-              <div class="prep-qty" id="prepAroma">10.5 ml</div>
+              <div class="prep-qty" id="prepAroma">10,50 ml</div>
             </div>
 
             <div class="prep-item">
               <div class="prep-index">3</div>
               <div class="prep-text">Compléter avec la base neutre</div>
-              <div class="prep-qty" id="prepBase">24.5 ml</div>
+              <div class="prep-qty" id="prepBase">24,50 ml</div>
             </div>
           </div>
 
@@ -799,17 +803,17 @@
 
     function formatMl(value){
       const n = round2(value);
-      return Number.isInteger(n) ? n + ' ml' : n.toFixed(1).replace('.', ',') + ' ml';
+      return Number.isInteger(n) ? n + ' ml' : n.toFixed(2).replace('.', ',') + ' ml';
     }
 
     function formatMg(value){
       const n = round2(value);
-      return Number.isInteger(n) ? n + ' mg/ml' : n.toFixed(1).replace('.', ',') + ' mg/ml';
+      return Number.isInteger(n) ? n + ' mg/ml' : n.toFixed(2).replace('.', ',') + ' mg/ml';
     }
 
     function formatPercent(value){
       const n = round2(value);
-      return Number.isInteger(n) ? n + ' %' : n.toFixed(1).replace('.', ',') + ' %';
+      return Number.isInteger(n) ? n + ' %' : n.toFixed(2).replace('.', ',') + ' %';
     }
 
     function showStatus(message, ok = true){
@@ -832,7 +836,7 @@
 
     function setActiveNicotineChip(value){
       document.querySelectorAll('.chip').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent.trim() === value + ' mg');
+        btn.classList.toggle('active', btn.textContent.trim() === value + ' mg/ml');
       });
     }
 
@@ -850,7 +854,6 @@
 
     function updateResult(volume, nicotine, boosterMl, aromaMl, baseMl){
       document.getElementById('finalBaseDisplay').textContent = formatMl(baseMl);
-
       document.getElementById('finalVolumeSide').textContent = formatMl(volume);
       document.getElementById('finalNicotineSide').textContent = formatMg(nicotine);
       document.getElementById('finalAromaSide').textContent = formatPercent(Number(document.getElementById('aroma').value));
