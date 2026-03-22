@@ -311,9 +311,9 @@
 
     .field input{
       width:100%;
-      height:clamp(54px, 14vw, 66px);
-      font-size:clamp(18px, 6vw, 24px);
-      padding:0 16px;
+      height:clamp(48px, 12vw, 60px);
+      font-size:clamp(18px, 5.5vw, 22px);
+      padding:0 14px;
       border:1.5px solid var(--border);
       border-radius:var(--radius-sm);
       outline:none;
@@ -431,10 +431,9 @@
       border-radius:26px;
       padding:22px;
       box-shadow:0 16px 32px rgba(10,77,155,.20);
-      display:grid;
-      grid-template-columns:1fr auto;
+      display:flex;
+      flex-direction:column;
       gap:16px;
-      align-items:center;
     }
 
     .hero-result-kicker{
@@ -450,18 +449,40 @@
       font-size:18px;
       font-weight:800;
       opacity:.96;
-      margin-bottom:10px;
+      margin-bottom:6px;
     }
 
     .hero-result-value{
-      font-size:clamp(26px, 8vw, 58px);
+      font-size:clamp(36px, 12vw, 58px);
       line-height:1;
       font-weight:900;
     }
 
+    /* Infos secondaires : grille 2×2 propre sous la valeur principale */
     .hero-result-side{
-      font-size:clamp(12px, 3.5vw, 14px);
-      line-height:1.45;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px 16px;
+    }
+
+    .hero-result-side-item{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .hero-result-side-label{
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      opacity:.7;
+    }
+
+    .hero-result-side-value{
+      font-size:15px;
+      font-weight:800;
+      opacity:.96;
     }
 
     /* ── SUMMARY GRID ── */
@@ -516,10 +537,9 @@
     }
 
     .prep-item{
-      display:grid;
-      grid-template-columns:auto 1fr auto;
-      gap:12px;
+      display:flex;
       align-items:center;
+      gap:12px;
       background:#fff;
       border:1px solid #E7ECF4;
       border-radius:18px;
@@ -527,6 +547,7 @@
     }
 
     .prep-index{
+      flex-shrink:0;
       width:30px;
       height:30px;
       border-radius:999px;
@@ -539,14 +560,17 @@
     }
 
     .prep-item-text{
+      flex:1;
       font-size:clamp(14px, 4.4vw, 15px);
       line-height:1.35;
       font-weight:600;
     }
 
     .prep-item-qty{
-      font-size:clamp(16px, 5vw, 18px);
+      flex-shrink:0;
+      font-size:clamp(15px, 4.6vw, 18px);
       font-weight:900;
+      white-space:nowrap;
     }
 
     /* ── COPY ROW ── */
@@ -709,14 +733,26 @@
       <div>
         <div class="hero-result-kicker">Préparation finale</div>
         <div class="hero-result-title">Base à compléter</div>
-        <div class="hero-result-value" id="finalBaseDisplay">24,5 ml</div>
+        <div class="hero-result-value" id="finalBaseDisplay">24,50 ml</div>
       </div>
 
       <div class="hero-result-side">
-        Nicotine : <span id="finalNicotineSide">10 mg/ml</span><br>
-        Arôme : <span id="finalAromaSide">15 %</span><br>
-        Base à compléter : <span id="finalBaseSide">24,5 ml</span><br>
-        Volume final : <span id="finalVolumeSide">70 ml</span>
+        <div class="hero-result-side-item">
+          <span class="hero-result-side-label">Nicotine</span>
+          <span class="hero-result-side-value" id="finalNicotineSide">10 mg/ml</span>
+        </div>
+        <div class="hero-result-side-item">
+          <span class="hero-result-side-label">Arôme</span>
+          <span class="hero-result-side-value" id="finalAromaSide">15 %</span>
+        </div>
+        <div class="hero-result-side-item">
+          <span class="hero-result-side-label">Base neutre</span>
+          <span class="hero-result-side-value" id="finalBaseSide">24,50 ml</span>
+        </div>
+        <div class="hero-result-side-item">
+          <span class="hero-result-side-label">Volume final</span>
+          <span class="hero-result-side-value" id="finalVolumeSide">70 ml</span>
+        </div>
       </div>
     </div>
 
