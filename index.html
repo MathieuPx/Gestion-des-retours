@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0A4D9B" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>LYSMA Solutions — Calculateur e-liquide</title>
+
+  <style>
+    :root{
+      --brand:#0A4D9B;
+      --brand-2:#1E73D8;
+      --brand-3:#6EA8FF;
+      --brand-soft:#EAF3FF;
+
+      --bg:#F2F4F7;
+      --bg-2:#F8FAFC;
+      --card:#FFFFFF;
+
+      --text:#0F172A;
+      --muted:#6B7280;
+      --border:#DCE5F0;
+
+      --success:#16A34A;
+      --success-bg:rgba(22,163,74,.10);
+
+      --danger:#DC2626;
+      --danger-bg:rgba(220,38,38,.10);
+
+      --shadow-sm:0 6px 18px rgba(15,23,42,.05);
+      --shadow-md:0 14px 34px rgba(15,23,42,.08);
+      --shadow-lg:0 24px 60px rgba(10,77,155,.18);
+
+      --radius-sm:14px;
+      --radius-md:20px;
+      --radius-lg:26px;
+      --radius-xl:32px;
+
+      --gradient-brand:linear-gradient(135deg, #0A4D9B 0%, #1E73D8 58%, #6EA8FF 100%);
+      --gradient-page:linear-gradient(180deg, #F8FAFC 0%, #F2F4F7 100%);
+      --gradient-card:linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%);
+    }
+
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      min-height:100%;
+      font-family:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:var(--gradient-page);
+      color:var(--text);
+    }
+
+    body{
+      min-height:100vh;
+    }
+
+    button,
+    input{
+      font:inherit;
+    }
+
+    .app{
+      min-height:100vh;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      border-radius:var(--radius-xl);
+      background:var(--gradient-brand);
+      color:#fff;
+      padding:26px;
+      box-shadow:var(--shadow-lg);
+      isolation:isolate;
+    }
+
+    .hero::before,
+    .hero::after{
+      content:"";
+      position:absolute;
+      border-radius:999px;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .hero::before{
+      width:320px;
+      height:320px;
+      top:-140px;
+      right:-70px;
+      background:rgba(255,255,255,.08);
+    }
+
+    .hero::after{
+      width:220px;
+      height:220px;
+      bottom:-110px;
+      right:120px;
+      background:rgba(255,255,255,.06);
+    }
+
+    .hero-main{
+      position:relative;
+      z-index:1;
+      margin-top:6px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .hero-title-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    .hero-title-row h1{
+      margin:0;
+      font-size:clamp(34px, 7vw, 62px);
+      line-height:1.02;
+      font-weight:900;
+      letter-spacing:-.05em;
+      max-width:900px;
+    }
+
+    .logo-lysma{
+      display:block;
+      width:auto;
+      height:220px;
+      max-width:320px;
+      flex-shrink:0;
+      filter:drop-shadow(0 12px 30px rgba(0,0,0,.25));
+      transform-origin:center center;
+      will-change:transform;
+      animation:logoSwing 6s ease-in-out infinite;
+    }
+
+    @keyframes logoSwing{
+      0%   { transform:rotate(0deg); }
+      8%   { transform:rotate(-12deg); }
+      16%  { transform:rotate(12deg); }
+      24%  { transform:rotate(-12deg); }
+      32%  { transform:rotate(12deg); }
+      40%  { transform:rotate(-12deg); }
+      48%  { transform:rotate(12deg); }
+      56%  { transform:rotate(0deg); }
+      100% { transform:rotate(0deg); }
+    }
+
+    .brand-line{
+      display:flex;
+      align-items:baseline;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+
+    .brand-line em{
+      margin:0;
+      font-style:normal;
+      font-size:.98rem;
+      opacity:.84;
+    }
+
+    .brand-line h2{
+      margin:0;
+      font-size:1.2rem;
+      font-weight:800;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#fff;
+    }
+
+    .brand-line span{
+      margin:0;
+      font-size:1rem;
+      opacity:.88;
+    }
+
+    .hero-sub{
+      margin:2px 0 0;
+      max-width:780px;
+      font-size:15px;
+      line-height:1.55;
+      color:rgba(255,255,255,.88);
+      font-weight:500;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(340px, 1.05fr) minmax(340px, .95fr);
+      gap:18px;
+      flex:1;
+    }
+
+    .panel{
+      background:var(--gradient-card);
+      border:1px solid var(--border);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow-md);
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      min-width:0;
+    }
+
+    .panel-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .section-kicker{
+      margin:0;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--brand-2);
+    }
+
+    .section-title{
+      margin:6px 0 0;
+      font-size:28px;
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-.04em;
+      color:var(--text);
+    }
+
+    .section-note{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.5;
+      font-weight:700;
+      text-align:right;
+    }
+
+    .divider{
+      height:1px;
+      background:linear-gradient(90deg, rgba(10,77,155,.18), rgba(10,77,155,0));
+    }
+
+    .quick-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .quick-btn{
+      border:none;
+      min-height:66px;
+      border-radius:18px;
+      background:#EEF3F9;
+      color:var(--text);
+      font-size:20px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.18s ease;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+    }
+
+    .quick-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .quick-btn.active{
+      color:#fff;
+      background:var(--gradient-brand);
+      box-shadow:0 12px 24px rgba(10,77,155,.22);
+    }
+
+    .fields{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field label{
+      font-size:14px;
+      font-weight:800;
+      color:var(--text);
+    }
+
+    .field input{
+      width:100%;
+      height:66px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:#fff;
+      padding:0 18px;
+      font-size:24px;
+      font-weight:900;
+      color:var(--text);
+      outline:none;
+      transition:.18s ease;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+    }
+
+    .field input:focus{
+      border-color:var(--brand-2);
+      box-shadow:0 0 0 4px rgba(30,115,216,.10);
+    }
+
+    .presets{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .chip{
+      border:none;
+      border-radius:999px;
+      padding:12px 18px;
+      background:var(--brand-soft);
+      color:var(--brand);
+      font-size:14px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .chip.active{
+      background:var(--brand);
+      color:#fff;
+      box-shadow:0 10px 22px rgba(10,77,155,.18);
+    }
+
+    .action-row{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:12px;
+    }
+
+    .btn{
+      border:none;
+      min-height:68px;
+      border-radius:20px;
+      padding:16px 20px;
+      font-size:20px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .btn-primary{
+      background:var(--gradient-brand);
+      color:#fff;
+      box-shadow:0 14px 28px rgba(10,77,155,.22);
+    }
+
+    .btn-secondary{
+      background:#EEF2F7;
+      color:var(--text);
+    }
+
+    .status{
+      display:none;
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:14px;
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    .status.show{
+      display:block;
+    }
+
+    .status.ok{
+      background:var(--success-bg);
+      color:var(--success);
+      border:1px solid rgba(22,163,74,.18);
+    }
+
+    .status.error{
+      background:var(--danger-bg);
+      color:var(--danger);
+      border:1px solid rgba(220,38,38,.18);
+    }
+
+    .foot-note{
+      text-align:center;
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.5;
+      font-weight:700;
+    }
+
+    .hero-result{
+      background:var(--gradient-brand);
+      color:#fff;
+      border-radius:26px;
+      padding:22px;
+      box-shadow:0 16px 32px rgba(10,77,155,.20);
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:16px;
+      align-items:center;
+    }
+
+    .hero-result-kicker{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      opacity:.86;
+      margin-bottom:6px;
+    }
+
+    .hero-result-title{
+      font-size:18px;
+      font-weight:800;
+      opacity:.96;
+      margin-bottom:10px;
+    }
+
+    .hero-result-value{
+      font-size:clamp(34px, 5vw, 58px);
+      font-weight:900;
+      line-height:1;
+      letter-spacing:-.05em;
+    }
+
+    .hero-result-side{
+      text-align:right;
+      font-size:14px;
+      opacity:.92;
+      line-height:1.5;
+      font-weight:700;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .summary-card{
+      background:linear-gradient(180deg, #FFFFFF 0%, #F7FAFE 100%);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:18px;
+    }
+
+    .summary-label{
+      font-size:13px;
+      font-weight:800;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+
+    .summary-value{
+      font-size:clamp(22px,2.5vw,34px);
+      font-weight:900;
+      color:var(--brand);
+      line-height:1.08;
+      letter-spacing:-.03em;
+    }
+
+    .prep-card{
+      background:#FBFCFF;
+      border:1px dashed rgba(10,77,155,.25);
+      border-radius:24px;
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .prep-title{
+      font-size:20px;
+      font-weight:900;
+      letter-spacing:-.03em;
+      color:var(--text);
+      margin:0;
+    }
+
+    .prep-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .prep-item{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:12px;
+      align-items:center;
+      background:#fff;
+      border:1px solid #E7ECF4;
+      border-radius:18px;
+      padding:14px 16px;
+    }
+
+    .prep-index{
+      width:30px;
+      height:30px;
+      border-radius:999px;
+      background:var(--brand-soft);
+      color:var(--brand);
+      display:grid;
+      place-items:center;
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .prep-text{
+      font-size:15px;
+      font-weight:800;
+      color:var(--text);
+      line-height:1.4;
+    }
+
+    .prep-qty{
+      font-size:18px;
+      font-weight:900;
+      color:var(--brand);
+      white-space:nowrap;
+    }
+
+    .copy-row{
+      display:grid;
+      grid-template-columns:1fr;
+    }
+
+    .btn-copy{
+      border:none;
+      min-height:62px;
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:17px;
+      font-weight:900;
+      cursor:pointer;
+      background:#0F172A;
+      color:#fff;
+      transition:.18s ease;
+    }
+
+    .btn-copy:hover{
+      transform:translateY(-1px);
+    }
+
+    @media (max-width:1100px){
+      .layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:760px){
+      .app{
+        padding:14px;
+      }
+
+      .hero{
+        padding:20px 18px;
+      }
+
+      .panel{
+        padding:16px;
+      }
+
+      .section-title{
+        font-size:24px;
+      }
+
+      .quick-grid,
+      .fields,
+      .summary-grid,
+      .action-row{
+        grid-template-columns:1fr;
+      }
+
+      .hero-result{
+        grid-template-columns:1fr;
+      }
+
+      .hero-result-side{
+        text-align:left;
+      }
+
+      .prep-item{
+        grid-template-columns:auto 1fr;
+      }
+
+      .prep-qty{
+        grid-column:2;
+      }
+
+      .hero-title-row{
+        align-items:flex-start;
+      }
+
+      .logo-lysma{
+        height:120px;
+        max-width:290px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <section class="hero">
+      <div class="hero-main">
+        <div class="hero-title-row">
+          <h1>Calculateur e-liquide</h1>
+          <img
+            class="logo-lysma"
+            src="./logo-lysma.png"
+            alt="Logo LYSMA"
+          >
+        </div>
+
+        <div class="brand-line">
+          <em>By</em>
+          <h2>LYSMA</h2>
+          <span>solutions</span>
+        </div>
+
+        <p class="hero-sub">
+          Un calculateur simple, rapide et lisible pour préparer tes mélanges avec un rendu premium,
+          pensé pour mobile comme pour desktop.
+        </p>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-kicker">Préparer mon mélange</p>
+            <h2 class="section-title">Paramètres de préparation</h2>
+          </div>
+          <div class="section-note">Saisie simple, calcul immédiat.</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div>
+          <p class="section-kicker">Volumes rapides</p>
+          <div class="quick-grid">
+            <button class="quick-btn" type="button" onclick="setVolume(30)">30 ml</button>
+            <button class="quick-btn" type="button" onclick="setVolume(60)">60 ml</button>
+            <button class="quick-btn active" type="button" onclick="setVolume(70)">70 ml</button>
+            <button class="quick-btn" type="button" onclick="setVolume(100)">100 ml</button>
+            <button class="quick-btn" type="button" onclick="setVolume(120)">120 ml</button>
+            <button class="quick-btn" type="button" onclick="setVolume(200)">200 ml</button>
+          </div>
+        </div>
+
+        <div>
+          <p class="section-kicker">Paramètres</p>
+          <div class="fields">
+            <div class="field">
+              <label for="volume">Quantité souhaitée (ml)</label>
+              <input id="volume" type="number" inputmode="decimal" value="70" min="1" step="1">
+            </div>
+
+            <div class="field">
+              <label for="nicotine">Taux nicotine voulu (mg/ml)</label>
+              <input id="nicotine" type="number" inputmode="decimal" value="10" min="0" step="0.1">
+            </div>
+
+            <div class="field">
+              <label for="boosterStrength">Force booster (mg/ml)</label>
+              <input id="boosterStrength" type="number" inputmode="decimal" value="20" min="1" step="0.1">
+            </div>
+
+            <div class="field">
+              <label for="aroma">Arôme (%)</label>
+              <input id="aroma" type="number" inputmode="decimal" value="15" min="0" max="100" step="0.1">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="section-kicker">Presets nicotine</p>
+          <div class="presets">
+            <button class="chip" type="button" onclick="setNicotine(0)">0 mg</button>
+            <button class="chip" type="button" onclick="setNicotine(3)">3 mg</button>
+            <button class="chip" type="button" onclick="setNicotine(6)">6 mg</button>
+            <button class="chip active" type="button" onclick="setNicotine(10)">10 mg</button>
+            <button class="chip" type="button" onclick="setNicotine(12)">12 mg</button>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" type="button" onclick="calculateMix()">Calculer</button>
+          <button class="btn btn-secondary" type="button" onclick="resetForm()">Reset</button>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div class="foot-note">
+          Formule utilisée : booster = (volume × nicotine voulue) / force booster
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="section-kicker">Résultat</h2>
+            <p class="section-title">Lecture immédiate</p>
+          </div>
+        </div>
+
+        <div class="hero-result">
+          <div>
+            <div class="hero-result-kicker">Préparation finale</div>
+            <div class="hero-result-title">Base à compléter</div>
+            <div class="hero-result-value" id="finalBaseDisplay">24.5 ml</div>
+          </div>
+
+          <div class="hero-result-side">
+            Nicotine : <span id="finalNicotineSide">10 mg/ml</span><br>
+            Arôme : <span id="finalAromaSide">15 %</span><br>
+            Base à compléter : <span id="finalBaseSide">24.5 ml</span><br>
+            Volume final : <span id="finalVolumeSide">70 ml</span>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">Volume final</div>
+            <div class="summary-value" id="volumeDisplay">70 ml</div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-label">Nicotine</div>
+            <div class="summary-value" id="nicotineDisplay">10 mg/ml</div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-label">Booster</div>
+            <div class="summary-value" id="boosterDisplay">35 ml</div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-label">Arôme</div>
+            <div class="summary-value" id="aromaDisplay">10.5 ml</div>
+          </div>
+        </div>
+
+        <div class="prep-card">
+          <h3 class="prep-title">Préparation détaillée</h3>
+
+          <div class="prep-list">
+            <div class="prep-item">
+              <div class="prep-index">1</div>
+              <div class="prep-text">Ajouter le booster nicotine</div>
+              <div class="prep-qty" id="prepBooster">35 ml</div>
+            </div>
+
+            <div class="prep-item">
+              <div class="prep-index">2</div>
+              <div class="prep-text">Ajouter l’arôme</div>
+              <div class="prep-qty" id="prepAroma">10.5 ml</div>
+            </div>
+
+            <div class="prep-item">
+              <div class="prep-index">3</div>
+              <div class="prep-text">Compléter avec la base neutre</div>
+              <div class="prep-qty" id="prepBase">24.5 ml</div>
+            </div>
+          </div>
+
+          <div class="copy-row">
+            <button class="btn-copy" type="button" onclick="copyResult()">Copier le résumé</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function round2(value){
+      return Math.round((value + Number.EPSILON) * 100) / 100;
+    }
+
+    function formatMl(value){
+      const n = round2(value);
+      return Number.isInteger(n) ? n + ' ml' : n.toFixed(1).replace('.', ',') + ' ml';
+    }
+
+    function formatMg(value){
+      const n = round2(value);
+      return Number.isInteger(n) ? n + ' mg/ml' : n.toFixed(1).replace('.', ',') + ' mg/ml';
+    }
+
+    function formatPercent(value){
+      const n = round2(value);
+      return Number.isInteger(n) ? n + ' %' : n.toFixed(1).replace('.', ',') + ' %';
+    }
+
+    function showStatus(message, ok = true){
+      const el = document.getElementById('status');
+      el.textContent = message;
+      el.className = 'status show ' + (ok ? 'ok' : 'error');
+    }
+
+    function clearStatus(){
+      const el = document.getElementById('status');
+      el.textContent = '';
+      el.className = 'status';
+    }
+
+    function setActiveVolumeButton(value){
+      document.querySelectorAll('.quick-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim() === value + ' ml');
+      });
+    }
+
+    function setActiveNicotineChip(value){
+      document.querySelectorAll('.chip').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim() === value + ' mg');
+      });
+    }
+
+    function setVolume(value){
+      document.getElementById('volume').value = value;
+      setActiveVolumeButton(value);
+      calculateMix();
+    }
+
+    function setNicotine(value){
+      document.getElementById('nicotine').value = value;
+      setActiveNicotineChip(value);
+      calculateMix();
+    }
+
+    function updateResult(volume, nicotine, boosterMl, aromaMl, baseMl){
+      document.getElementById('finalBaseDisplay').textContent = formatMl(baseMl);
+
+      document.getElementById('finalVolumeSide').textContent = formatMl(volume);
+      document.getElementById('finalNicotineSide').textContent = formatMg(nicotine);
+      document.getElementById('finalAromaSide').textContent = formatPercent(Number(document.getElementById('aroma').value));
+      document.getElementById('finalBaseSide').textContent = formatMl(baseMl);
+
+      document.getElementById('volumeDisplay').textContent = formatMl(volume);
+      document.getElementById('nicotineDisplay').textContent = formatMg(nicotine);
+      document.getElementById('boosterDisplay').textContent = formatMl(boosterMl);
+      document.getElementById('aromaDisplay').textContent = formatMl(aromaMl);
+
+      document.getElementById('prepBooster').textContent = formatMl(boosterMl);
+      document.getElementById('prepAroma').textContent = formatMl(aromaMl);
+      document.getElementById('prepBase').textContent = formatMl(baseMl);
+    }
+
+    function calculateMix(){
+      clearStatus();
+
+      const volume = parseFloat(document.getElementById('volume').value);
+      const nicotine = parseFloat(document.getElementById('nicotine').value);
+      const boosterStrength = parseFloat(document.getElementById('boosterStrength').value);
+      const aroma = parseFloat(document.getElementById('aroma').value);
+
+      if (isNaN(volume) || isNaN(nicotine) || isNaN(boosterStrength) || isNaN(aroma)) {
+        showStatus('Merci de remplir tous les champs avec des valeurs valides.', false);
+        return;
+      }
+
+      if (volume <= 0 || boosterStrength <= 0 || nicotine < 0 || aroma < 0 || aroma > 100) {
+        showStatus('Vérifie les valeurs saisies : volume > 0, booster > 0, arôme entre 0 et 100.', false);
+        return;
+      }
+
+      const boosterMl = (volume * nicotine) / boosterStrength;
+      const aromaMl = volume * (aroma / 100);
+      const baseMl = volume - boosterMl - aromaMl;
+
+      if (baseMl < 0) {
+        showStatus('Le mélange est impossible : booster + arôme dépassent le volume final.', false);
+        return;
+      }
+
+      updateResult(volume, nicotine, boosterMl, aromaMl, baseMl);
+      showStatus('Calcul effectué avec succès.', true);
+    }
+
+    function resetForm(){
+      document.getElementById('volume').value = 70;
+      document.getElementById('nicotine').value = 10;
+      document.getElementById('boosterStrength').value = 20;
+      document.getElementById('aroma').value = 15;
+
+      setActiveVolumeButton(70);
+      setActiveNicotineChip(10);
+      calculateMix();
+    }
+
+    function copyResult(){
+      const volume = document.getElementById('volumeDisplay').textContent;
+      const nicotine = document.getElementById('nicotineDisplay').textContent;
+      const booster = document.getElementById('boosterDisplay').textContent;
+      const aroma = document.getElementById('aromaDisplay').textContent;
+      const base = document.getElementById('prepBase').textContent;
+
+      const text =
+`Calculateur e-liquide by LYSMA solutions
+
+Volume final : ${volume}
+Nicotine : ${nicotine}
+Booster : ${booster}
+Arôme : ${aroma}
+Base neutre : ${base}
+
+Préparation :
+1. Ajouter ${booster} de booster
+2. Ajouter ${aroma} d’arôme
+3. Compléter avec ${base} de base neutre`;
+
+      navigator.clipboard.writeText(text)
+        .then(() => showStatus('Résumé copié dans le presse-papiers.', true))
+        .catch(() => showStatus('Impossible de copier automatiquement sur cet appareil.', false));
+    }
+
+    document.getElementById('volume').addEventListener('input', calculateMix);
+    document.getElementById('nicotine').addEventListener('input', calculateMix);
+    document.getElementById('boosterStrength').addEventListener('input', calculateMix);
+    document.getElementById('aroma').addEventListener('input', calculateMix);
+
+    calculateMix();
+  </script>
+</body>
+</html>
