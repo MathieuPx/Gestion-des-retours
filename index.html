@@ -121,6 +121,7 @@
     .hero-title-row{
       display:flex;
       align-items:center;
+      justify-content:space-between;
       gap:12px;
     }
 
@@ -552,16 +553,17 @@
 </head>
 <body>
   <div class="app">
+
 <!-- ── HERO ── -->
 <section class="hero">
   <div class="hero-main">
     <div class="hero-title-row">
+      <h1>Calculateur e-liquide</h1>
       <img
         class="logo-lysma"
         src="./logo-lysma.png"
         alt="Logo LYSMA"
       >
-      <h1>Calculateur<br>e-liquide</h1>
     </div>
 
     <!-- brand-line utilise uniquement des spans décoratifs -->
@@ -579,7 +581,6 @@
   <div class="panel">
     <div class="panel-header">
       <div>
-        <p class="section-kicker">Préparer mon mélange</p>
         <h2 class="section-title">Paramètres de préparation</h2>
       </div>
     </div>
@@ -602,17 +603,17 @@
       <p class="section-kicker">Paramètres</p>
       <div class="fields">
         <div class="field">
-          <label for="volume">Quantité souhaitée (ml)</label>
+          <label for="volume">Volume (ml)</label>
           <input id="volume" type="number" inputmode="decimal" value="70" min="1" step="1">
         </div>
 
         <div class="field">
-          <label for="nicotine">Taux nicotine voulu (mg/ml)</label>
+          <label for="nicotine">Nicotine (mg/ml)</label>
           <input id="nicotine" type="number" inputmode="decimal" value="10" min="0" step="0.1">
         </div>
 
         <div class="field">
-          <label for="boosterStrength">Force booster (mg/ml)</label>
+          <label for="boosterStrength">Booster (mg/ml)</label>
           <input id="boosterStrength" type="number" inputmode="decimal" value="20" min="1" step="0.1">
         </div>
 
@@ -646,8 +647,7 @@
   <div class="panel">
     <div class="panel-header">
       <div>
-        <p class="section-kicker">Résultat</p>
-        <h2 class="section-title">Lecture immédiate</h2>
+        <h2 class="section-title">Résultat</h2>
       </div>
     </div>
 
@@ -707,19 +707,19 @@
       <div class="prep-list">
         <div class="prep-item">
           <div class="prep-index">1</div>
-          <div class="prep-item-text">Ajouter le booster nicotine</div>
+          <div class="prep-item-text">Booster nicotine</div>
           <div class="prep-item-qty" id="prepBooster">35 ml</div>
         </div>
 
         <div class="prep-item">
           <div class="prep-index">2</div>
-          <div class="prep-item-text">Ajouter l'arôme</div>
+          <div class="prep-item-text">Arôme</div>
           <div class="prep-item-qty" id="prepAroma">10,50 ml</div>
         </div>
 
         <div class="prep-item">
           <div class="prep-index">3</div>
-          <div class="prep-item-text">Compléter avec la base neutre</div>
+          <div class="prep-item-text">Base neutre</div>
           <div class="prep-item-qty" id="prepBase">24,50 ml</div>
         </div>
       </div>
@@ -731,7 +731,6 @@
   </div>
 
 </section>
-```
 
   </div>
 
