@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
@@ -75,6 +76,7 @@
       gap:18px;
     }
 
+    /* ── HERO ── */
     .hero{
       position:relative;
       overflow:hidden;
@@ -152,15 +154,17 @@
       gap:10px;
     }
 
+    /* FIX 1 : h1 seul, pas de heading imbriqué */
     .hero-main h1{
-  margin:0;
-  font-size:clamp(22px, 7vw, 62px);
-  line-height:1.02;
-  font-weight:900;
-  letter-spacing:-.05em;
-  max-width:900px;
-}
+      margin:0;
+      font-size:clamp(22px, 7vw, 62px);
+      line-height:1.02;
+      font-weight:900;
+      letter-spacing:-.05em;
+      max-width:900px;
+    }
 
+    /* FIX 2 : brand-line utilise des spans, plus de h2 imbriqué */
     .brand-line{
       display:flex;
       align-items:baseline;
@@ -168,21 +172,23 @@
       flex-wrap:wrap;
     }
 
-    .brand-line em{
-  font-size:clamp(12px, 2.8vw, 16px);
-}
+    .brand-line .brand-em{
+      font-size:clamp(12px, 2.8vw, 16px);
+      font-style:italic;
+    }
 
-.brand-line h2{
-  font-size:clamp(16px, 4.2vw, 22px);
-}
-
-.brand-line span{
-  font-size:clamp(14px, 3.6vw, 20px);
-}
-
-    .brand-line span{
+    /* FIX 3 : .brand-name remplace le h2 décoratif — une seule déclaration de font-size */
+    .brand-line .brand-name{
       margin:0;
-      font-size:1rem;
+      font-size:clamp(16px, 4.2vw, 22px);
+      font-weight:900;
+      opacity:.88;
+    }
+
+    /* FIX 4 : .brand-suffix — une seule déclaration, suppression du doublon */
+    .brand-line .brand-suffix{
+      margin:0;
+      font-size:clamp(14px, 3.6vw, 20px);
       opacity:.88;
     }
 
@@ -195,6 +201,7 @@
       font-weight:500;
     }
 
+    /* ── LAYOUT ── */
     .layout{
       display:grid;
       grid-template-columns:minmax(340px, 1.05fr) minmax(340px, .95fr);
@@ -231,6 +238,7 @@
       color:var(--brand-2);
     }
 
+    /* FIX 5 : section-title est un h2 dans les panneaux, pas dans la hero */
     .section-title{
       margin:6px 0 0;
       font-size:28px;
@@ -253,24 +261,25 @@
       background:linear-gradient(90deg, rgba(10,77,155,.18), rgba(10,77,155,0));
     }
 
+    /* ── QUICK GRID ── */
     .quick-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(90px,1fr));
-  gap:12px;
-}
+      display:grid;
+      grid-template-columns:repeat(3,minmax(90px,1fr));
+      gap:12px;
+    }
 
     .quick-btn{
-  border:none;
-  min-height:clamp(72px, 16vw, 66px);
-  border-radius:18px;
-  background:#EEF3F9;
-  color:var(--text);
-  font-size:clamp(18px, 5.2vw, 20px);
-  font-weight:900;
-  cursor:pointer;
-  transition:.18s ease;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
-}
+      border:none;
+      min-height:clamp(72px, 16vw, 66px);
+      border-radius:18px;
+      background:#EEF3F9;
+      color:var(--text);
+      font-size:clamp(18px, 5.2vw, 20px);
+      font-weight:900;
+      cursor:pointer;
+      transition:.18s ease;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+    }
 
     .quick-btn:hover{
       transform:translateY(-1px);
@@ -282,11 +291,12 @@
       box-shadow:0 12px 24px rgba(10,77,155,.22);
     }
 
+    /* ── FIELDS ── */
     .fields{
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0,1fr));
-  gap:14px;
-}
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
 
     .field{
       display:flex;
@@ -295,22 +305,29 @@
     }
 
     .field label{
-  font-size:clamp(12px, 3.2vw, 14px);
-  font-weight:800;
-}
+      font-size:clamp(12px, 3.2vw, 14px);
+      font-weight:800;
+    }
 
-.field input{
-  width:100%;
-  height:clamp(54px, 14vw, 66px);
-  font-size:clamp(18px, 6vw, 24px);
-  padding:0 16px;
-}
+    .field input{
+      width:100%;
+      height:clamp(54px, 14vw, 66px);
+      font-size:clamp(18px, 6vw, 24px);
+      padding:0 16px;
+      border:1.5px solid var(--border);
+      border-radius:var(--radius-sm);
+      outline:none;
+      transition:.18s ease;
+      background:#fff;
+      color:var(--text);
+    }
 
     .field input:focus{
       border-color:var(--brand-2);
       box-shadow:0 0 0 4px rgba(30,115,216,.10);
     }
 
+    /* ── PRESETS / CHIPS ── */
     .presets{
       display:flex;
       flex-wrap:wrap;
@@ -318,16 +335,30 @@
     }
 
     .chip{
-  font-size:clamp(12px, 3.5vw, 14px);
-  padding:clamp(10px, 2.5vw, 12px) clamp(14px, 3.8vw, 18px);
-}
+      border:1.5px solid var(--border);
+      border-radius:999px;
+      background:#fff;
+      color:var(--text);
+      font-weight:800;
+      cursor:pointer;
+      transition:.18s ease;
+      font-size:clamp(12px, 3.5vw, 14px);
+      padding:clamp(10px, 2.5vw, 12px) clamp(14px, 3.8vw, 18px);
+    }
+
+    .chip:hover{
+      border-color:var(--brand-2);
+      color:var(--brand);
+    }
 
     .chip.active{
       background:var(--brand);
       color:#fff;
+      border-color:var(--brand);
       box-shadow:0 10px 22px rgba(10,77,155,.18);
     }
 
+    /* ── ACTIONS ── */
     .action-row{
       display:grid;
       grid-template-columns:1.15fr .85fr;
@@ -335,9 +366,14 @@
     }
 
     .btn{
-  min-height:clamp(56px, 14vw, 68px);
-  font-size:clamp(18px, 5vw, 20px);
-}
+      border:none;
+      border-radius:var(--radius-sm);
+      font-weight:900;
+      cursor:pointer;
+      transition:.18s ease;
+      min-height:clamp(56px, 14vw, 68px);
+      font-size:clamp(18px, 5vw, 20px);
+    }
 
     .btn:hover{
       transform:translateY(-1px);
@@ -354,6 +390,7 @@
       color:var(--text);
     }
 
+    /* ── STATUS ── */
     .status{
       display:none;
       border-radius:18px;
@@ -387,6 +424,7 @@
       font-weight:700;
     }
 
+    /* ── HERO RESULT ── */
     .hero-result{
       background:var(--gradient-brand);
       color:#fff;
@@ -416,15 +454,17 @@
     }
 
     .hero-result-value{
-  font-size:clamp(26px, 8vw, 58px);
-  line-height:1;
-}
+      font-size:clamp(26px, 8vw, 58px);
+      line-height:1;
+      font-weight:900;
+    }
 
-.hero-result-side{
-  font-size:clamp(12px, 3.5vw, 14px);
-  line-height:1.45;
-}
+    .hero-result-side{
+      font-size:clamp(12px, 3.5vw, 14px);
+      line-height:1.45;
+    }
 
+    /* ── SUMMARY GRID ── */
     .summary-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -446,10 +486,12 @@
     }
 
     .summary-value{
-  font-size:clamp(18px, 5.5vw, 34px);
-  line-height:1.08;
-}
+      font-size:clamp(18px, 5.5vw, 34px);
+      line-height:1.08;
+      font-weight:900;
+    }
 
+    /* ── PREP CARD ── */
     .prep-card{
       background:#FBFCFF;
       border:1px dashed rgba(10,77,155,.25);
@@ -459,7 +501,14 @@
       flex-direction:column;
       gap:14px;
     }
-    
+
+    /* FIX 6 : prep-card-title distinct de prep-item-title pour éviter la confusion de nommage */
+    .prep-card-title{
+      margin:0;
+      font-size:clamp(18px, 5.5vw, 20px);
+      font-weight:900;
+      color:var(--text);
+    }
 
     .prep-list{
       display:grid;
@@ -489,19 +538,18 @@
       font-weight:900;
     }
 
-    .prep-title{
-  font-size:clamp(18px, 5.5vw, 20px);
-}
+    .prep-item-text{
+      font-size:clamp(14px, 4.4vw, 15px);
+      line-height:1.35;
+      font-weight:600;
+    }
 
-.prep-text{
-  font-size:clamp(14px, 4.4vw, 15px);
-  line-height:1.35;
-}
+    .prep-item-qty{
+      font-size:clamp(16px, 5vw, 18px);
+      font-weight:900;
+    }
 
-.prep-qty{
-  font-size:clamp(16px, 5vw, 18px);
-}
-
+    /* ── COPY ROW ── */
     .copy-row{
       display:grid;
       grid-template-columns:1fr;
@@ -524,196 +572,209 @@
       transform:translateY(-1px);
     }
 
+    /* ── RESPONSIVE ── */
     @media (max-width:1100px){
       .layout{
         grid-template-columns:1fr;
       }
     }
 
-    @media (max-width: 760px){
-  .hero-main h1{ font-size:clamp(22px, 7vw, 32px); }
-  .section-title{ font-size:clamp(18px, 6vw, 24px); }
-  .quick-btn{ font-size:clamp(18px, 5vw, 20px); }
-  .field input{ font-size:clamp(18px, 5.5vw, 22px); }
-  .chip{ font-size:clamp(12px, 3.2vw, 14px); }
-  .btn{ font-size:clamp(18px, 4.8vw, 20px); }
-  .hero-result-value{ font-size:clamp(26px, 8vw, 40px); }
-  .summary-value{ font-size:clamp(18px, 5vw, 26px); }
-  .prep-text{ font-size:clamp(14px, 4vw, 15px); }
-  .prep-qty{ font-size:clamp(16px, 4.8vw, 18px); }
-}
+    @media (max-width:760px){
+      .hero-main h1        { font-size:clamp(22px, 7vw, 32px); }
+      .section-title       { font-size:clamp(18px, 6vw, 24px); }
+      .quick-btn           { font-size:clamp(18px, 5vw, 20px); }
+      .field input         { font-size:clamp(18px, 5.5vw, 22px); }
+      .chip                { font-size:clamp(12px, 3.2vw, 14px); }
+      .btn                 { font-size:clamp(18px, 4.8vw, 20px); }
+      .hero-result-value   { font-size:clamp(26px, 8vw, 40px); }
+      .summary-value       { font-size:clamp(18px, 5vw, 26px); }
+      .prep-item-text      { font-size:clamp(14px, 4vw, 15px); }
+      .prep-item-qty       { font-size:clamp(16px, 4.8vw, 18px); }
+    }
   </style>
+
 </head>
 <body>
   <div class="app">
 
-    <section class="hero">
-      <div class="hero-top">
-        <img
-          class="logo-lysma"
-          src="./logo-lysma.png"
-          alt="Logo LYSMA"
-        >
+```
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-top">
+    <img
+      class="logo-lysma"
+      src="./logo-lysma.png"
+      alt="Logo LYSMA"
+    >
+  </div>
+
+  <div class="hero-main">
+    <!-- FIX 1 : h1 seul, sans heading imbriqué -->
+    <h1>Calculateur e-liquide</h1>
+
+    <!-- FIX 2 & 3 : brand-line utilise uniquement des spans décoratifs -->
+    <div class="brand-line" aria-label="By LYSMA solutions">
+      <span class="brand-em">By</span>
+      <span class="brand-name">LYSMA</span>
+      <span class="brand-suffix">solutions</span>
+    </div>
+  </div>
+</section>
+
+<section class="layout">
+
+  <!-- ── PANNEAU GAUCHE : Paramètres ── -->
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <p class="section-kicker">Préparer mon mélange</p>
+        <h2 class="section-title">Paramètres de préparation</h2>
       </div>
+      <div class="section-note">Saisie simple, calcul immédiat.</div>
+    </div>
 
-      <div class="hero-main">
-        <h1>Calculateur e-liquide</h1>
+    <div class="divider"></div>
 
-        <div class="brand-line">
-          <em>By</em>
-          <h2>LYSMA</h2>
-          <span>solutions</span>
-        </div>
+    <div>
+      <p class="section-kicker">Volumes rapides</p>
+      <div class="quick-grid">
+        <button class="quick-btn" type="button" onclick="setVolume(30)">30 ml</button>
+        <button class="quick-btn" type="button" onclick="setVolume(60)">60 ml</button>
+        <button class="quick-btn active" type="button" onclick="setVolume(70)">70 ml</button>
+        <button class="quick-btn" type="button" onclick="setVolume(100)">100 ml</button>
+        <button class="quick-btn" type="button" onclick="setVolume(120)">120 ml</button>
+        <button class="quick-btn" type="button" onclick="setVolume(200)">200 ml</button>
       </div>
-    </section>
+    </div>
 
-    <section class="layout">
-      <div class="panel">
-        <div class="panel-header">
-          <div>
-            <p class="section-kicker">Préparer mon mélange</p>
-            <h2 class="section-title">Paramètres de préparation</h2>
-          </div>
-          <div class="section-note">Saisie simple, calcul immédiat.</div>
+    <div>
+      <p class="section-kicker">Paramètres</p>
+      <div class="fields">
+        <div class="field">
+          <label for="volume">Quantité souhaitée (ml)</label>
+          <input id="volume" type="number" inputmode="decimal" value="70" min="1" step="1">
         </div>
 
-        <div class="divider"></div>
-
-        <div>
-          <p class="section-kicker">Volumes rapides</p>
-          <div class="quick-grid">
-            <button class="quick-btn" type="button" onclick="setVolume(30)">30 ml</button>
-            <button class="quick-btn" type="button" onclick="setVolume(60)">60 ml</button>
-            <button class="quick-btn active" type="button" onclick="setVolume(70)">70 ml</button>
-            <button class="quick-btn" type="button" onclick="setVolume(100)">100 ml</button>
-            <button class="quick-btn" type="button" onclick="setVolume(120)">120 ml</button>
-            <button class="quick-btn" type="button" onclick="setVolume(200)">200 ml</button>
-          </div>
+        <div class="field">
+          <label for="nicotine">Taux nicotine voulu (mg/ml)</label>
+          <input id="nicotine" type="number" inputmode="decimal" value="10" min="0" step="0.1">
         </div>
 
-        <div>
-          <p class="section-kicker">Paramètres</p>
-          <div class="fields">
-            <div class="field">
-              <label for="volume">Quantité souhaitée (ml)</label>
-              <input id="volume" type="number" inputmode="decimal" value="70" min="1" step="1">
-            </div>
-
-            <div class="field">
-              <label for="nicotine">Taux nicotine voulu (mg/ml)</label>
-              <input id="nicotine" type="number" inputmode="decimal" value="10" min="0" step="0.1">
-            </div>
-
-            <div class="field">
-              <label for="boosterStrength">Force booster (mg/ml)</label>
-              <input id="boosterStrength" type="number" inputmode="decimal" value="20" min="1" step="0.1">
-            </div>
-
-            <div class="field">
-              <label for="aroma">Arôme (%)</label>
-              <input id="aroma" type="number" inputmode="decimal" value="15" min="0" max="100" step="0.1">
-            </div>
-          </div>
+        <div class="field">
+          <label for="boosterStrength">Force booster (mg/ml)</label>
+          <input id="boosterStrength" type="number" inputmode="decimal" value="20" min="1" step="0.1">
         </div>
 
-        <div>
-          <p class="section-kicker">Presets nicotine</p>
-          <div class="presets">
-            <button class="chip" type="button" onclick="setNicotine(0)">0 mg/ml</button>
-            <button class="chip" type="button" onclick="setNicotine(3)">3 mg/ml</button>
-            <button class="chip" type="button" onclick="setNicotine(6)">6 mg/ml</button>
-            <button class="chip active" type="button" onclick="setNicotine(10)">10 mg/ml</button>
-            <button class="chip" type="button" onclick="setNicotine(12)">12 mg/ml</button>
-          </div>
-        </div>
-
-        <div class="action-row">
-          <button class="btn btn-primary" type="button" onclick="calculateMix()">Calculer</button>
-          <button class="btn btn-secondary" type="button" onclick="resetForm()">Reset</button>
-        </div>
-
-        <div id="status" class="status"></div>
-
-        <div class="foot-note">
-          Formule utilisée : booster = (volume × nicotine voulue) / force booster
+        <div class="field">
+          <label for="aroma">Arôme (%)</label>
+          <input id="aroma" type="number" inputmode="decimal" value="15" min="0" max="100" step="0.1">
         </div>
       </div>
+    </div>
 
-      <div class="panel">
-        <div class="panel-header">
-          <div>
-            <p class="section-kicker">Résultat</p>
-            <h2 class="section-title">Lecture immédiate</h2>
-          </div>
-          <div class="section-note">Tout est résumé clairement.</div>
+    <div>
+      <p class="section-kicker">Presets nicotine</p>
+      <div class="presets">
+        <button class="chip" type="button" onclick="setNicotine(0)">0 mg/ml</button>
+        <button class="chip" type="button" onclick="setNicotine(3)">3 mg/ml</button>
+        <button class="chip" type="button" onclick="setNicotine(6)">6 mg/ml</button>
+        <button class="chip active" type="button" onclick="setNicotine(10)">10 mg/ml</button>
+        <button class="chip" type="button" onclick="setNicotine(12)">12 mg/ml</button>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-primary" type="button" onclick="calculateMix()">Calculer</button>
+      <button class="btn btn-secondary" type="button" onclick="resetForm()">Reset</button>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <p class="foot-note">
+      Formule utilisée : booster = (volume × nicotine voulue) / force booster
+    </p>
+  </div>
+
+  <!-- ── PANNEAU DROIT : Résultat ── -->
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <p class="section-kicker">Résultat</p>
+        <h2 class="section-title">Lecture immédiate</h2>
+      </div>
+      <div class="section-note">Tout est résumé clairement.</div>
+    </div>
+
+    <div class="hero-result">
+      <div>
+        <div class="hero-result-kicker">Préparation finale</div>
+        <div class="hero-result-title">Base à compléter</div>
+        <div class="hero-result-value" id="finalBaseDisplay">24,5 ml</div>
+      </div>
+
+      <div class="hero-result-side">
+        Nicotine : <span id="finalNicotineSide">10 mg/ml</span><br>
+        Arôme : <span id="finalAromaSide">15 %</span><br>
+        Base à compléter : <span id="finalBaseSide">24,5 ml</span><br>
+        Volume final : <span id="finalVolumeSide">70 ml</span>
+      </div>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Volume final</div>
+        <div class="summary-value" id="volumeDisplay">70 ml</div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-label">Nicotine</div>
+        <div class="summary-value" id="nicotineDisplay">10 mg/ml</div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-label">Booster</div>
+        <div class="summary-value" id="boosterDisplay">35 ml</div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-label">Arôme</div>
+        <div class="summary-value" id="aromaDisplay">10,50 ml</div>
+      </div>
+    </div>
+
+    <!-- FIX 6 : h3 renommé prep-card-title, items utilisent prep-item-text / prep-item-qty -->
+    <div class="prep-card">
+      <h3 class="prep-card-title">Préparation détaillée</h3>
+
+      <div class="prep-list">
+        <div class="prep-item">
+          <div class="prep-index">1</div>
+          <div class="prep-item-text">Ajouter le booster nicotine</div>
+          <div class="prep-item-qty" id="prepBooster">35 ml</div>
         </div>
 
-        <div class="hero-result">
-          <div>
-            <div class="hero-result-kicker">Préparation finale</div>
-            <div class="hero-result-title">Base à compléter</div>
-            <div class="hero-result-value" id="finalBaseDisplay">24,5 ml</div>
-          </div>
-
-          <div class="hero-result-side">
-            Nicotine : <span id="finalNicotineSide">10 mg/ml</span><br>
-            Arôme : <span id="finalAromaSide">15 %</span><br>
-            Base à compléter : <span id="finalBaseSide">24,5 ml</span><br>
-            Volume final : <span id="finalVolumeSide">70 ml</span>
-          </div>
+        <div class="prep-item">
+          <div class="prep-index">2</div>
+          <div class="prep-item-text">Ajouter l'arôme</div>
+          <div class="prep-item-qty" id="prepAroma">10,50 ml</div>
         </div>
 
-        <div class="summary-grid">
-          <div class="summary-card">
-            <div class="summary-label">Volume final</div>
-            <div class="summary-value" id="volumeDisplay">70 ml</div>
-          </div>
-
-          <div class="summary-card">
-            <div class="summary-label">Nicotine</div>
-            <div class="summary-value" id="nicotineDisplay">10 mg/ml</div>
-          </div>
-
-          <div class="summary-card">
-            <div class="summary-label">Booster</div>
-            <div class="summary-value" id="boosterDisplay">35 ml</div>
-          </div>
-
-          <div class="summary-card">
-            <div class="summary-label">Arôme</div>
-            <div class="summary-value" id="aromaDisplay">10,50 ml</div>
-          </div>
-        </div>
-
-        <div class="prep-card">
-          <h3 class="prep-title">Préparation détaillée</h3>
-
-          <div class="prep-list">
-            <div class="prep-item">
-              <div class="prep-index">1</div>
-              <div class="prep-text">Ajouter le booster nicotine</div>
-              <div class="prep-qty" id="prepBooster">35 ml</div>
-            </div>
-
-            <div class="prep-item">
-              <div class="prep-index">2</div>
-              <div class="prep-text">Ajouter l’arôme</div>
-              <div class="prep-qty" id="prepAroma">10,50 ml</div>
-            </div>
-
-            <div class="prep-item">
-              <div class="prep-index">3</div>
-              <div class="prep-text">Compléter avec la base neutre</div>
-              <div class="prep-qty" id="prepBase">24,50 ml</div>
-            </div>
-          </div>
-
-          <div class="copy-row">
-            <button class="btn-copy" type="button" onclick="copyResult()">Copier le résumé</button>
-          </div>
+        <div class="prep-item">
+          <div class="prep-index">3</div>
+          <div class="prep-item-text">Compléter avec la base neutre</div>
+          <div class="prep-item-qty" id="prepBase">24,50 ml</div>
         </div>
       </div>
-    </section>
+
+      <div class="copy-row">
+        <button class="btn-copy" type="button" onclick="copyResult()">Copier le résumé</button>
+      </div>
+    </div>
+  </div>
+
+</section>
+```
+
   </div>
 
   <script>
@@ -792,10 +853,10 @@
     function calculateMix(){
       clearStatus();
 
-      const volume = parseFloat(document.getElementById('volume').value);
-      const nicotine = parseFloat(document.getElementById('nicotine').value);
+      const volume          = parseFloat(document.getElementById('volume').value);
+      const nicotine        = parseFloat(document.getElementById('nicotine').value);
       const boosterStrength = parseFloat(document.getElementById('boosterStrength').value);
-      const aroma = parseFloat(document.getElementById('aroma').value);
+      const aroma           = parseFloat(document.getElementById('aroma').value);
 
       if (isNaN(volume) || isNaN(nicotine) || isNaN(boosterStrength) || isNaN(aroma)) {
         showStatus('Merci de remplir tous les champs avec des valeurs valides.', false);
@@ -808,8 +869,8 @@
       }
 
       const boosterMl = (volume * nicotine) / boosterStrength;
-      const aromaMl = volume * (aroma / 100);
-      const baseMl = volume - boosterMl - aromaMl;
+      const aromaMl   = volume * (aroma / 100);
+      const baseMl    = volume - boosterMl - aromaMl;
 
       if (baseMl < 0) {
         showStatus('Le mélange est impossible : booster + arôme dépassent le volume final.', false);
@@ -821,10 +882,10 @@
     }
 
     function resetForm(){
-      document.getElementById('volume').value = 70;
-      document.getElementById('nicotine').value = 10;
+      document.getElementById('volume').value          = 70;
+      document.getElementById('nicotine').value        = 10;
       document.getElementById('boosterStrength').value = 20;
-      document.getElementById('aroma').value = 15;
+      document.getElementById('aroma').value           = 15;
 
       setActiveVolumeButton(70);
       setActiveNicotineChip(10);
@@ -832,11 +893,11 @@
     }
 
     function copyResult(){
-      const volume = document.getElementById('volumeDisplay').textContent;
+      const volume   = document.getElementById('volumeDisplay').textContent;
       const nicotine = document.getElementById('nicotineDisplay').textContent;
-      const booster = document.getElementById('boosterDisplay').textContent;
-      const aroma = document.getElementById('aromaDisplay').textContent;
-      const base = document.getElementById('prepBase').textContent;
+      const booster  = document.getElementById('boosterDisplay').textContent;
+      const aroma    = document.getElementById('aromaDisplay').textContent;
+      const base     = document.getElementById('prepBase').textContent;
 
       const text =
 `Calculateur e-liquide by LYSMA solutions
@@ -849,7 +910,7 @@ Base neutre : ${base}
 
 Préparation :
 1. Ajouter ${booster} de booster
-2. Ajouter ${aroma} d’arôme
+2. Ajouter ${aroma} d'arôme
 3. Compléter avec ${base} de base neutre`;
 
       navigator.clipboard.writeText(text)
@@ -864,5 +925,6 @@ Préparation :
 
     calculateMix();
   </script>
+
 </body>
 </html>
